@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>提示词反向提纯 | PromptFlow</title>
+    <title>反向提纯 | PromptFlow</title>
     <style>
         * {
             margin: 0;
@@ -102,7 +102,7 @@
             color: white;
         }
         main {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 48px 32px;
             position: relative;
@@ -110,47 +110,64 @@
         }
         .hero {
             text-align: center;
-            margin-bottom: 56px;
+            margin-bottom: 40px;
             animation: fadeInUp 0.8s ease-out;
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .hero h1 {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: bold;
             background: linear-gradient(135deg, #0ea5e9, #a855f7, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 12px;
-            animation: titleGlow 4s ease-in-out infinite;
-        }
-        @keyframes titleGlow {
-            0%, 100% { filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.5)); }
-            50% { filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8)); }
         }
         .hero p {
-            font-size: 18px;
+            font-size: 16px;
             color: #94a3b8;
+        }
+        .filetype-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 14px 28px;
+            background: rgba(30, 27, 75, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            color: #e2e8f0;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn:hover {
+            border-color: #0ea5e9;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.4);
         }
         .upload-area {
             background: rgba(30, 27, 75, 0.5);
             backdrop-filter: blur(20px);
             border: 3px dashed rgba(14, 165, 233, 0.3);
-            border-radius: 24px;
-            padding: 64px 32px;
+            border-radius: 20px;
+            padding: 48px 32px;
             text-align: center;
             cursor: pointer;
             transition: all 0.4s;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             position: relative;
             overflow: hidden;
         }
@@ -159,48 +176,26 @@
             box-shadow: 0 0 40px rgba(14, 165, 233, 0.3);
             transform: translateY(-4px);
         }
-        .upload-area::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.05), transparent);
-            animation: shimmer 4s infinite;
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
         .upload-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
+            font-size: 72px;
+            margin-bottom: 16px;
             display: block;
-            animation: bounce 2s infinite;
-            position: relative;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
         .upload-text {
-            font-size: 20px;
+            font-size: 18px;
             color: #e2e8f0;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
-            position: relative;
         }
         .upload-hint {
-            font-size: 14px;
+            font-size: 13px;
             color: #64748b;
-            position: relative;
         }
         #fileInput {
             display: none;
         }
         .preview-area {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             display: none;
             animation: fadeInUp 0.5s ease-out;
         }
@@ -209,55 +204,60 @@
         }
         .image-preview {
             max-width: 100%;
-            max-height: 350px;
+            max-height: 300px;
             border-radius: 16px;
             display: block;
-            margin: 0 auto 24px;
+            margin: 0 auto 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-        .mode-selector {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 32px;
-            animation: fadeInUp 0.5s ease-out 0.2s both;
-        }
-        .mode-btn {
-            flex: 1;
-            padding: 18px;
-            border: 2px solid rgba(148, 163, 184, 0.2);
-            background: rgba(30, 27, 75, 0.4);
-            backdrop-filter: blur(10px);
-            color: #e2e8f0;
+        .file-preview {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
             border-radius: 16px;
+            padding: 20px;
+        }
+        .file-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        .file-name {
             font-size: 16px;
+            color: #e2e8f0;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
         }
-        .mode-btn:hover {
-            border-color: #0ea5e9;
-            transform: translateY(-2px);
+        .file-meta {
+            font-size: 13px;
+            color: #64748b;
         }
-        .mode-btn.active {
-            background: linear-gradient(135deg, #0ea5e9, #a855f7);
-            border-color: transparent;
-            color: white;
-            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.4);
+        .code-preview {
+            max-height: 200px;
+            overflow: auto;
+            background: #020617;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
         }
         .analyze-btn {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
             background: linear-gradient(135deg, #0ea5e9, #a855f7);
             color: white;
             border: none;
             border-radius: 16px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 32px;
         }
         .analyze-btn:hover:not(:disabled) {
             transform: translateY(-3px);
@@ -272,28 +272,54 @@
             background: rgba(30, 27, 75, 0.5);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 24px;
-            padding: 40px;
+            border-radius: 20px;
+            padding: 32px;
             animation: fadeInUp 0.6s ease-out;
         }
         .results-area.show {
             display: block;
         }
         .results-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: white;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
             text-align: center;
         }
+        .file-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
         .keywords-section {
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
         .keywords-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: #94a3b8;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -304,12 +330,12 @@
             gap: 10px;
         }
         .keyword {
-            padding: 10px 18px;
+            padding: 8px 14px;
             background: rgba(14, 165, 233, 0.1);
             color: #0ea5e9;
             border: 1px solid rgba(14, 165, 233, 0.2);
-            border-radius: 20px;
-            font-size: 14px;
+            border-radius: 18px;
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.3s;
         }
@@ -321,33 +347,34 @@
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(148, 163, 184, 0.1);
             border-radius: 16px;
-            padding: 28px;
-            margin-top: 32px;
+            padding: 24px;
+            margin-top: 24px;
         }
         .full-prompt-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             color: #e2e8f0;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .full-prompt-content {
-            font-size: 15px;
+            font-size: 14px;
             color: #cbd5e1;
-            line-height: 1.9;
-            margin-bottom: 20px;
+            line-height: 1.8;
+            margin-bottom: 16px;
             word-break: break-word;
+            white-space: pre-wrap;
         }
         .copy-prompt-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, #0ea5e9, #a855f7);
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -360,8 +387,8 @@
             background: linear-gradient(135deg, #10b981, #059669);
         }
         footer {
-            margin-top: 80px;
-            padding: 40px;
+            margin-top: 60px;
+            padding: 32px;
             text-align: center;
             border-top: 1px solid rgba(148, 163, 184, 0.1);
             color: #64748b;
@@ -386,54 +413,49 @@
 
     <main>
         <div class="hero">
-            <h1>🔍 提示词反向提纯</h1>
-            <p>上传一张图片，AI 将自动分析并生成对应的绘画提示词</p>
+            <h1>🔍 反向提纯工具</h1>
+            <p>上传图片或代码文件，自动分析并生成对应的提示词</p>
+        </div>
+
+        <div class="filetype-tabs">
+            <button class="tab-btn active" data-type="image">🖼️ 图片分析</button>
+            <button class="tab-btn" data-type="code">📝 文件/代码分析</button>
         </div>
 
         <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <span class="upload-icon">🖼️</span>
-            <div class="upload-text">点击或拖拽上传图片</div>
-            <div class="upload-hint">支持 JPG、PNG、WebP 格式</div>
+            <span class="upload-icon" id="uploadIcon">🖼️</span>
+            <div class="upload-text" id="uploadText">点击或拖拽上传图片</div>
+            <div class="upload-hint" id="uploadHint">支持 JPG、PNG、WebP 格式</div>
         </div>
 
         <input type="file" id="fileInput" accept="image/*">
 
-        <div class="preview-area" id="previewArea">
-            <img id="imagePreview" class="image-preview">
-        </div>
+        <div class="preview-area" id="previewArea"></div>
 
-        <div class="mode-selector" id="modeSelector" style="display: none;">
-            <button class="mode-btn active" data-mode="keywords">🎯 关键词模式（免费）</button>
-            <button class="mode-btn" data-mode="api">✨ API 模式（精准）</button>
-        </div>
-
-        <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyzeImage()">开始分析 ✨</button>
+        <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyze()">开始分析 ✨</button>
 
         <div class="results-area" id="resultsArea">
             <div class="results-title">🎉 分析结果</div>
 
+            <div class="file-stats" id="fileStats"></div>
+
             <div class="keywords-section">
-                <div class="keywords-title">🎨 艺术风格</div>
-                <div class="keywords-grid" id="styleKeywords"></div>
+                <div class="keywords-title">🎯 核心功能</div>
+                <div class="keywords-grid" id="featuresKeywords"></div>
             </div>
 
             <div class="keywords-section">
-                <div class="keywords-title">👤 主体元素</div>
-                <div class="keywords-grid" id="subjectKeywords"></div>
-            </div>
-
-            <div class="keywords-section">
-                <div class="keywords-title">🌄 场景背景</div>
-                <div class="keywords-grid" id="sceneKeywords"></div>
-            </div>
-
-            <div class="keywords-section">
-                <div class="keywords-title">✨ 技术参数</div>
+                <div class="keywords-title">💻 技术栈</div>
                 <div class="keywords-grid" id="techKeywords"></div>
             </div>
 
+            <div class="keywords-section">
+                <div class="keywords-title">📊 代码统计</div>
+                <div class="keywords-grid" id="statsKeywords"></div>
+            </div>
+
             <div class="full-prompt">
-                <div class="full-prompt-title">📝 完整提示词</div>
+                <div class="full-prompt-title">📝 完整使用提示词</div>
                 <div class="full-prompt-content" id="fullPrompt"></div>
                 <button class="copy-prompt-btn" onclick="copyFullPrompt()">复制完整提示词</button>
             </div>
@@ -445,29 +467,47 @@
     </footer>
 
     <script>
-        const keywordDatabase = {
-            style: [
-                "写实风格", "卡通风格", "油画风格", "水彩风格", "素描风格",
-                "赛博朋克", "蒸汽朋克", "动漫风格", "漫画风格",
-                "3D渲染", "像素艺术", "低多边形", "极简主义", "超现实主义"
-            ],
-            subject: [
-                "人物肖像", "风景", "城市建筑", "动物", "植物",
-                "科技产品", "食物", "交通工具", "抽象艺术", "角色设计"
-            ],
-            scene: [
-                "城市夜景", "自然风光", "室内场景", "科幻场景", "奇幻世界",
-                "海滩", "森林", "山脉", "沙漠", "雨天", "晴天", "黄昏", "日出"
-            ],
-            tech: [
-                "8K分辨率", "超高清", "高细节", "电影级光照", "体积光",
-                "景深效果", "柔和光照", "强对比度", "鲜艳色彩", "柔和色调",
-                "专业摄影", "广角镜头", "长焦镜头", "HDR", "虚幻引擎渲染"
-            ]
+        const imageKeywordDB = {
+            style: ["写实风格", "卡通风格", "油画风格", "水彩风格", "素描风格", "赛博朋克", "蒸汽朋克", "动漫风格", "漫画风格", "3D渲染", "像素艺术", "低多边形", "极简主义", "超现实主义"],
+            subject: ["人物肖像", "风景", "城市建筑", "动物", "植物", "科技产品", "食物", "交通工具", "抽象艺术", "角色设计"],
+            scene: ["城市夜景", "自然风光", "室内场景", "科幻场景", "奇幻世界", "海滩", "森林", "山脉", "沙漠", "雨天", "晴天", "黄昏", "日出"],
+            tech: ["8K分辨率", "超高清", "高细节", "电影级光照", "体积光", "景深效果", "柔和光照", "强对比度", "鲜艳色彩", "柔和色调", "专业摄影", "广角镜头", "长焦镜头", "HDR", "虚幻引擎渲染"]
         };
 
-        let selectedImage = null;
-        let currentMode = "keywords";
+        const languageDB = {
+            js: { name: "JavaScript", icon: "🟨", features: ["前端开发", "后端开发", "动态语言", "事件驱动", "异步编程"] },
+            ts: { name: "TypeScript", icon: "🔷", features: ["类型安全", "面向对象", "前端开发", "静态类型", "编译型"] },
+            py: { name: "Python", icon: "🐍", features: ["数据分析", "AI开发", "脚本编写", "后端开发", "科学计算"] },
+            java: { name: "Java", icon: "☕", features: ["后端开发", "企业应用", "面向对象", "跨平台", "强类型"] },
+            cpp: { name: "C++", icon: "⚡", features: ["系统编程", "高性能", "游戏开发", "底层开发", "内存管理"] },
+            c: { name: "C语言", icon: "🔤", features: ["系统编程", "底层开发", "嵌入式", "高性能", "指针操作"] },
+            cs: { name: "C#", icon: "🟣", features: ["后端开发", "游戏开发", "Unity", "企业应用", "面向对象"] },
+            go: { name: "Go", icon: "🐹", features: ["高并发", "后端开发", "微服务", "系统编程", "云原生"] },
+            rs: { name: "Rust", icon: "🦀", features: ["内存安全", "高性能", "系统编程", "WebAssembly", "零成本抽象"] },
+            rb: { name: "Ruby", icon: "💎", features: ["Web开发", "脚本语言", "Rails框架", "动态类型", "优雅语法"] },
+            php: { name: "PHP", icon: "🐘", features: ["Web开发", "后端开发", "WordPress", "Laravel", "服务器端"] },
+            swift: { name: "Swift", icon: "🦅", features: ["iOS开发", "macOS应用", "现代语法", "类型安全", "高性能"] },
+            kt: { name: "Kotlin", icon: "🟠", features: ["Android开发", "后端开发", "JVM语言", "空安全", "简洁语法"] },
+            html: { name: "HTML", icon: "📄", features: ["网页结构", "前端基础", "标签语言", "语义化", "响应式"] },
+            css: { name: "CSS", icon: "🎨", features: ["页面样式", "视觉设计", "动画效果", "响应式布局", "Flex/Grid"] },
+            json: { name: "JSON", icon: "📋", features: ["数据交换", "配置文件", "轻量级", "易读", "REST API"] },
+            yaml: { name: "YAML", icon: "⚙️", features: ["配置文件", "DevOps", "易读", "Kubernetes", "Ansible"] },
+            yml: { name: "YAML", icon: "⚙️", features: ["配置文件", "DevOps", "易读", "Kubernetes", "Ansible"] },
+            md: { name: "Markdown", icon: "📝", features: ["文档编写", "技术文档", "简洁语法", "README", "笔记"] },
+            txt: { name: "文本", icon: "📄", features: ["纯文本", "笔记记录", "数据存储", "简单格式", "通用"] },
+            xml: { name: "XML", icon: "📰", features: ["数据交换", "配置文件", "结构化", "标签语言", "企业应用"] },
+            sql: { name: "SQL", icon: "🗄️", features: ["数据库查询", "数据管理", "关系型数据库", "数据分析", "CRUD"] },
+            sh: { name: "Shell", icon: "💻", features: ["自动化脚本", "Linux命令", "系统管理", "批处理", "DevOps"] },
+            bash: { name: "Bash", icon: "💻", features: ["自动化脚本", "Linux命令", "系统管理", "批处理", "DevOps"] },
+            jsx: { name: "JSX", icon: "⚛️", features: ["React", "前端开发", "组件化", "UI开发", "虚拟DOM"] },
+            tsx: { name: "TSX", icon: "⚛️", features: ["React", "TypeScript", "前端开发", "组件化", "类型安全"] },
+            vue: { name: "Vue", icon: "🟢", features: ["前端框架", "组件化", "响应式", "Vue.js", "SPA开发"] },
+            default: { name: "未知", icon: "📄", features: ["代码分析", "文本文件", "自定义解析"] }
+        };
+
+        let selectedFile = null;
+        let currentType = "image";
+        let fileContent = "";
 
         function createParticles() {
             const container = document.getElementById("particles");
@@ -481,33 +521,79 @@
             }
         }
 
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                currentType = this.dataset.type;
+                
+                const fileInput = document.getElementById("fileInput");
+                const uploadIcon = document.getElementById("uploadIcon");
+                const uploadText = document.getElementById("uploadText");
+                const uploadHint = document.getElementById("uploadHint");
+                
+                if (currentType === "image") {
+                    fileInput.accept = "image/*";
+                    uploadIcon.textContent = "🖼️";
+                    uploadText.textContent = "点击或拖拽上传图片";
+                    uploadHint.textContent = "支持 JPG、PNG、WebP 格式";
+                } else {
+                    fileInput.accept = ".txt,.md,.js,.ts,.tsx,.jsx,.py,.java,.cpp,.c,.cs,.go,.rs,.rb,.php,.swift,.kt,.html,.css,.json,.yaml,.yml,.xml,.sql,.sh,.bash,.vue,.ini,.conf";
+                    uploadIcon.textContent = "📝";
+                    uploadText.textContent = "点击或拖拽上传代码文件";
+                    uploadHint.textContent = "支持 代码、文本、配置文件等";
+                }
+                
+                selectedFile = null;
+                fileContent = "";
+                document.getElementById("previewArea").classList.remove("show");
+                document.getElementById("resultsArea").classList.remove("show");
+                document.getElementById("analyzeBtn").disabled = true;
+            });
+        });
+
         document.getElementById("fileInput").addEventListener("change", function(e) {
             const file = e.target.files[0];
             if (file) {
-                selectedImage = file;
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    document.getElementById("imagePreview").src = event.target.result;
-                    document.getElementById("previewArea").classList.add("show");
-                    document.getElementById("modeSelector").style.display = "flex";
-                    document.getElementById("analyzeBtn").disabled = false;
-                };
-                reader.readAsDataURL(file);
+                selectedFile = file;
+                const previewArea = document.getElementById("previewArea");
+                
+                if (currentType === "image") {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewArea.innerHTML = `<img class="image-preview" src="${event.target.result}">`;
+                        previewArea.classList.add("show");
+                        document.getElementById("analyzeBtn").disabled = false;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        fileContent = event.target.result;
+                        const ext = getFileExtension(file.name);
+                        const fileSize = (file.size / 1024).toFixed(1) + " KB";
+                        const lines = fileContent.split("\n").length;
+                        
+                        previewArea.innerHTML = `
+                            <div class="file-preview">
+                                <div class="file-info">
+                                    <div class="file-name">📁 ${file.name}</div>
+                                    <div class="file-meta">${ext.toUpperCase()} · ${fileSize} · ${lines} 行</div>
+                                </div>
+                                <div class="code-preview">${escapeHtml(fileContent.slice(0, 2000))}${fileContent.length > 2000 ? "\n\n... (文件过长，仅显示前 2000 字符)" : ""}</div>
+                            </div>
+                        `;
+                        previewArea.classList.add("show");
+                        document.getElementById("analyzeBtn").disabled = false;
+                    };
+                    reader.readAsText(file);
+                }
             }
         });
 
         const uploadArea = document.querySelector(".upload-area");
-        
-        uploadArea.addEventListener("dragover", function(e) {
-            e.preventDefault();
-            this.style.borderColor = "#0ea5e9";
-        });
-
-        uploadArea.addEventListener("dragleave", function(e) {
-            e.preventDefault();
-            this.style.borderColor = "rgba(14, 165, 233, 0.3)";
-        });
-
+        uploadArea.addEventListener("dragover", function(e) { e.preventDefault(); this.style.borderColor = "#0ea5e9"; });
+        uploadArea.addEventListener("dragleave", function(e) { e.preventDefault(); this.style.borderColor = "rgba(14, 165, 233, 0.3)"; });
         uploadArea.addEventListener("drop", function(e) {
             e.preventDefault();
             this.style.borderColor = "rgba(14, 165, 233, 0.3)";
@@ -519,37 +605,190 @@
             }
         });
 
-        document.querySelectorAll(".mode-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-                currentMode = this.dataset.mode;
-            });
-        });
+        function getFileExtension(filename) {
+            const ext = filename.split(".").pop().toLowerCase();
+            return ext || "txt";
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function analyze() {
+            if (!selectedFile) return;
+            
+            if (currentType === "image") {
+                analyzeImage();
+            } else {
+                analyzeCode();
+            }
+        }
 
         function analyzeImage() {
-            if (!selectedImage) return;
+            const styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+            const subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
+            const sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+            const techWords = getRandomKeywords(imageKeywordDB.tech, 4);
 
-            const styleWords = getRandomKeywords(keywordDatabase.style, 3);
-            const subjectWords = getRandomKeywords(keywordDatabase.subject, 2);
-            const sceneWords = getRandomKeywords(keywordDatabase.scene, 3);
-            const techWords = getRandomKeywords(keywordDatabase.tech, 4);
-
-            renderKeywords("styleKeywords", styleWords);
-            renderKeywords("subjectKeywords", subjectWords);
-            renderKeywords("sceneKeywords", sceneWords);
+            document.getElementById("fileStats").innerHTML = `
+                <div class="stat-card"><div class="stat-value">${(selectedFile.size / 1024).toFixed(1)}KB</div><div class="stat-label">文件大小</div></div>
+                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">图片分析</div></div>
+                <div class="stat-card"><div class="stat-value">${styleWords.length + subjectWords.length + sceneWords.length + techWords.length}</div><div class="stat-label">关键词数</div></div>
+            `;
+            
+            renderKeywords("featuresKeywords", [...styleWords, ...subjectWords]);
             renderKeywords("techKeywords", techWords);
+            renderKeywords("statsKeywords", sceneWords);
 
-            const fullPrompt = [
-                ...styleWords,
-                ...subjectWords,
-                ...sceneWords,
-                ...techWords
-            ].join("，");
+            const fullPrompt = `【AI 绘画提示词】\n\n🎯 画面描述：\n${[...subjectWords, ...sceneWords].join("，")}\n\n🎨 艺术风格：\n${styleWords.join("，")}\n\n✨ 技术参数：\n${techWords.join("，")}\n\n⚙️ 最终组合：\n${[...styleWords, ...subjectWords, ...sceneWords, ...techWords].join("，")}`;
 
             document.getElementById("fullPrompt").textContent = fullPrompt;
             document.getElementById("resultsArea").classList.add("show");
             document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function analyzeCode() {
+            const ext = getFileExtension(selectedFile.name);
+            const langInfo = languageDB[ext] || languageDB.default;
+            
+            const lines = fileContent.split("\n");
+            const lineCount = lines.length;
+            const charCount = fileContent.length;
+            const funcCount = (fileContent.match(/function\s+(\w+)|def\s+(\w+)|func\s+(\w+)|fn\s+(\w+)|(\w+)\s*\([^)]*\)\s*\{|public\s+\w+\s+(\w+)|private\s+\w+\s+(\w+)/g) || []).length;
+            const commentCount = (fileContent.match(/\/\/|#\s|\/\*|\*\/|<!--|-->/g) || []).length;
+            const importsCount = (fileContent.match(/import|require|from|include|using\s+namespace/g) || []).length;
+            
+            const features = detectFeatures(fileContent, ext);
+            const stats = [
+                `${lineCount} 行代码`,
+                `${charCount} 字符`,
+                `${funcCount} 个函数`,
+                `${commentCount} 处注释`,
+                `${importsCount} 个导入`,
+                ext !== "txt" && ext !== "md" ? `${langInfo.name} 语言` : "文本格式"
+            ].filter(Boolean);
+
+            document.getElementById("fileStats").innerHTML = `
+                <div class="stat-card"><div class="stat-value">${lineCount}</div><div class="stat-label">代码行数</div></div>
+                <div class="stat-card"><div class="stat-value">${charCount}</div><div class="stat-label">字符数</div></div>
+                <div class="stat-card"><div class="stat-value">${funcCount}</div><div class="stat-label">函数/方法</div></div>
+                <div class="stat-card"><div class="stat-value">${langInfo.icon}</div><div class="stat-label">${langInfo.name}</div></div>
+            `;
+
+            renderKeywords("featuresKeywords", features);
+            renderKeywords("techKeywords", langInfo.features);
+            renderKeywords("statsKeywords", stats);
+
+            const summary = generateSummary(fileContent, ext, langInfo);
+            document.getElementById("fullPrompt").textContent = summary;
+            document.getElementById("resultsArea").classList.add("show");
+            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function detectFeatures(code, ext) {
+            const features = [];
+            
+            if (code.match(/function|def|func|fn|=>/)) features.push("函数定义");
+            if (code.match(/if|else|switch|match/)) features.push("条件判断");
+            if (code.match(/for|while|foreach|loop/)) features.push("循环结构");
+            if (code.match(/class|struct|interface|type/)) features.push("面向对象");
+            if (code.match(/async|await|promise|callback/)) features.push("异步编程");
+            if (code.match(/import|export|require|from/)) features.push("模块化");
+            if (code.match(/try|catch|throw|error|Error/)) features.push("错误处理");
+            if (code.match(/console\.log|print|System\.out|fmt\.Print/)) features.push("输出调试");
+            if (code.match(/const|let|var|let mut/)) features.push("变量声明");
+            if (code.match(/return/)) features.push("返回值");
+            if (code.match(/\[|\]|Array|List|Vec/)) features.push("数组/列表");
+            if (code.match(/\{|\}|Object|HashMap/)) features.push("对象/字典");
+            if (code.match(/http|fetch|axios|get|post|request/)) features.push("网络请求");
+            if (code.match(/fetch|axios|\.get\(|\.post\(|XMLHttpRequest/)) features.push("API 调用");
+            if (code.match(/JSON|json/)) features.push("JSON 处理");
+            if (code.match(/SQL|SELECT|INSERT|UPDATE|DELETE/)) features.push("数据库操作");
+            if (code.match(/React|Vue|Angular|Component|template/)) features.push("前端框架");
+            if (code.match(/DOM|document|getElement|querySelector/)) features.push("DOM 操作");
+            if (code.match(/Event|addEventListener|onClick|@click/)) features.push("事件处理");
+            if (code.match(/CSS|style|class=|className/)) features.push("样式处理");
+            if (code.match(/await|async|Promise/)) features.push("异步操作");
+            if (code.match(/TODO|FIXME|NOTE|TODO:/)) features.push("包含注释说明");
+            if (code.match(/Math|Math\.|calculate|compute/)) features.push("数学计算");
+            if (code.match(/Date|time|timestamp/)) features.push("日期时间");
+            if (code.match(/file|readFile|writeFile|fs\./)) features.push("文件操作");
+            if (code.match(/test|describe|it|expect|assert/)) features.push("测试代码");
+            if (code.match(/constexpr|static|final|readonly/)) features.push("常量/静态");
+            if (code.match(/export|module.exports|public/)) features.push("公开接口");
+            if (code.match(/\$\{|template|`[\s\S]*`/)) features.push("模板字符串");
+            if (code.match(/\.filter|\.map|\.reduce|forEach/)) features.push("函数式编程");
+            if (code.match(/fetch|axios|AJAX|XHR/)) features.push("AJAX 请求");
+            if (features.length === 0) features.push("基础代码", "自定义逻辑");
+            
+            const unique = [...new Set(features)];
+            return unique.slice(0, 8);
+        }
+
+        function generateSummary(code, ext, langInfo) {
+            const lines = code.split("\n");
+            const lineCount = lines.length;
+            const funcCount = (code.match(/function\s+(\w+)|def\s+(\w+)|func\s+(\w+)|fn\s+(\w+)/g) || []).length;
+            
+            let fileType = ext !== "txt" && ext !== "md" ? `${langInfo.icon} ${langInfo.name} 代码文件` : "📝 文本文件";
+            
+            let purpose = "通用代码/脚本";
+            if (ext === "html" || ext === "css" || ext === "jsx" || ext === "tsx" || ext === "vue") {
+                purpose = "🌐 前端页面/组件";
+            } else if (ext === "py" && code.match(/import|def/)) {
+                purpose = "🐍 Python 脚本/后端代码";
+            } else if (ext === "js" && code.match(/require|module|export/)) {
+                purpose = "🟨 JavaScript 模块";
+            } else if (ext === "json") {
+                purpose = "⚙️ 配置/数据文件";
+            } else if (ext === "yaml" || ext === "yml") {
+                purpose = "🔧 配置文件（部署/CI）";
+            } else if (ext === "md") {
+                purpose = "📖 文档/说明";
+            } else if (ext === "sql") {
+                purpose = "🗄️ 数据库查询";
+            } else if (ext === "sh" || ext === "bash") {
+                purpose = "💻 自动化脚本";
+            }
+            
+            const sampleCode = code.split("\n").slice(0, 10).join("\n");
+            
+            return `【代码分析报告】
+
+📋 文件信息：
+• 文件名：${selectedFile.name}
+• 类型：${fileType}
+• 用途：${purpose}
+• 代码行数：${lineCount} 行
+• 字符数：${code.length} 个
+
+🎯 核心功能：
+${detectFeatures(code, ext).slice(0, 6).join("，")}
+
+💻 技术栈：
+${langInfo.features.join("，")}
+
+📊 代码统计：
+• 总行数：${lineCount}
+• 字符数：${code.length}
+• 函数/方法：${funcCount} 个
+• 注释：${(code.match(/\/\/|#\s|\/\*/g) || []).length} 处
+• 导入语句：${(code.match(/import|require|from/g) || []).length} 个
+
+📝 使用场景提示词：
+1. 【代码理解】请帮我分析这段${langInfo.name}代码，它的主要功能是什么？有哪些核心逻辑？
+2. 【代码优化】基于以下代码，帮我优化性能、简化逻辑，提高可读性和维护性。
+3. 【功能扩展】在现有代码基础上，帮我添加更多功能或错误处理。
+4. 【代码解释】请逐行解释这段代码的作用和实现思路。
+5. 【最佳实践】请指出这段代码中不符合最佳实践的地方，并给出改进建议。
+6. 【单元测试】为这段代码编写完整的单元测试，覆盖率达到 80% 以上。
+7. 【文档编写】为这段代码编写详细的文档说明，包括功能、用法、参数、返回值等。
+8. 【Bug 修复】帮我检查并修复潜在的 Bug、边界情况处理错误、逻辑漏洞等。
+
+⚡ 快速描述：
+这是一个 ${lineCount} 行的 ${langInfo.name} ${purpose}，包含 ${funcCount} 个函数，核心功能涉及 ${detectFeatures(code, ext).slice(0, 3).join("、")}。代码结构清晰，适合进一步开发和维护。`;
         }
 
         function getRandomKeywords(arr, count) {
