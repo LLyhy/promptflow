@@ -386,6 +386,122 @@
         .copy-prompt-btn.copied {
             background: linear-gradient(135deg, #10b981, #059669);
         }
+        .model-compare-section {
+            background: rgba(30, 27, 75, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            margin-top: 32px;
+        }
+        .model-compare-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 8px;
+            text-align: center;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .model-compare-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .model-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .model-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .model-card:hover {
+            border-color: rgba(14, 165, 233, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
+        }
+        .model-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .model-card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+        .model-card-score {
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            color: #10b981;
+        }
+        .model-card-style {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .model-card-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .model-card-keyword {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: rgba(14, 165, 233, 0.15);
+            color: #0ea5e9;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        .model-card-pros {
+            font-size: 11px;
+            color: #10b981;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        .model-card-cons {
+            font-size: 11px;
+            color: #f59e0b;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .prompt-adapt-tips {
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .prompt-adapt-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0ea5e9;
+            margin-bottom: 10px;
+        }
+        .prompt-adapt-list {
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        .prompt-adapt-list li {
+            margin-left: 16px;
+            margin-bottom: 4px;
+        }
         footer {
             margin-top: 60px;
             padding: 32px;
@@ -458,6 +574,157 @@
                 <div class="full-prompt-title">📝 完整使用提示词</div>
                 <div class="full-prompt-content" id="fullPrompt"></div>
                 <button class="copy-prompt-btn" onclick="copyFullPrompt()">复制完整提示词</button>
+            </div>
+
+            <div class="model-compare-section" id="modelCompareSection" style="display:none;">
+                <div class="model-compare-title" id="modelCompareTitle">🎨 AI 绘画模型差异对比</div>
+                <div class="model-compare-subtitle" id="modelCompareSubtitle">相同提示词，不同模型出图效果差异大，选对模型事半功倍</div>
+                <div class="model-cards" id="modelCards"></div>
+                <div class="prompt-adapt-tips">
+                    <div class="prompt-adapt-title">💡 提示词适配技巧</div>
+                    <div class="prompt-adapt-list" id="promptAdaptTips"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="model-compare-section">
+            <div class="model-compare-title">📚 主流 AI 模型差异指南</div>
+            <div class="model-compare-subtitle">了解不同模型的特性，让你的提示词发挥最大效果</div>
+
+            <div style="margin-top: 16px;">
+                <div class="keywords-title" style="font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:12px;">🎨 图像生成模型</div>
+                <div class="model-cards">
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">Midjourney</div>
+                            <div class="model-card-score">准确率 90%</div>
+                        </div>
+                        <div class="model-card-style">艺术感强、出图精美、色彩饱和度高，适合商业插画和概念设计</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">艺术风格</span>
+                            <span class="model-card-keyword">电影感</span>
+                            <span class="model-card-keyword">商业插画</span>
+                        </div>
+                        <div class="model-card-pros">✓ 艺术表现力最强，细节丰富</div>
+                        <div class="model-card-cons">✗ 中文理解一般，提示词需简洁</div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">Stable Diffusion</div>
+                            <div class="model-card-score">准确率 88%</div>
+                        </div>
+                        <div class="model-card-style">开源可定制，支持 LoRA 和 ControlNet，适合技术玩家和批量生产</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">开源</span>
+                            <span class="model-card-keyword">LoRA训练</span>
+                            <span class="model-card-keyword">精细控制</span>
+                        </div>
+                        <div class="model-card-pros">✓ 可本地部署，完全免费可控</div>
+                        <div class="model-card-cons">✗ 需要调参，上手门槛较高</div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">DALL-E 3</div>
+                            <div class="model-card-score">准确率 75%</div>
+                        </div>
+                        <div class="model-card-style">理解自然语言能力强，适合文字描述精确的场景，但艺术风格较弱</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">语义理解</span>
+                            <span class="model-card-keyword">文字生成</span>
+                            <span class="model-card-keyword">ChatGPT集成</span>
+                        </div>
+                        <div class="model-card-pros">✓ 自然语言理解最好，含文字图</div>
+                        <div class="model-card-cons">✗ 风格单一，艺术感不足</div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">FLUX</div>
+                            <div class="model-card-score">准确率 85%</div>
+                        </div>
+                        <div class="model-card-style">Black Forest Labs 推出的新模型，结构清晰、语义准确，平衡艺术与写实</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">新兴</span>
+                            <span class="model-card-keyword">结构清晰</span>
+                            <span class="model-card-keyword">语义准确</span>
+                        </div>
+                        <div class="model-card-pros">✓ 结构清晰，写实与风格平衡</div>
+                        <div class="model-card-cons">✗ 相对较新，社区资源较少</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <div class="keywords-title" style="font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:12px;">💬 文本对话模型</div>
+                <div class="model-cards">
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">GPT-4 / o1</div>
+                            <div class="model-card-score">准确率 95%</div>
+                        </div>
+                        <div class="model-card-style">综合能力最强，推理、写作、代码、翻译全能，适合复杂任务和专业场景</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">推理强</span>
+                            <span class="model-card-keyword">多模态</span>
+                            <span class="model-card-keyword">全能型</span>
+                        </div>
+                        <div class="model-card-pros">✓ 逻辑推理最强，知识最全面</div>
+                        <div class="model-card-cons">✗ 成本较高，长文本较慢</div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">Claude 3.5</div>
+                            <div class="model-card-score">准确率 92%</div>
+                        </div>
+                        <div class="model-card-style">长文档处理能力强，上下文窗口大，代码和分析能力突出，非常适合办公场景</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">长文本</span>
+                            <span class="model-card-keyword">文档分析</span>
+                            <span class="model-card-keyword">代码强</span>
+                        </div>
+                        <div class="model-card-pros">✓ 200K 上下文，处理超长文档</div>
+                        <div class="model-card-cons">✗ 需科学上网，国内不方便</div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">GPT-3.5</div>
+                            <div class="model-card-score">准确率 85%</div>
+                        </div>
+                        <div class="model-card-style">速度快、成本低，适合日常对话和简单任务，作为主力使用性价比最高</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">快速</span>
+                            <span class="model-card-keyword">便宜</span>
+                            <span class="model-card-keyword">日常</span>
+                        </div>
+                        <div class="model-card-pros">✓ 响应最快，性价比最高</div>
+                        <div class="model-card-cons">✗ 复杂推理能力有限</div>
+                    </div>
+                    <div class="model-card">
+                        <div class="model-card-header">
+                            <div class="model-card-name">文心一言 / 通义千问</div>
+                            <div class="model-card-score">准确率 80%</div>
+                        </div>
+                        <div class="model-card-style">中文理解强，国内访问方便，适合中文内容创作和本土场景</div>
+                        <div class="model-card-keywords">
+                            <span class="model-card-keyword">中文强</span>
+                            <span class="model-card-keyword">国内可用</span>
+                            <span class="model-card-keyword">合规</span>
+                        </div>
+                        <div class="model-card-pros">✓ 中文理解好，无需科学上网</div>
+                        <div class="model-card-cons">✗ 国际知识更新较慢</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-adapt-tips">
+                <div class="prompt-adapt-title">🔑 核心原则：相同提示词 → 不同模型 ≠ 相同结果</div>
+                <div class="prompt-adapt-list">
+                    <li>• <b>Midjourney</b> 提示词要短，用关键词逗号分隔，避免长句子，重点放在"风格 + 主体 + 画质"</li>
+                    <li>• <b>Stable Diffusion</b> 提示词要详细，标签化描述，善用权重语法 (word:1.2)，配合负面提示词</li>
+                    <li>• <b>DALL-E 3</b> 可以用完整自然语言描述，适合描述复杂场景和包含文字的图片</li>
+                    <li>• <b>GPT-4</b> 适合复杂推理、系统设计、长内容生成，提示词要结构化、分步骤</li>
+                    <li>• <b>Claude</b> 适合文档分析、会议纪要、代码审查，提示词要给出清晰的输出格式要求</li>
+                    <li>• <b>代码模型</b> 提示词要明确技术栈、输入输出格式，提供上下文代码片段效果最好</li>
+                </div>
             </div>
         </div>
     </main>
@@ -626,67 +893,6 @@
             }
         }
 
-        function analyzeImage() {
-            const styleWords = getRandomKeywords(imageKeywordDB.style, 3);
-            const subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
-            const sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
-            const techWords = getRandomKeywords(imageKeywordDB.tech, 4);
-
-            document.getElementById("fileStats").innerHTML = `
-                <div class="stat-card"><div class="stat-value">${(selectedFile.size / 1024).toFixed(1)}KB</div><div class="stat-label">文件大小</div></div>
-                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">图片分析</div></div>
-                <div class="stat-card"><div class="stat-value">${styleWords.length + subjectWords.length + sceneWords.length + techWords.length}</div><div class="stat-label">关键词数</div></div>
-            `;
-            
-            renderKeywords("featuresKeywords", [...styleWords, ...subjectWords]);
-            renderKeywords("techKeywords", techWords);
-            renderKeywords("statsKeywords", sceneWords);
-
-            const fullPrompt = `【AI 绘画提示词】\n\n🎯 画面描述：\n${[...subjectWords, ...sceneWords].join("，")}\n\n🎨 艺术风格：\n${styleWords.join("，")}\n\n✨ 技术参数：\n${techWords.join("，")}\n\n⚙️ 最终组合：\n${[...styleWords, ...subjectWords, ...sceneWords, ...techWords].join("，")}`;
-
-            document.getElementById("fullPrompt").textContent = fullPrompt;
-            document.getElementById("resultsArea").classList.add("show");
-            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
-        }
-
-        function analyzeCode() {
-            const ext = getFileExtension(selectedFile.name);
-            const langInfo = languageDB[ext] || languageDB.default;
-            
-            const lines = fileContent.split("\n");
-            const lineCount = lines.length;
-            const charCount = fileContent.length;
-            const funcCount = (fileContent.match(/function\s+(\w+)|def\s+(\w+)|func\s+(\w+)|fn\s+(\w+)|(\w+)\s*\([^)]*\)\s*\{|public\s+\w+\s+(\w+)|private\s+\w+\s+(\w+)/g) || []).length;
-            const commentCount = (fileContent.match(/\/\/|#\s|\/\*|\*\/|<!--|-->/g) || []).length;
-            const importsCount = (fileContent.match(/import|require|from|include|using\s+namespace/g) || []).length;
-            
-            const features = detectFeatures(fileContent, ext);
-            const stats = [
-                `${lineCount} 行代码`,
-                `${charCount} 字符`,
-                `${funcCount} 个函数`,
-                `${commentCount} 处注释`,
-                `${importsCount} 个导入`,
-                ext !== "txt" && ext !== "md" ? `${langInfo.name} 语言` : "文本格式"
-            ].filter(Boolean);
-
-            document.getElementById("fileStats").innerHTML = `
-                <div class="stat-card"><div class="stat-value">${lineCount}</div><div class="stat-label">代码行数</div></div>
-                <div class="stat-card"><div class="stat-value">${charCount}</div><div class="stat-label">字符数</div></div>
-                <div class="stat-card"><div class="stat-value">${funcCount}</div><div class="stat-label">函数/方法</div></div>
-                <div class="stat-card"><div class="stat-value">${langInfo.icon}</div><div class="stat-label">${langInfo.name}</div></div>
-            `;
-
-            renderKeywords("featuresKeywords", features);
-            renderKeywords("techKeywords", langInfo.features);
-            renderKeywords("statsKeywords", stats);
-
-            const summary = generateSummary(fileContent, ext, langInfo);
-            document.getElementById("fullPrompt").textContent = summary;
-            document.getElementById("resultsArea").classList.add("show");
-            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
-        }
-
         function detectFeatures(code, ext) {
             const features = [];
             
@@ -813,6 +1019,211 @@ ${langInfo.features.join("，")}
                     btn.classList.remove("copied");
                 }, 2000);
             });
+        }
+
+        const imageModelData = [
+            {
+                name: "Midjourney v6",
+                score: 90,
+                style: "艺术感最强，色彩饱和度高，电影质感，适合商业插画、概念设计",
+                keywords: ["艺术风格", "电影感", "插画", "概念设计"],
+                pros: "艺术表现力最强，出图精美，社区资源丰富",
+                cons: "中文理解一般，提示词要简洁关键词化",
+                tip: "用英文关键词逗号分隔，如: cyberpunk, neon lights, rainy, 8k"
+            },
+            {
+                name: "Stable Diffusion",
+                score: 88,
+                style: "开源可定制，可配合 LoRA/ControlNet 精细控制，适合技术玩家",
+                keywords: ["开源", "LoRA", "精细控制", "本地部署"],
+                pros: "免费可控，支持模型训练，可批量生产",
+                cons: "需要调参，有上手门槛，需配合负面提示词",
+                tip: "提示词要详细标签化，善用权重语法 (word:1.3)，加负面提示词"
+            },
+            {
+                name: "DALL-E 3",
+                score: 75,
+                style: "自然语言理解最强，能生成含文字图片，适合语义精确的场景",
+                keywords: ["语义理解", "文字图", "ChatGPT集成"],
+                pros: "理解完整句子，可生成含中文/英文文字的图",
+                cons: "艺术风格单一，画面较平淡，创意不足",
+                tip: "可以直接用中文/英文完整长句子描述画面内容"
+            },
+            {
+                name: "FLUX.1",
+                score: 85,
+                style: "新兴模型，结构清晰，写实与艺术平衡，人物和场景准确度高",
+                keywords: ["新兴", "结构清晰", "写实", "人物准确"],
+                pros: "人物结构准确，不易出残手，出图稳定",
+                cons: "相对较新，社区模型和LoRA资源在积累中",
+                tip: "适合写实摄影风、人物肖像、产品展示等场景"
+            }
+        ];
+
+        const codeModelData = [
+            {
+                name: "GPT-4 / o1",
+                score: 95,
+                style: "代码理解、逻辑推理、系统设计能力最强，适合复杂任务",
+                keywords: ["推理强", "系统设计", "多语言", "最佳实践"],
+                pros: "能理解复杂逻辑，给出架构建议，代码质量高",
+                cons: "成本较高，响应速度较慢",
+                tip: "适合：代码重构、架构设计、复杂 Bug 分析、算法实现"
+            },
+            {
+                name: "Claude 3.5 Sonnet",
+                score: 93,
+                style: "代码生成和分析能力突出，上下文窗口大，适合大文件分析",
+                keywords: ["长代码", "架构分析", "代码审查", "200K上下文"],
+                pros: "可一次分析整个项目代码，代码风格规范",
+                cons: "需要科学上网，国内访问不便",
+                tip: "适合：大文件代码审查、项目整体分析、跨文件重构"
+            },
+            {
+                name: "GPT-3.5 Turbo",
+                score: 82,
+                style: "速度快成本低，适合简单脚本和日常编码辅助",
+                keywords: ["快速", "便宜", "小功能", "日常"],
+                pros: "响应快，性价比极高，简单任务足够用",
+                cons: "复杂逻辑易出错，缺乏架构思考能力",
+                tip: "适合：单文件小功能、API 调用封装、简单工具脚本"
+            },
+            {
+                name: "CodeLlama / DeepSeek",
+                score: 85,
+                style: "开源代码模型，可本地部署，适合有隐私/合规要求的场景",
+                keywords: ["开源", "本地部署", "隐私", "企业"],
+                pros: "数据不离开本地，可定制微调，免费商用（部分）",
+                cons: "能力略逊于商业模型，需硬件资源",
+                tip: "适合：企业内网开发、敏感代码、有合规要求的项目"
+            }
+        ];
+
+        function renderDynamicModelCompare(type) {
+            const section = document.getElementById("modelCompareSection");
+            const titleEl = document.getElementById("modelCompareTitle");
+            const subtitleEl = document.getElementById("modelCompareSubtitle");
+            const cardsEl = document.getElementById("modelCards");
+            const tipsEl = document.getElementById("promptAdaptTips");
+
+            let data, title, subtitle, tips;
+            if (type === "image") {
+                data = imageModelData;
+                title = "🎨 你的图适合哪个模型？";
+                subtitle = "即使完全相同的提示词，不同模型出图效果差异巨大";
+                tips = [
+                    "<b>Midjourney 推荐提示词格式：</b>关键词逗号分隔，风格词放前面，画质词放后面，如: cyberpunk, portrait, neon lights, cinematic, 8k, --ar 16:9",
+                    "<b>Stable Diffusion 推荐提示词格式：</b>详细标签描述，加权重语法，配合负面提示词，如: (masterpiece:1.2), best quality, 1girl, blue hair ... 负面: lowres, bad anatomy, bad hands",
+                    "<b>DALL-E 3 推荐提示词格式：</b>完整自然语言描述，可包含具体文字内容，如: '一张坐在咖啡馆窗边读书的女孩，照片上有手写字体 COFFEE TIME'",
+                    "<b>FLUX 推荐提示词格式：</b>结构清晰的描述性语言，适合写实和人物，出图稳定不容易翻车",
+                    "<b>💡 实战建议：</b>同样的提示词，在不同模型测试 2-3 次，找到最适合你风格的模型"
+                ];
+            } else {
+                data = codeModelData;
+                title = "💻 你的代码适合哪个模型？";
+                subtitle = "不同模型对代码的理解、优化建议差异明显，选对模型效率翻倍";
+                tips = [
+                    "<b>GPT-4 / o1 推荐用法：</b>'请帮我重新设计这段代码的架构，使其更易维护和扩展，并说明每种设计模式的取舍'",
+                    "<b>Claude 3.5 推荐用法：</b>粘贴完整文件或多文件，说'请审查以下项目代码，找出潜在 Bug、性能问题和安全漏洞，并给出修复方案'",
+                    "<b>GPT-3.5 推荐用法：</b>'帮我用 Python 写一个读取 CSV 并生成柱状图的脚本，使用 matplotlib，代码要有注释'",
+                    "<b>CodeLlama / DeepSeek 推荐用法：</b>适合有隐私要求的企业内网开发场景，可本地部署微调",
+                    "<b>💡 实战建议：</b>简单代码用 GPT-3.5/DeepSeek，复杂架构/重构用 GPT-4，大文件用 Claude"
+                ];
+            }
+
+            titleEl.textContent = title;
+            subtitleEl.textContent = subtitle;
+            cardsEl.innerHTML = data.map(m => `
+                <div class="model-card">
+                    <div class="model-card-header">
+                        <div class="model-card-name">${m.name}</div>
+                        <div class="model-card-score">准确率 ${m.score}%</div>
+                    </div>
+                    <div class="model-card-style">${m.style}</div>
+                    <div class="model-card-keywords">
+                        ${m.keywords.map(k => `<span class="model-card-keyword">${k}</span>`).join("")}
+                    </div>
+                    <div class="model-card-pros">✓ ${m.pros}</div>
+                    <div class="model-card-cons">✗ ${m.cons}</div>
+                </div>
+            `).join("");
+            tipsEl.innerHTML = tips.map(t => `<li>${t}</li>`).join("");
+            section.style.display = "block";
+        }
+
+        function analyzeImage() {
+            const styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+            const subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
+            const sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+            const techWords = getRandomKeywords(imageKeywordDB.tech, 4);
+
+            document.getElementById("fileStats").innerHTML = `
+                <div class="stat-card"><div class="stat-value">${(selectedFile.size / 1024).toFixed(1)}KB</div><div class="stat-label">文件大小</div></div>
+                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">图片分析</div></div>
+                <div class="stat-card"><div class="stat-value">${styleWords.length + subjectWords.length + sceneWords.length + techWords.length}</div><div class="stat-label">关键词数</div></div>
+            `;
+            
+            renderKeywords("featuresKeywords", [...styleWords, ...subjectWords]);
+            renderKeywords("techKeywords", techWords);
+            renderKeywords("statsKeywords", sceneWords);
+
+            const fullPrompt = `【AI 绘画提示词】
+
+🎯 画面描述：
+${[...subjectWords, ...sceneWords].join("，")}
+
+🎨 艺术风格：
+${styleWords.join("，")}
+
+✨ 技术参数：
+${techWords.join("，")}
+
+⚙️ 最终组合（直接复制使用）：
+${[...styleWords, ...subjectWords, ...sceneWords, ...techWords].join("，")}`;
+
+            document.getElementById("fullPrompt").textContent = fullPrompt;
+            document.getElementById("resultsArea").classList.add("show");
+            renderDynamicModelCompare("image");
+            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function analyzeCode() {
+            const ext = getFileExtension(selectedFile.name);
+            const langInfo = languageDB[ext] || languageDB.default;
+            
+            const lines = fileContent.split("\n");
+            const lineCount = lines.length;
+            const charCount = fileContent.length;
+            const funcCount = (fileContent.match(/function\s+(\w+)|def\s+(\w+)|func\s+(\w+)|fn\s+(\w+)|(\w+)\s*\([^)]*\)\s*\{|public\s+\w+\s+(\w+)|private\s+\w+\s+(\w+)/g) || []).length;
+            const commentCount = (fileContent.match(/\/\/|#\s|\/\*|\*\/|<!--|-->/g) || []).length;
+            const importsCount = (fileContent.match(/import|require|from|include|using\s+namespace/g) || []).length;
+            
+            const features = detectFeatures(fileContent, ext);
+            const stats = [
+                `${lineCount} 行代码`,
+                `${charCount} 字符`,
+                `${funcCount} 个函数`,
+                `${commentCount} 处注释`,
+                `${importsCount} 个导入`,
+                ext !== "txt" && ext !== "md" ? `${langInfo.name} 语言` : "文本格式"
+            ].filter(Boolean);
+
+            document.getElementById("fileStats").innerHTML = `
+                <div class="stat-card"><div class="stat-value">${lineCount}</div><div class="stat-label">代码行数</div></div>
+                <div class="stat-card"><div class="stat-value">${charCount}</div><div class="stat-label">字符数</div></div>
+                <div class="stat-card"><div class="stat-value">${funcCount}</div><div class="stat-label">函数/方法</div></div>
+                <div class="stat-card"><div class="stat-value">${langInfo.icon}</div><div class="stat-label">${langInfo.name}</div></div>
+            `;
+
+            renderKeywords("featuresKeywords", features);
+            renderKeywords("techKeywords", langInfo.features);
+            renderKeywords("statsKeywords", stats);
+
+            const summary = generateSummary(fileContent, ext, langInfo);
+            document.getElementById("fullPrompt").textContent = summary;
+            document.getElementById("resultsArea").classList.add("show");
+            renderDynamicModelCompare("code");
+            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
         }
 
         createParticles();

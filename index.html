@@ -605,6 +605,38 @@
             line-height: 1.7;
             margin-bottom: 20px;
         }
+        .model-info {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .model-info-header {
+            font-size: 13px;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+        }
+        .model-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .model-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .model-note {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-top: 8px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(148, 163, 184, 0.15);
+        }
         .prompt-tags {
             display: flex;
             gap: 8px;
@@ -1242,154 +1274,242 @@
                 title: "专业邮件写手",
                 content: "你是一位专业的商业邮件写作专家。请帮我写一封清晰、专业、礼貌的邮件。请确保邮件结构完整，包括主题、称呼、正文、结尾等部分。",
                 category: "通用写作",
-                tags: ["邮件", "商务", "写作"]
+                tags: ["邮件", "商务", "写作"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 85, "文心一言": 80, "通义千问": 78 },
+                bestModel: "GPT-4",
+                note: "写作任务对中文理解和格式要求较高，GPT-4 和 Claude 表现最佳"
             },
             {
                 id: 2,
                 title: "代码优化助手",
                 content: "你是一位资深的代码审查专家。请审查以下代码，提供优化建议，指出潜在问题，并给出改进后的版本。",
                 category: "编程开发",
-                tags: ["代码优化", "代码审查", "最佳实践"]
+                tags: ["代码优化", "代码审查", "最佳实践"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama", "CodeLlama-70B"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "CodeLlama": 85, "CodeLlama-70B": 80 },
+                bestModel: "GPT-4",
+                note: "复杂代码逻辑的理解和优化推荐使用 GPT-4，简单代码 GPT-3.5 也够用"
             },
             {
                 id: 3,
                 title: "赛博朋克风格提示词",
                 content: "赛博朋克风格，霓虹灯光，雨景，未来都市，高楼大厦，全息广告，科技感，蓝色和紫色调，高细节，8K分辨率，cinematic lighting",
                 category: "AI绘画",
-                tags: ["赛博朋克", "未来", "城市"]
+                tags: ["赛博朋克", "未来", "城市"],
+                models: ["Midjourney", "Stable Diffusion", "DALL-E 3", "FLUX"],
+                accuracy: { "Midjourney": 90, "Stable Diffusion": 88, "DALL-E 3": 75, "FLUX": 85 },
+                bestModel: "Midjourney",
+                note: "Midjourney 对赛博朋克、霓虹等风格的理解最佳，色彩和细节表现出色"
             },
             {
                 id: 4,
                 title: "知识点解释器",
                 content: "请用通俗易懂的方式解释以下概念，适合初学者理解。请提供定义、例子、应用场景等内容。",
                 category: "学习教育",
-                tags: ["学习", "教育", "解释"]
+                tags: ["学习", "教育", "解释"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 93, "Claude": 91, "GPT-3.5": 85, "文心一言": 82, "通义千问": 80 },
+                bestModel: "GPT-4",
+                note: "需要准确知识和通俗表达结合，GPT-4 在知识准确性和解释能力上最佳"
             },
             {
                 id: 5,
                 title: "会议纪要生成器",
                 content: "你是一位专业的会议记录员。请根据以下会议内容，生成清晰的会议纪要，包括会议主题、参会人员、讨论要点、行动事项等。",
                 category: "职场效率",
-                tags: ["会议", "纪要", "职场"]
+                tags: ["会议", "纪要", "职场"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 90, "Claude": 92, "GPT-3.5": 80, "文心一言": 78, "通义千问": 75 },
+                bestModel: "Claude",
+                note: "Claude 在长文档理解和结构化输出方面表现突出，非常适合纪要整理"
             },
             {
                 id: 6,
                 title: "博客文章写手",
                 content: "你是一位专业的博客作者。请帮我写一篇结构清晰、内容吸引人的博客文章。包括引人入胜的开头、逻辑清晰的主体、有力的结尾。",
                 category: "通用写作",
-                tags: ["博客", "文章", "写作"]
+                tags: ["博客", "文章", "写作"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 95, "Claude": 88, "GPT-3.5": 82, "文心一言": 80, "通义千问": 78 },
+                bestModel: "GPT-4",
+                note: "长内容写作和逻辑清晰度上，GPT-4 表现最佳，文章质量高且结构完整"
             },
             {
                 id: 7,
                 title: "自然风格摄影提示词",
                 content: "自然风景摄影，早晨金色阳光，山脉湖泊，蓝天白云，高清晰度，专业摄影，f/8，广角镜头，色彩真实，8K超高清",
                 category: "AI绘画",
-                tags: ["自然", "风景", "摄影"]
+                tags: ["自然", "风景", "摄影"],
+                models: ["Midjourney", "Stable Diffusion", "DALL-E 3", "FLUX"],
+                accuracy: { "Midjourney": 92, "Stable Diffusion": 85, "DALL-E 3": 80, "FLUX": 88 },
+                bestModel: "Midjourney",
+                note: "风景和摄影风格提示词，Midjourney 写实度和光影最佳"
             },
             {
                 id: 8,
                 title: "故事续写助手",
                 content: "你是一位富有想象力的故事作家。请根据我提供的开头，继续编写一个引人入胜的故事。保持情节连贯，人物鲜明，结局出人意料。",
                 category: "通用写作",
-                tags: ["故事", "创意", "写作"]
+                tags: ["故事", "创意", "写作"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 93, "Claude": 90, "GPT-3.5": 80, "文心一言": 75, "通义千问": 72 },
+                bestModel: "GPT-4",
+                note: "创意写作和情节连贯性是关键，GPT-4 的故事创作能力最强"
             },
             {
                 id: 9,
                 title: "Python脚本生成器",
                 content: "你是一位Python编程专家。请根据我的需求，编写高效、优雅的Python代码。包括注释、错误处理和最佳实践。",
                 category: "编程开发",
-                tags: ["Python", "脚本", "开发"]
+                tags: ["Python", "脚本", "开发"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama", "CodeLlama-70B"],
+                accuracy: { "GPT-4": 95, "Claude": 85, "GPT-3.5": 85, "CodeLlama": 82, "CodeLlama-70B": 80 },
+                bestModel: "GPT-4",
+                note: "代码生成和最佳实践推荐，GPT-4 代码质量最高且包含完整注释"
             },
             {
                 id: 10,
                 title: "日系动漫风格提示词",
                 content: "日系动漫风格，可爱少女，樱花飘落，粉色调，柔和光线，大眼睛，精致发型，JK制服，校园背景，唯美浪漫，高细节",
                 category: "AI绘画",
-                tags: ["动漫", "日系", "少女"]
+                tags: ["动漫", "日系", "少女"],
+                models: ["Stable Diffusion", "Midjourney", "FLUX", "NovelAI"],
+                accuracy: { "Stable Diffusion": 95, "Midjourney": 80, "FLUX": 85, "NovelAI": 92 },
+                bestModel: "Stable Diffusion + NovelAI",
+                note: "日系动漫风格，Stable Diffusion 配合专门模型（Anything、MeinaMix）最佳，NovelAI 也很专业"
             },
             {
                 id: 11,
                 title: "英语学习助手",
                 content: "你是一位专业的英语老师。请帮我练习英语听说读写。包括单词记忆、语法讲解、口语练习和写作批改。",
                 category: "学习教育",
-                tags: ["英语", "学习", "语言"]
+                tags: ["英语", "学习", "语言"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "Gemini", "文心一言"],
+                accuracy: { "GPT-4": 95, "Claude": 92, "GPT-3.5": 85, "Gemini": 88, "文心一言": 75 },
+                bestModel: "GPT-4",
+                note: "语言学习和语法讲解，GPT-4 的英语能力和教学能力都非常强"
             },
             {
                 id: 12,
                 title: "PPT大纲生成器",
                 content: "你是一位专业的演示文稿设计师。请根据主题，为我生成一个结构清晰、内容丰富的PPT大纲。包括标题、副标题和主要内容要点。",
                 category: "职场效率",
-                tags: ["PPT", "演示", "设计"]
+                tags: ["PPT", "演示", "设计"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 88, "Claude": 90, "GPT-3.5": 80, "文心一言": 78, "通义千问": 75 },
+                bestModel: "Claude",
+                note: "结构化内容和清晰表达，Claude 输出格式整齐，易于复制粘贴"
             },
             {
                 id: 13,
                 title: "产品文案撰写",
                 content: "你是一位资深的产品文案策划。请为我的产品撰写吸引人的产品描述和营销文案。突出产品特点和优势，激发购买欲望。",
                 category: "通用写作",
-                tags: ["文案", "营销", "产品"]
+                tags: ["文案", "营销", "产品"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82, "文心一言": 85, "通义千问": 83 },
+                bestModel: "GPT-4",
+                note: "营销文案需要创意和语言功底，GPT-4 在中文文案创作上有优势"
             },
             {
                 id: 14,
                 title: "SQL查询优化",
                 content: "你是一位数据库专家。请帮我优化以下SQL查询语句，提高执行效率。分析查询计划，提供优化建议和替代方案。",
                 category: "编程开发",
-                tags: ["SQL", "数据库", "优化"]
+                tags: ["SQL", "数据库", "优化"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"],
+                accuracy: { "GPT-4": 90, "Claude": 85, "GPT-3.5": 80, "CodeLlama": 82 },
+                bestModel: "GPT-4",
+                note: "SQL优化需要理解查询计划和性能知识，GPT-4 能够给出专业建议"
             },
             {
                 id: 15,
                 title: "古风仙侠风格提示词",
                 content: "古风仙侠风格，仙气缭绕，山水意境，水墨画风，古装美女，御剑飞行，仙侠世界，云雾缭绕，中国风，意境深远",
                 category: "AI绘画",
-                tags: ["古风", "仙侠", "中国风"]
+                tags: ["古风", "仙侠", "中国风"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 },
+                bestModel: "Stable Diffusion",
+                note: "中国古风和水墨画风，Stable Diffusion 配合中国风模型（如GuoFeng3）最佳"
             },
             {
                 id: 16,
                 title: "数学题讲解",
                 content: "你是一位耐心的数学老师。请详细讲解以下数学题目，包括解题思路、步骤和答案。用通俗易懂的方式解释复杂概念。",
                 category: "学习教育",
-                tags: ["数学", "解题", "教育"]
+                tags: ["数学", "解题", "教育"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "Gemini", "文心一言"],
+                accuracy: { "GPT-4": 95, "Claude": 88, "GPT-3.5": 75, "Gemini": 90, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "数学逻辑和解题步骤分析，GPT-4 准确率最高，推导过程最详细"
             },
             {
                 id: 17,
                 title: "简历优化顾问",
                 content: "你是一位专业的职业规划师。请帮我优化简历，突出优势和亮点。提供专业的简历撰写建议和模板。",
                 category: "职场效率",
-                tags: ["简历", "求职", "职业"]
+                tags: ["简历", "求职", "职业"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82, "文心一言": 85, "通义千问": 80 },
+                bestModel: "GPT-4",
+                note: "简历优化需要理解岗位需求和行业关键词，GPT-4 综合能力最强"
             },
             {
                 id: 18,
                 title: "社交媒体文案",
                 content: "你是一位社交媒体运营专家。请帮我撰写吸引人的社交媒体帖子。包括标题、正文、标签和配图建议。",
                 category: "通用写作",
-                tags: ["社交媒体", "文案", "运营"]
+                tags: ["社交媒体", "文案", "运营"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82, "文心一言": 85, "通义千问": 83 },
+                bestModel: "GPT-4",
+                note: "短文案写作和热点把握，GPT-4 在创意和语言表达上都很出色"
             },
             {
                 id: 19,
                 title: "JavaScript调试助手",
                 content: "你是一位前端开发专家。请帮我调试以下JavaScript代码。分析错误原因，提供修复方案和最佳实践建议。",
                 category: "编程开发",
-                tags: ["JavaScript", "调试", "前端"]
+                tags: ["JavaScript", "调试", "前端"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"],
+                accuracy: { "GPT-4": 93, "Claude": 85, "GPT-3.5": 82, "CodeLlama": 80 },
+                bestModel: "GPT-4",
+                note: "前端代码调试和错误分析，GPT-4 能够定位问题并给出多种解决方案"
             },
             {
                 id: 20,
                 title: "科幻场景提示词",
                 content: "科幻场景，太空飞船，星际穿越，星云背景，未来科技，量子引擎，光影效果，电影级画质，史诗感，深空探索",
                 category: "AI绘画",
-                tags: ["科幻", "太空", "未来"]
+                tags: ["科幻", "太空", "未来"],
+                models: ["Midjourney", "Stable Diffusion", "DALL-E 3", "FLUX"],
+                accuracy: { "Midjourney": 90, "Stable Diffusion": 88, "DALL-E 3": 85, "FLUX": 90 },
+                bestModel: "Midjourney / FLUX",
+                note: "科幻和宏大场景，Midjourney 和 FLUX 的细节和氛围感都非常震撼"
             },
             {
                 id: 21,
                 title: "历史知识问答",
                 content: "你是一位历史学者。请回答关于历史事件、人物和文化的问题。提供详细的背景信息和有趣的历史故事。",
                 category: "学习教育",
-                tags: ["历史", "知识", "问答"]
+                tags: ["历史", "知识", "问答"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82, "文心一言": 88, "通义千问": 85 },
+                bestModel: "GPT-4",
+                note: "历史知识的准确性和叙述能力，GPT-4 综合最佳，Claude 也很出色"
             },
             {
                 id: 22,
                 title: "时间管理顾问",
                 content: "你是一位时间管理专家。请帮我制定高效的工作计划和时间管理方案。提供实用的时间管理技巧和工具推荐。",
                 category: "职场效率",
-                tags: ["时间管理", "效率", "计划"]
+                tags: ["时间管理", "效率", "计划"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 88, "Claude": 92, "GPT-3.5": 80, "文心一言": 78, "通义千问": 75 },
+                bestModel: "Claude",
+                note: "计划制定和方案输出，Claude 的结构化和条理性最好"
             }
         ];
 
@@ -1502,6 +1622,13 @@
                 card.className = 'prompt-card';
                 card.style.animationDelay = (index * 0.1) + 's';
                 const favorited = isFavorited(prompt.id);
+                
+                const modelAccuracy = prompt.models.map(model => {
+                    const acc = prompt.accuracy[model] || 0;
+                    const color = acc >= 90 ? '#10b981' : acc >= 80 ? '#0ea5e9' : acc >= 70 ? '#f59e0b' : '#ef4444';
+                    return `<span class="model-tag" style="background: ${color}15; border: 1px solid ${color}40; color: ${color};">${model} ${acc}%</span>`;
+                }).join('');
+
                 card.innerHTML = `
                     <div class="prompt-header">
                         <div class="prompt-title">${prompt.title}</div>
@@ -1512,6 +1639,11 @@
                         <span class="tag category-tag">${prompt.category}</span>
                     </div>
                     <div class="prompt-content">${prompt.content}</div>
+                    <div class="model-info">
+                        <div class="model-info-header">🤖 推荐模型：<strong style="color: #10b981;">${prompt.bestModel}</strong> 效果最佳</div>
+                        <div class="model-tags">${modelAccuracy}</div>
+                        <div class="model-note">${prompt.note}</div>
+                    </div>
                     <div class="card-actions">
                         <button class="copy-btn" onclick="copyPrompt(${prompt.id})">复制提示词</button>
                         <button class="favorite-btn-action ${favorited ? 'favorited' : ''}" onclick="toggleFavorite(${prompt.id})">${favorited ? '取消收藏' : '收藏'}</button>
