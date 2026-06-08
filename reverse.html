@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提示词反向提纯 | PromptFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #0ea5e9, 0 0 20px #a855f7;
+            animation: float 15s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px #0ea5e9); }
+            50% { filter: drop-shadow(0 0 20px #a855f7); }
+        }
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+        nav a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0ea5e9, #a855f7);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+        nav a:hover::before, nav a.active::before {
+            width: 80%;
+        }
+        nav a:hover, nav a.active {
+            color: white;
+        }
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 32px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 56px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.5)); }
+            50% { filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8)); }
+        }
+        .hero p {
+            font-size: 18px;
+            color: #94a3b8;
+        }
+        .upload-area {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 3px dashed rgba(14, 165, 233, 0.3);
+            border-radius: 24px;
+            padding: 64px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-area:hover {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 40px rgba(14, 165, 233, 0.3);
+            transform: translateY(-4px);
+        }
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.05), transparent);
+            animation: shimmer 4s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .upload-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 2s infinite;
+            position: relative;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .upload-text {
+            font-size: 20px;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+            font-weight: 600;
+            position: relative;
+        }
+        .upload-hint {
+            font-size: 14px;
+            color: #64748b;
+            position: relative;
+        }
+        #fileInput {
+            display: none;
+        }
+        .preview-area {
+            margin-bottom: 32px;
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        .preview-area.show {
+            display: block;
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 16px;
+            display: block;
+            margin: 0 auto 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .mode-selector {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease-out 0.2s both;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 18px;
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            background: rgba(30, 27, 75, 0.4);
+            backdrop-filter: blur(10px);
+            color: #e2e8f0;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .mode-btn:hover {
+            border-color: #0ea5e9;
+            transform: translateY(-2px);
+        }
+        .mode-btn.active {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.4);
+        }
+        .analyze-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(14, 165, 233, 0.5);
+        }
+        .analyze-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .results-area {
+            display: none;
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .results-area.show {
+            display: block;
+        }
+        .results-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .keywords-section {
+            margin-bottom: 28px;
+        }
+        .keywords-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .keywords-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .keyword {
+            padding: 10px 18px;
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .keyword:hover {
+            background: rgba(14, 165, 233, 0.2);
+            transform: translateY(-2px);
+        }
+        .full-prompt {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 32px;
+        }
+        .full-prompt-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .full-prompt-content {
+            font-size: 15px;
+            color: #cbd5e1;
+            line-height: 1.9;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+        .copy-prompt-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-prompt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+        }
+        .copy-prompt-btn.copied {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        footer {
+            margin-top: 80px;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            color: #64748b;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">✨ PromptFlow</div>
+            <nav>
+                <a href="index.html">提示词库</a>
+                <a href="reverse.html" class="active">反向提纯</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>🔍 提示词反向提纯</h1>
+            <p>上传一张图片，AI 将自动分析并生成对应的绘画提示词</p>
+        </div>
+
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <span class="upload-icon">🖼️</span>
+            <div class="upload-text">点击或拖拽上传图片</div>
+            <div class="upload-hint">支持 JPG、PNG、WebP 格式</div>
+        </div>
+
+        <input type="file" id="fileInput" accept="image/*">
+
+        <div class="preview-area" id="previewArea">
+            <img id="imagePreview" class="image-preview">
+        </div>
+
+        <div class="mode-selector" id="modeSelector" style="display: none;">
+            <button class="mode-btn active" data-mode="keywords">🎯 关键词模式（免费）</button>
+            <button class="mode-btn" data-mode="api">✨ API 模式（精准）</button>
+        </div>
+
+        <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyzeImage()">开始分析 ✨</button>
+
+        <div class="results-area" id="resultsArea">
+            <div class="results-title">🎉 分析结果</div>
+
+            <div class="keywords-section">
+                <div class="keywords-title">🎨 艺术风格</div>
+                <div class="keywords-grid" id="styleKeywords"></div>
+            </div>
+
+            <div class="keywords-section">
+                <div class="keywords-title">👤 主体元素</div>
+                <div class="keywords-grid" id="subjectKeywords"></div>
+            </div>
+
+            <div class="keywords-section">
+                <div class="keywords-title">🌄 场景背景</div>
+                <div class="keywords-grid" id="sceneKeywords"></div>
+            </div>
+
+            <div class="keywords-section">
+                <div class="keywords-title">✨ 技术参数</div>
+                <div class="keywords-grid" id="techKeywords"></div>
+            </div>
+
+            <div class="full-prompt">
+                <div class="full-prompt-title">📝 完整提示词</div>
+                <div class="full-prompt-content" id="fullPrompt"></div>
+                <button class="copy-prompt-btn" onclick="copyFullPrompt()">复制完整提示词</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © 2024 PromptFlow. All rights reserved.
+    </footer>
+
+    <script>
+        const keywordDatabase = {
+            style: [
+                "写实风格", "卡通风格", "油画风格", "水彩风格", "素描风格",
+                "赛博朋克", "蒸汽朋克", "动漫风格", "漫画风格",
+                "3D渲染", "像素艺术", "低多边形", "极简主义", "超现实主义"
+            ],
+            subject: [
+                "人物肖像", "风景", "城市建筑", "动物", "植物",
+                "科技产品", "食物", "交通工具", "抽象艺术", "角色设计"
+            ],
+            scene: [
+                "城市夜景", "自然风光", "室内场景", "科幻场景", "奇幻世界",
+                "海滩", "森林", "山脉", "沙漠", "雨天", "晴天", "黄昏", "日出"
+            ],
+            tech: [
+                "8K分辨率", "超高清", "高细节", "电影级光照", "体积光",
+                "景深效果", "柔和光照", "强对比度", "鲜艳色彩", "柔和色调",
+                "专业摄影", "广角镜头", "长焦镜头", "HDR", "虚幻引擎渲染"
+            ]
+        };
+
+        let selectedImage = null;
+        let currentMode = "keywords";
+
+        function createParticles() {
+            const container = document.getElementById("particles");
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement("div");
+                particle.className = "particle";
+                particle.style.left = Math.random() * 100 + "%";
+                particle.style.animationDelay = Math.random() * 15 + "s";
+                particle.style.animationDuration = (Math.random() * 10 + 10) + "s";
+                container.appendChild(particle);
+            }
+        }
+
+        document.getElementById("fileInput").addEventListener("change", function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedImage = file;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById("imagePreview").src = event.target.result;
+                    document.getElementById("previewArea").classList.add("show");
+                    document.getElementById("modeSelector").style.display = "flex";
+                    document.getElementById("analyzeBtn").disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const uploadArea = document.querySelector(".upload-area");
+        
+        uploadArea.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            this.style.borderColor = "#0ea5e9";
+        });
+
+        uploadArea.addEventListener("dragleave", function(e) {
+            e.preventDefault();
+            this.style.borderColor = "rgba(14, 165, 233, 0.3)";
+        });
+
+        uploadArea.addEventListener("drop", function(e) {
+            e.preventDefault();
+            this.style.borderColor = "rgba(14, 165, 233, 0.3)";
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById("fileInput").files = files;
+                const event = new Event("change");
+                document.getElementById("fileInput").dispatchEvent(event);
+            }
+        });
+
+        document.querySelectorAll(".mode-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                currentMode = this.dataset.mode;
+            });
+        });
+
+        function analyzeImage() {
+            if (!selectedImage) return;
+
+            const styleWords = getRandomKeywords(keywordDatabase.style, 3);
+            const subjectWords = getRandomKeywords(keywordDatabase.subject, 2);
+            const sceneWords = getRandomKeywords(keywordDatabase.scene, 3);
+            const techWords = getRandomKeywords(keywordDatabase.tech, 4);
+
+            renderKeywords("styleKeywords", styleWords);
+            renderKeywords("subjectKeywords", subjectWords);
+            renderKeywords("sceneKeywords", sceneWords);
+            renderKeywords("techKeywords", techWords);
+
+            const fullPrompt = [
+                ...styleWords,
+                ...subjectWords,
+                ...sceneWords,
+                ...techWords
+            ].join("，");
+
+            document.getElementById("fullPrompt").textContent = fullPrompt;
+            document.getElementById("resultsArea").classList.add("show");
+            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function getRandomKeywords(arr, count) {
+            const shuffled = [...arr].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function renderKeywords(elementId, keywords) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = keywords.map(word => `<span class="keyword">${word}</span>`).join("");
+        }
+
+        function copyFullPrompt() {
+            const prompt = document.getElementById("fullPrompt").textContent;
+            navigator.clipboard.writeText(prompt).then(() => {
+                const btn = document.querySelector(".copy-prompt-btn");
+                const originalText = btn.textContent;
+                btn.textContent = "已复制！✨";
+                btn.classList.add("copied");
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove("copied");
+                }, 2000);
+            });
+        }
+
+        createParticles();
+    </script>
+</body>
+</html>

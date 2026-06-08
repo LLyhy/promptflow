@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptFlow | AI 提示词宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #0ea5e9, 0 0 20px #a855f7;
+            animation: float 15s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px #0ea5e9); }
+            50% { filter: drop-shadow(0 0 20px #a855f7); }
+        }
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+        nav a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0ea5e9, #a855f7);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+        nav a:hover::before, nav a.active::before {
+            width: 80%;
+        }
+        nav a:hover, nav a.active {
+            color: white;
+        }
+        .nav-badge {
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        .theme-toggle {
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            color: #0ea5e9;
+            font-size: 20px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .theme-toggle:hover {
+            background: rgba(14, 165, 233, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+        body.light-theme {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+        }
+        body.light-theme header {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .logo {
+            filter: none;
+        }
+        body.light-theme nav a {
+            color: #334155;
+        }
+        body.light-theme nav a:hover, body.light-theme nav a.active {
+            color: #0f172a;
+        }
+        body.light-theme .hero h1 {
+            filter: none;
+        }
+        body.light-theme .hero p {
+            color: #64748b;
+        }
+        body.light-theme .search-input {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+        body.light-theme .search-input::placeholder {
+            color: #94a3b8;
+        }
+        body.light-theme .category-btn {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #334155;
+        }
+        body.light-theme .category-btn:hover {
+            border-color: #0ea5e9;
+        }
+        body.light-theme .prompt-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .prompt-title {
+            color: #1e293b;
+        }
+        body.light-theme .prompt-content {
+            color: #475569;
+        }
+        body.light-theme .tag {
+            background: rgba(14, 165, 233, 0.1);
+            color: #0369a1;
+            border-color: rgba(14, 165, 233, 0.2);
+        }
+        body.light-theme .tag.category-tag {
+            background: rgba(168, 85, 247, 0.1);
+            color: #7c3aed;
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+        body.light-theme .reverse-cta {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .reverse-cta h2 {
+            color: #1e293b;
+        }
+        body.light-theme .reverse-cta p {
+            color: #64748b;
+        }
+        body.light-theme .support-section h2 {
+            color: #059669;
+        }
+        body.light-theme .support-section p {
+            color: #64748b;
+        }
+        body.light-theme .qr-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .qr-card h3 {
+            color: #1e293b;
+        }
+        body.light-theme .submit-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .submit-section h2 {
+            color: #1e293b;
+        }
+        body.light-theme .submit-section p {
+            color: #64748b;
+        }
+        body.light-theme .form-group label {
+            color: #334155;
+        }
+        body.light-theme .form-group input, 
+        body.light-theme .form-group textarea, 
+        body.light-theme .form-group select {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+        body.light-theme .form-group select option {
+            background: white;
+            color: #1e293b;
+        }
+        body.light-theme .modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .modal-content h3 {
+            color: #1e293b;
+        }
+        body.light-theme .modal-content p {
+            color: #64748b;
+        }
+        body.light-theme .history-item, 
+        body.light-theme .favorite-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .history-item-title, 
+        body.light-theme .favorite-item-title {
+            color: #1e293b;
+        }
+        body.light-theme .history-item-text, 
+        body.light-theme .favorite-item-text {
+            color: #64748b;
+        }
+        body.light-theme .history-item-time {
+            color: #94a3b8;
+        }
+        body.light-theme footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: #64748b;
+        }
+        body.light-theme .empty-state {
+            color: #94a3b8;
+        }
+        body.light-theme .empty-state-title {
+            color: #64748b;
+        }
+        body.light-theme .theme-toggle {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: rgba(251, 191, 36, 0.3);
+            color: #b45309;
+        }
+        body.light-theme .floating-particles {
+            opacity: 0.3;
+        }
+        .resources-section {
+            margin-top: 60px;
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+        .resources-section h2 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .resource-card {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.4s;
+        }
+        .resource-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        .resource-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+        .resource-card h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        .resource-card p {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .resource-link {
+            background: none;
+            border: none;
+            color: #f59e0b;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s;
+        }
+        .resource-link:hover {
+            color: #fbbf24;
+            margin-left: 8px;
+        }
+        .tip-item {
+            cursor: pointer;
+        }
+        .tip-action {
+            display: inline-block;
+            margin-top: 12px;
+            color: #10b981;
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+        .tip-item:hover .tip-action {
+            opacity: 1;
+            margin-left: 8px;
+        }
+        .promotion-section {
+            margin-top: 60px;
+            animation: fadeInUp 0.8s ease-out 1.2s both;
+        }
+        .promotion-section h2 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .promotion-tips {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            gap: 20px;
+        }
+        .tip-item {
+            display: flex;
+            gap: 20px;
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+        .tip-item:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
+        }
+        .tip-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .tip-item h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .tip-item p {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        body.light-theme .resources-section h2 {
+            color: #d97706;
+        }
+        body.light-theme .resource-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .resource-card h3 {
+            color: #1e293b;
+        }
+        body.light-theme .resource-card p {
+            color: #64748b;
+        }
+        body.light-theme .resource-link {
+            color: #d97706;
+        }
+        body.light-theme .promotion-section h2 {
+            color: #059669;
+        }
+        body.light-theme .tip-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .tip-item h4 {
+            color: #1e293b;
+        }
+        body.light-theme .tip-item p {
+            color: #64748b;
+        }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 32px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 64px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero h1 {
+            font-size: 56px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.5)); }
+            50% { filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8)); }
+        }
+        .hero p {
+            font-size: 20px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        .search-bar {
+            max-width: 600px;
+            margin: 48px auto;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 20px 28px 20px 56px;
+            font-size: 16px;
+            background: rgba(30, 27, 75, 0.6);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .search-input:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.3);
+        }
+        .search-input::placeholder {
+            color: #64748b;
+        }
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #64748b;
+        }
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .category-btn {
+            padding: 12px 24px;
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            background: rgba(30, 27, 75, 0.4);
+            color: #e2e8f0;
+            border-radius: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .category-btn:hover {
+            border-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
+        }
+        .category-btn.active {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.4);
+        }
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        .prompt-card {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .prompt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #a855f7, #ec4899);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        .prompt-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+        .prompt-card:hover::before {
+            transform: scaleX(1);
+        }
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .prompt-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+        .favorite-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 4px;
+            border-radius: 8px;
+        }
+        .favorite-btn:hover {
+            background: rgba(236, 72, 153, 0.2);
+            transform: scale(1.1);
+        }
+        .favorite-btn.favorited {
+            color: #ec4899;
+        }
+        .prompt-content {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .prompt-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            font-size: 12px;
+            padding: 6px 14px;
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
+            border-radius: 16px;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+        .tag.category-tag {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+        .card-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .copy-btn, .favorite-btn-action {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .copy-btn {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            color: white;
+        }
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+        }
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .favorite-btn-action {
+            background: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        .favorite-btn-action:hover {
+            background: rgba(236, 72, 153, 0.2);
+            transform: translateY(-2px);
+        }
+        .favorite-btn-action.favorited {
+            background: rgba(236, 72, 153, 0.2);
+        }
+        .reverse-cta {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
+            margin-top: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .reverse-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .reverse-cta h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .reverse-cta p {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        .reverse-cta-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.4);
+        }
+        .reverse-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(14, 165, 233, 0.5);
+        }
+        .support-section {
+            margin-top: 60px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+        .support-section h2 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        .support-section p {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+        .qr-cards {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .qr-card {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.4s;
+            min-width: 250px;
+        }
+        .qr-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .qr-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .qr-card h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .qr-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: rgba(148, 163, 184, 0.1);
+            border: 2px dashed rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .submit-section {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            margin-top: 64px;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+        .submit-section h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .submit-section p {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .submit-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group label {
+            color: #e2e8f0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 16px;
+            font-size: 14px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+        }
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-group select option {
+            background: #1e1b4b;
+            color: white;
+        }
+        .submit-btn {
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: rgba(30, 27, 75, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .modal-content h3 {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 16px;
+        }
+        .modal-content p {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+        .modal-content .close-btn {
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .modal-content .close-btn:hover {
+            transform: translateY(-2px);
+        }
+        .tabs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            background: rgba(30, 27, 75, 0.4);
+            color: #e2e8f0;
+            border-radius: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn:hover {
+            border-color: #0ea5e9;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-color: transparent;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .history-list, .favorites-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .history-item, .favorite-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+        .history-item:hover, .favorite-item:hover {
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+        .history-item-content, .favorite-item-content {
+            flex: 1;
+            margin-right: 12px;
+        }
+        .history-item-title, .favorite-item-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .history-item-text, .favorite-item-text {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .history-item-time {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .item-action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .item-action-btn.copy {
+            background: rgba(14, 165, 233, 0.2);
+            color: #0ea5e9;
+        }
+        .item-action-btn.remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .item-action-btn:hover {
+            transform: translateY(-1px);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #64748b;
+        }
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .empty-state-title {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        .empty-state-desc {
+            font-size: 14px;
+        }
+        footer {
+            margin-top: 80px;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            color: #64748b;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">✨ PromptFlow</div>
+            <nav>
+                <a href="#prompts" id="nav-prompts" class="active">提示词库</a>
+                <a href="#favorites" id="nav-favorites">收藏夹<span id="favorites-badge" class="nav-badge" style="display: none;">0</span></a>
+                <a href="#history" id="nav-history">历史记录<span id="history-badge" class="nav-badge" style="display: none;">0</span></a>
+                <a href="#submit" id="nav-submit">提交提示词</a>
+                <a href="reverse.html">反向提纯</a>
+                <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>AI 提示词宝库</h1>
+            <p>释放 AI 的无限潜能，精选优质提示词助力创作</p>
+        </div>
+
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索提示词...">
+        </div>
+
+        <div class="category-filters">
+            <button class="category-btn active" data-category="all">全部</button>
+            <button class="category-btn" data-category="通用写作">通用写作</button>
+            <button class="category-btn" data-category="编程开发">编程开发</button>
+            <button class="category-btn" data-category="AI绘画">AI绘画</button>
+            <button class="category-btn" data-category="学习教育">学习教育</button>
+            <button class="category-btn" data-category="职场效率">职场效率</button>
+        </div>
+
+        <div id="prompts" class="tab-content active">
+            <div class="prompts-grid" id="promptsGrid"></div>
+        </div>
+
+        <div id="favorites" class="tab-content">
+            <div class="favorites-list" id="favoritesList"></div>
+        </div>
+
+        <div id="history" class="tab-content">
+            <div class="history-list" id="historyList"></div>
+        </div>
+
+        <div id="submit" class="submit-section">
+            <h2>📝 提交新提示词</h2>
+            <p>有好的提示词想要分享？提交给我们，让更多人受益！</p>
+            <form class="submit-form" id="submitForm">
+                <div class="form-group">
+                    <label for="submitTitle">标题</label>
+                    <input type="text" id="submitTitle" placeholder="给你的提示词起个名字" required>
+                </div>
+                <div class="form-group">
+                    <label for="submitContent">提示词内容</label>
+                    <textarea id="submitContent" placeholder="详细描述你的提示词..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="submitCategory">分类</label>
+                    <select id="submitCategory" required>
+                        <option value="">请选择分类</option>
+                        <option value="通用写作">通用写作</option>
+                        <option value="编程开发">编程开发</option>
+                        <option value="AI绘画">AI绘画</option>
+                        <option value="学习教育">学习教育</option>
+                        <option value="职场效率">职场效率</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="submitTags">标签（用逗号分隔）</label>
+                    <input type="text" id="submitTags" placeholder="例如：写作, 创意, 故事">
+                </div>
+                <button type="submit" class="submit-btn">提交提示词</button>
+            </form>
+        </div>
+
+        <div class="reverse-cta">
+            <h2>🔍 提示词反向提纯</h2>
+            <p>上传一张图片，AI 将自动分析并生成对应的绘画提示词</p>
+            <a href="reverse.html" class="reverse-cta-btn">开始体验</a>
+        </div>
+
+        <div class="support-section">
+            <h2>💖 支持我们</h2>
+            <p>如果这个项目对你有帮助，欢迎请我们喝杯咖啡～</p>
+            <div class="qr-cards">
+                <div class="qr-card">
+                    <div class="qr-icon">💚</div>
+                    <h3>微信支付</h3>
+                    <img src="wechat-qr.png" alt="微信赞赏码" class="qr-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="qr-placeholder" style="display: none;">
+                        <span>请将微信赞赏码<br>重命名为 wechat-qr.png<br>并放到 public 目录下</span>
+                    </div>
+                </div>
+                <div class="qr-card">
+                    <div class="qr-icon">💙</div>
+                    <h3>支付宝</h3>
+                    <img src="alipay-qr.png" alt="支付宝赞赏码" class="qr-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="qr-placeholder" style="display: none;">
+                        <span>请将支付宝赞赏码<br>重命名为 alipay-qr.png<br>并放到 public 目录下</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resources-section">
+            <h2>📚 学习资源</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">🎯</div>
+                    <h3>提示词技巧</h3>
+                    <p>学习如何编写高质量的AI提示词，掌握提示工程的核心技巧。</p>
+                    <button class="resource-link" onclick="showResource('tips')">了解更多 →</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">💡</div>
+                    <h3>AI工具推荐</h3>
+                    <p>精选优质AI工具推荐，提升你的创作效率和质量。</p>
+                    <button class="resource-link" onclick="showResource('tools')">了解更多 →</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">📖</div>
+                    <h3>教程指南</h3>
+                    <p>详细的使用教程和最佳实践指南，帮助你快速上手。</p>
+                    <button class="resource-link" onclick="showResource('tutorial')">了解更多 →</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">🌐</div>
+                    <h3>社区交流</h3>
+                    <p>加入我们的社区，与其他创作者交流分享经验。</p>
+                    <button class="resource-link" onclick="showResource('community')">了解更多 →</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="promotion-section">
+            <h2>🚀 推广建议</h2>
+            <div class="promotion-tips">
+                <div class="tip-item" onclick="showPromotionTip('social')">
+                    <span class="tip-number">1</span>
+                    <div>
+                        <h4>社交媒体分享</h4>
+                        <p>在微信、微博、小红书等平台分享优质提示词，吸引更多用户关注。</p>
+                        <span class="tip-action">点击查看详情 →</span>
+                    </div>
+                </div>
+                <div class="tip-item" onclick="showPromotionTip('seo')">
+                    <span class="tip-number">2</span>
+                    <div>
+                        <h4>SEO优化</h4>
+                        <p>针对高搜索量的关键词进行页面优化，提升搜索引擎排名。</p>
+                        <span class="tip-action">点击查看详情 →</span>
+                    </div>
+                </div>
+                <div class="tip-item" onclick="showPromotionTip('partnership')">
+                    <span class="tip-number">3</span>
+                    <div>
+                        <h4>内容合作</h4>
+                        <p>与AI相关的公众号、博主进行合作推广，扩大影响力。</p>
+                        <span class="tip-action">点击查看详情 →</span>
+                    </div>
+                </div>
+                <div class="tip-item" onclick="showPromotionTip('community')">
+                    <span class="tip-number">4</span>
+                    <div>
+                        <h4>社群运营</h4>
+                        <p>建立用户社群，定期分享新提示词，保持用户活跃度。</p>
+                        <span class="tip-action">点击查看详情 →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © 2024 PromptFlow. All rights reserved.
+    </footer>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">🎉 成功！</h3>
+            <p id="modalMessage">操作成功完成！</p>
+            <button class="close-btn" onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <script>
+        const prompts = [
+            {
+                id: 1,
+                title: "专业邮件写手",
+                content: "你是一位专业的商业邮件写作专家。请帮我写一封清晰、专业、礼貌的邮件。请确保邮件结构完整，包括主题、称呼、正文、结尾等部分。",
+                category: "通用写作",
+                tags: ["邮件", "商务", "写作"]
+            },
+            {
+                id: 2,
+                title: "代码优化助手",
+                content: "你是一位资深的代码审查专家。请审查以下代码，提供优化建议，指出潜在问题，并给出改进后的版本。",
+                category: "编程开发",
+                tags: ["代码优化", "代码审查", "最佳实践"]
+            },
+            {
+                id: 3,
+                title: "赛博朋克风格提示词",
+                content: "赛博朋克风格，霓虹灯光，雨景，未来都市，高楼大厦，全息广告，科技感，蓝色和紫色调，高细节，8K分辨率，cinematic lighting",
+                category: "AI绘画",
+                tags: ["赛博朋克", "未来", "城市"]
+            },
+            {
+                id: 4,
+                title: "知识点解释器",
+                content: "请用通俗易懂的方式解释以下概念，适合初学者理解。请提供定义、例子、应用场景等内容。",
+                category: "学习教育",
+                tags: ["学习", "教育", "解释"]
+            },
+            {
+                id: 5,
+                title: "会议纪要生成器",
+                content: "你是一位专业的会议记录员。请根据以下会议内容，生成清晰的会议纪要，包括会议主题、参会人员、讨论要点、行动事项等。",
+                category: "职场效率",
+                tags: ["会议", "纪要", "职场"]
+            },
+            {
+                id: 6,
+                title: "博客文章写手",
+                content: "你是一位专业的博客作者。请帮我写一篇结构清晰、内容吸引人的博客文章。包括引人入胜的开头、逻辑清晰的主体、有力的结尾。",
+                category: "通用写作",
+                tags: ["博客", "文章", "写作"]
+            },
+            {
+                id: 7,
+                title: "自然风格摄影提示词",
+                content: "自然风景摄影，早晨金色阳光，山脉湖泊，蓝天白云，高清晰度，专业摄影，f/8，广角镜头，色彩真实，8K超高清",
+                category: "AI绘画",
+                tags: ["自然", "风景", "摄影"]
+            },
+            {
+                id: 8,
+                title: "故事续写助手",
+                content: "你是一位富有想象力的故事作家。请根据我提供的开头，继续编写一个引人入胜的故事。保持情节连贯，人物鲜明，结局出人意料。",
+                category: "通用写作",
+                tags: ["故事", "创意", "写作"]
+            },
+            {
+                id: 9,
+                title: "Python脚本生成器",
+                content: "你是一位Python编程专家。请根据我的需求，编写高效、优雅的Python代码。包括注释、错误处理和最佳实践。",
+                category: "编程开发",
+                tags: ["Python", "脚本", "开发"]
+            },
+            {
+                id: 10,
+                title: "日系动漫风格提示词",
+                content: "日系动漫风格，可爱少女，樱花飘落，粉色调，柔和光线，大眼睛，精致发型，JK制服，校园背景，唯美浪漫，高细节",
+                category: "AI绘画",
+                tags: ["动漫", "日系", "少女"]
+            },
+            {
+                id: 11,
+                title: "英语学习助手",
+                content: "你是一位专业的英语老师。请帮我练习英语听说读写。包括单词记忆、语法讲解、口语练习和写作批改。",
+                category: "学习教育",
+                tags: ["英语", "学习", "语言"]
+            },
+            {
+                id: 12,
+                title: "PPT大纲生成器",
+                content: "你是一位专业的演示文稿设计师。请根据主题，为我生成一个结构清晰、内容丰富的PPT大纲。包括标题、副标题和主要内容要点。",
+                category: "职场效率",
+                tags: ["PPT", "演示", "设计"]
+            },
+            {
+                id: 13,
+                title: "产品文案撰写",
+                content: "你是一位资深的产品文案策划。请为我的产品撰写吸引人的产品描述和营销文案。突出产品特点和优势，激发购买欲望。",
+                category: "通用写作",
+                tags: ["文案", "营销", "产品"]
+            },
+            {
+                id: 14,
+                title: "SQL查询优化",
+                content: "你是一位数据库专家。请帮我优化以下SQL查询语句，提高执行效率。分析查询计划，提供优化建议和替代方案。",
+                category: "编程开发",
+                tags: ["SQL", "数据库", "优化"]
+            },
+            {
+                id: 15,
+                title: "古风仙侠风格提示词",
+                content: "古风仙侠风格，仙气缭绕，山水意境，水墨画风，古装美女，御剑飞行，仙侠世界，云雾缭绕，中国风，意境深远",
+                category: "AI绘画",
+                tags: ["古风", "仙侠", "中国风"]
+            },
+            {
+                id: 16,
+                title: "数学题讲解",
+                content: "你是一位耐心的数学老师。请详细讲解以下数学题目，包括解题思路、步骤和答案。用通俗易懂的方式解释复杂概念。",
+                category: "学习教育",
+                tags: ["数学", "解题", "教育"]
+            },
+            {
+                id: 17,
+                title: "简历优化顾问",
+                content: "你是一位专业的职业规划师。请帮我优化简历，突出优势和亮点。提供专业的简历撰写建议和模板。",
+                category: "职场效率",
+                tags: ["简历", "求职", "职业"]
+            },
+            {
+                id: 18,
+                title: "社交媒体文案",
+                content: "你是一位社交媒体运营专家。请帮我撰写吸引人的社交媒体帖子。包括标题、正文、标签和配图建议。",
+                category: "通用写作",
+                tags: ["社交媒体", "文案", "运营"]
+            },
+            {
+                id: 19,
+                title: "JavaScript调试助手",
+                content: "你是一位前端开发专家。请帮我调试以下JavaScript代码。分析错误原因，提供修复方案和最佳实践建议。",
+                category: "编程开发",
+                tags: ["JavaScript", "调试", "前端"]
+            },
+            {
+                id: 20,
+                title: "科幻场景提示词",
+                content: "科幻场景，太空飞船，星际穿越，星云背景，未来科技，量子引擎，光影效果，电影级画质，史诗感，深空探索",
+                category: "AI绘画",
+                tags: ["科幻", "太空", "未来"]
+            },
+            {
+                id: 21,
+                title: "历史知识问答",
+                content: "你是一位历史学者。请回答关于历史事件、人物和文化的问题。提供详细的背景信息和有趣的历史故事。",
+                category: "学习教育",
+                tags: ["历史", "知识", "问答"]
+            },
+            {
+                id: 22,
+                title: "时间管理顾问",
+                content: "你是一位时间管理专家。请帮我制定高效的工作计划和时间管理方案。提供实用的时间管理技巧和工具推荐。",
+                category: "职场效率",
+                tags: ["时间管理", "效率", "计划"]
+            }
+        ];
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function getFavorites() {
+            const stored = localStorage.getItem('pf_favorites');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveFavorites(favorites) {
+            localStorage.setItem('pf_favorites', JSON.stringify(favorites));
+            updateBadge('favorites', favorites.length);
+        }
+
+        function getHistory() {
+            const stored = localStorage.getItem('pf_history');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveHistory(history) {
+            localStorage.setItem('pf_history', JSON.stringify(history.slice(0, 50)));
+            updateBadge('history', history.length);
+        }
+
+        function updateBadge(type, count) {
+            const badge = document.getElementById(type + '-badge');
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+
+        function isFavorited(id) {
+            const favorites = getFavorites();
+            return favorites.includes(id);
+        }
+
+        function toggleFavorite(id) {
+            const favorites = getFavorites();
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            saveFavorites(favorites);
+            renderPrompts(filterPrompts(currentCategory, currentSearch));
+            renderFavorites();
+            showModal('收藏已' + (index > -1 ? '取消' : '添加') + '！', '提示词已成功' + (index > -1 ? '取消收藏' : '添加到收藏夹') + '。');
+        }
+
+        function addToHistory(prompt) {
+            const history = getHistory();
+            const exists = history.find(h => h.id === prompt.id);
+            if (!exists) {
+                history.unshift({
+                    ...prompt,
+                    timestamp: Date.now()
+                });
+                saveHistory(history);
+                renderHistory();
+            }
+        }
+
+        function removeFromHistory(id) {
+            const history = getHistory().filter(h => h.id !== id);
+            saveHistory(history);
+            renderHistory();
+        }
+
+        function removeFromFavorites(id) {
+            const favorites = getFavorites().filter(f => f !== id);
+            saveFavorites(favorites);
+            renderPrompts(filterPrompts(currentCategory, currentSearch));
+            renderFavorites();
+        }
+
+        function renderPrompts(filteredPrompts) {
+            const grid = document.getElementById('promptsGrid');
+            grid.innerHTML = '';
+            
+            if (filteredPrompts.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-title">没有找到匹配的提示词</div>
+                        <div class="empty-state-desc">尝试更换关键词或选择其他分类</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredPrompts.forEach((prompt, index) => {
+                const card = document.createElement('div');
+                card.className = 'prompt-card';
+                card.style.animationDelay = (index * 0.1) + 's';
+                const favorited = isFavorited(prompt.id);
+                card.innerHTML = `
+                    <div class="prompt-header">
+                        <div class="prompt-title">${prompt.title}</div>
+                        <button class="favorite-btn ${favorited ? 'favorited' : ''}" onclick="toggleFavorite(${prompt.id})">${favorited ? '❤️' : '🤍'}</button>
+                    </div>
+                    <div class="prompt-tags">
+                        ${prompt.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        <span class="tag category-tag">${prompt.category}</span>
+                    </div>
+                    <div class="prompt-content">${prompt.content}</div>
+                    <div class="card-actions">
+                        <button class="copy-btn" onclick="copyPrompt(${prompt.id})">复制提示词</button>
+                        <button class="favorite-btn-action ${favorited ? 'favorited' : ''}" onclick="toggleFavorite(${prompt.id})">${favorited ? '取消收藏' : '收藏'}</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderFavorites() {
+            const list = document.getElementById('favoritesList');
+            const favorites = getFavorites();
+            
+            if (favorites.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💔</div>
+                        <div class="empty-state-title">还没有收藏</div>
+                        <div class="empty-state-desc">点击提示词卡片上的❤️按钮添加收藏</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const favoritePrompts = prompts.filter(p => favorites.includes(p.id));
+            list.innerHTML = favoritePrompts.map(prompt => `
+                <div class="favorite-item">
+                    <div class="favorite-item-content">
+                        <div class="favorite-item-title">${prompt.title}</div>
+                        <div class="favorite-item-text">${prompt.content}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="item-action-btn copy" onclick="copyPrompt(${prompt.id})">复制</button>
+                        <button class="item-action-btn remove" onclick="removeFromFavorites(${prompt.id})">移除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            const history = getHistory();
+            
+            if (history.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📜</div>
+                        <div class="empty-state-title">还没有复制记录</div>
+                        <div class="empty-state-desc">复制提示词后会在这里显示</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div class="history-item-content">
+                        <div class="history-item-title">${item.title}</div>
+                        <div class="history-item-text">${item.content}</div>
+                        <div class="history-item-time">${formatTime(item.timestamp)}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="item-action-btn copy" onclick="copyPrompt(${item.id})">复制</button>
+                        <button class="item-action-btn remove" onclick="removeFromHistory(${item.id})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return '刚刚';
+            if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+            return date.toLocaleDateString('zh-CN');
+        }
+
+        function copyPrompt(id) {
+            const prompt = prompts.find(p => p.id === id);
+            if (prompt) {
+                navigator.clipboard.writeText(prompt.content).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = '已复制！✨';
+                    btn.classList.add('copied');
+                    addToHistory(prompt);
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        }
+
+        function filterPrompts(category, searchText) {
+            return prompts.filter(prompt => {
+                const matchesCategory = category === 'all' || prompt.category === category;
+                const matchesSearch = searchText === '' || 
+                    prompt.title.toLowerCase().includes(searchText.toLowerCase()) ||
+                    prompt.content.toLowerCase().includes(searchText.toLowerCase()) ||
+                    prompt.tags.some(tag => tag.toLowerCase().includes(searchText.toLowerCase()));
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('submitTitle').value;
+            const content = document.getElementById('submitContent').value;
+            const category = document.getElementById('submitCategory').value;
+            const tagsInput = document.getElementById('submitTags').value;
+            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : [];
+            
+            const newPrompt = {
+                id: Date.now(),
+                title,
+                content,
+                category,
+                tags
+            };
+            
+            prompts.push(newPrompt);
+            document.getElementById('submitForm').reset();
+            showModal('✅ 提交成功！', '感谢你的贡献！提示词已添加到库中。');
+            renderPrompts(prompts);
+        }
+
+        let currentCategory = 'all';
+        let currentSearch = '';
+
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                renderPrompts(filterPrompts(currentCategory, currentSearch));
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            currentSearch = this.value;
+            renderPrompts(filterPrompts(currentCategory, currentSearch));
+        });
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                
+                document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                if (targetId && document.getElementById(targetId)) {
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    if (targetId === 'favorites') renderFavorites();
+                    if (targetId === 'history') renderHistory();
+                }
+            });
+        });
+
+        document.getElementById('submitForm').addEventListener('submit', handleSubmit);
+
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        function toggleTheme() {
+            const body = document.body;
+            const toggleBtn = document.getElementById('themeToggle');
+            
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                toggleBtn.textContent = '🌙';
+                localStorage.setItem('pf_theme', 'dark');
+            } else {
+                body.classList.add('light-theme');
+                toggleBtn.textContent = '☀️';
+                localStorage.setItem('pf_theme', 'light');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('pf_theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+            document.getElementById('themeToggle').textContent = '☀️';
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+        const resourceData = {
+            tips: {
+                title: '🎯 提示词技巧',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#10b981;">提示工程核心技巧</h4>
+                    <p style="margin-bottom:12px;"><strong>1. 明确角色定位</strong> - 告诉AI扮演什么身份，如资深编辑、代码专家等</p>
+                    <p style="margin-bottom:12px;"><strong>2. 提供上下文</strong> - 给足够背景信息，让AI更好理解需求</p>
+                    <p style="margin-bottom:12px;"><strong>3. 指定输出格式</strong> - 明确要求格式，如表格、JSON、列表等</p>
+                    <p style="margin-bottom:12px;"><strong>4. 分步骤思考</strong> - 复杂任务分解，让AI一步步完成</p>
+                    <p><strong>5. 迭代优化</strong> - 根据结果不断调整提示词</p>
+                `
+            },
+            tools: {
+                title: '💡 AI工具推荐',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#f59e0b;">精选AI工具</h4>
+                    <p style="margin-bottom:12px;"><strong>ChatGPT</strong> - 通用对话AI，适合各种任务</p>
+                    <p style="margin-bottom:12px;"><strong>Midjourney</strong> - AI绘画工具，创意生成</p>
+                    <p style="margin-bottom:12px;"><strong>Claude</strong> - 安全可靠的AI助手</p>
+                    <p style="margin-bottom:12px;"><strong>Stable Diffusion</strong> - 开源AI绘画</p>
+                    <p><strong>GitHub Copilot</strong> - AI编程助手</p>
+                `
+            },
+            tutorial: {
+                title: '📖 教程指南',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#10b981;">快速入门指南</h4>
+                    <p style="margin-bottom:12px;"><strong>第一步</strong> - 从提示词库选择合适的模板</p>
+                    <p style="margin-bottom:12px;"><strong>第二步</strong> - 根据需要修改内容</p>
+                    <p style="margin-bottom:12px;"><strong>第三步</strong> - 复制提示词到AI工具中使用</p>
+                    <p style="margin-bottom:12px;"><strong>第四步</strong> - 根据输出效果调整提示词</p>
+                    <p><strong>第五步</strong> - 收藏常用提示词</p>
+                `
+            },
+            community: {
+                title: '🌐 社区交流',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#a855f7;">加入我们的社区</h4>
+                    <p style="margin-bottom:12px;"><strong>分享你的技巧</strong> - 与大家交流使用心得</p>
+                    <p style="margin-bottom:12px;"><strong>贡献提示词</strong> - 分享你创作的优秀提示词</p>
+                    <p style="margin-bottom:12px;"><strong>获取最新资讯</strong> - 第一时间了解AI动态</p>
+                    <p style="margin-bottom:12px;"><strong>互相学习</strong> - 与其他创作者共同进步</p>
+                    <p><strong>即将上线</strong> - 更多社区功能敬请期待！</p>
+                `
+            }
+        };
+
+        const promotionData = {
+            social: {
+                title: '社交媒体分享',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#0ea5e9;">推广策略</h4>
+                    <p style="margin-bottom:12px;"><strong>内容选择</strong> - 挑选实用、有趣的提示词分享</p>
+                    <p style="margin-bottom:12px;"><strong>多平台布局</strong> - 微信、微博、小红书同步推送</p>
+                    <p style="margin-bottom:12px;"><strong>视觉优化</strong> - 配上美观的截图吸引眼球</p>
+                    <p style="margin-bottom:12px;"><strong>互动引导</strong> - 鼓励评论转发，扩大影响</p>
+                    <p><strong>持续更新</strong> - 保持稳定的内容更新频率</p>
+                `
+            },
+            seo: {
+                title: 'SEO优化',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#10b981;">搜索引擎优化</h4>
+                    <p style="margin-bottom:12px;"><strong>关键词研究</strong> - 分析热门AI相关搜索词</p>
+                    <p style="margin-bottom:12px;"><strong>页面优化</strong> - 标题、描述、图片优化</p>
+                    <p style="margin-bottom:12px;"><strong>内链结构</strong> - 合理的链接布局</p>
+                    <p style="margin-bottom:12px;"><strong>加载速度</strong> - 优化页面性能</p>
+                    <p><strong>外部链接</strong> - 建立高质量的外部链接</p>
+                `
+            },
+            partnership: {
+                title: '内容合作',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#a855f7;">合作方式</h4>
+                    <p style="margin-bottom:12px;"><strong>博主合作</strong> - 与AI领域博主建立合作</p>
+                    <p style="margin-bottom:12px;"><strong>公众号互推</strong> - 相关公众号互换推荐</p>
+                    <p style="margin-bottom:12px;"><strong>资源互换</strong> - 与同类产品交换链接</p>
+                    <p style="margin-bottom:12px;"><strong>内容共创</strong> - 联合创作优质内容</p>
+                    <p><strong>活动联动</strong> - 一起举办线上活动</p>
+                `
+            },
+            community: {
+                title: '社群运营',
+                content: `
+                    <h4 style="margin-bottom:16px;color:#ec4899;">运营策略</h4>
+                    <p style="margin-bottom:12px;"><strong>社群搭建</strong> - 建立微信、QQ、Discord群</p>
+                    <p style="margin-bottom:12px;"><strong>内容分享</strong> - 定期分享新提示词和技巧</p>
+                    <p style="margin-bottom:12px;"><strong>用户互动</strong> - 活跃氛围，鼓励交流</p>
+                    <p style="margin-bottom:12px;"><strong>活动策划</strong> - 定期举办线上活动</p>
+                    <p><strong>用户反馈</strong> - 积极收集并回应用户建议</p>
+                `
+            }
+        };
+
+        function showResource(type) {
+            const data = resourceData[type];
+            if (data) {
+                const modal = document.getElementById('modal');
+                document.getElementById('modalTitle').innerHTML = data.title;
+                document.getElementById('modalMessage').innerHTML = data.content;
+                modal.classList.add('active');
+            }
+        }
+
+        function showPromotionTip(type) {
+            const data = promotionData[type];
+            if (data) {
+                const modal = document.getElementById('modal');
+                document.getElementById('modalTitle').innerHTML = '🚀 ' + data.title;
+                document.getElementById('modalMessage').innerHTML = data.content;
+                modal.classList.add('active');
+            }
+        }
+
+        createParticles();
+        renderPrompts(prompts);
+        updateBadge('favorites', getFavorites().length);
+        updateBadge('history', getHistory().length);
+    </script>
+</body>
+</html>
