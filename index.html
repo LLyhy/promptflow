@@ -1637,6 +1637,299 @@
             position: relative;
             z-index: 1;
         }
+
+        /* ==================== v2 新样式 ==================== */
+        .format-btn {
+            padding: 10px;
+            background: rgba(30, 27, 75, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .format-btn:hover {
+            background: rgba(63, 51, 139, 0.4);
+            border-color: #6366f1;
+            transform: translateY(-1px);
+        }
+        .format-btn.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: transparent;
+            color: white;
+        }
+
+        /* 加载骨架动画 */
+        .skeleton-line {
+            height: 12px;
+            background: linear-gradient(90deg, rgba(99,102,241,0.1) 25%, rgba(99,102,241,0.25) 50%, rgba(99,102,241,0.1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-shine 1.4s ease-in-out infinite;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+        @keyframes skeleton-shine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* 首次引导浮层 */
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        .onboarding-card {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 420px;
+            width: 92%;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+        }
+        .onboarding-title { font-size: 22px; font-weight: 700; color: white; margin-bottom: 12px; }
+        .onboarding-text { color: #cbd5e1; font-size: 14px; line-height: 1.8; margin-bottom: 16px; }
+        .onboarding-steps { background: rgba(15, 23, 42, 0.5); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; }
+        .onboarding-step { color: #94a3b8; font-size: 13px; padding: 4px 0; }
+        .onboarding-step strong { color: #a5b4fc; }
+        .onboarding-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ============ v3.0 新功能样式 ============ */
+        .v3-inspiration-section {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 14px;
+        }
+        .v3-inspiration-header { margin-bottom: 12px; }
+        .v3-inspiration-title { font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
+        .v3-inspiration-sub { font-size: 12px; color: #94a3b8; }
+
+        .v3-inspiration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+        }
+        .inspiration-card {
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .inspiration-card:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: #8b5cf6;
+            transform: translateY(-2px);
+        }
+        .inspiration-card .emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+        .inspiration-card .title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px; }
+        .inspiration-card .subtitle { font-size: 11px; color: #94a3b8; line-height: 1.4; }
+        .inspiration-card .tag {
+            display: inline-block;
+            font-size: 10px;
+            color: #a5b4fc;
+            background: rgba(99, 102, 241, 0.2);
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-top: 6px;
+        }
+
+        .history-toggle {
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(147, 51, 234, 0.25);
+            color: #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .history-toggle:hover { background: rgba(99, 102, 241, 0.15); border-color: #6366f1; }
+
+        .tab-pill {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-pill:hover { border-color: #6366f1; color: #a5b4fc; }
+        .tab-pill.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; color: white; }
+
+        .history-item {
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .history-item:hover { background: rgba(99, 102, 241, 0.12); border-color: #6366f1; }
+        .history-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .history-item-title { font-size: 12px; color: #a5b4fc; font-weight: 600; }
+        .history-item-time { font-size: 10px; color: #64748b; }
+        .history-item-text { font-size: 11px; color: #cbd5e1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .history-item-actions { margin-top: 6px; display: flex; gap: 4px; }
+        .history-item-actions button {
+            background: transparent;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        .history-item-actions button:hover { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: #6366f1; }
+
+        .fav-star {
+            background: transparent;
+            border: none;
+            color: #f59e0b;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 4px;
+            margin-left: auto;
+            float: right;
+            transition: transform 0.2s;
+        }
+        .fav-star.active { color: #fbbf24; }
+        .fav-star:hover { transform: scale(1.2); }
+
+        .batch-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .batch-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .batch-card-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #10b981;
+        }
+        .batch-card-copy {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .batch-card-content {
+            font-size: 12px;
+            color: #cbd5e1;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        /* v4.0 去绘图按钮 */
+        .draw-btn {
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            color: #a5b4fc;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .draw-btn:hover {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-1px);
+        }
+        /* v4.0 新手教学卡片 */
+        .v4-tutorial-section {
+            max-width: 1000px;
+            margin: 40px auto 20px;
+            padding: 0 20px;
+        }
+        .v4-tutorial-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+        .v4-tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        .v4-tutorial-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .v4-tutorial-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+        .v4-tutorial-card-extra {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(249, 115, 22, 0.08));
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        .v4-tutorial-card-extra:hover { border-color: #f59e0b; }
+        .v4-tutorial-emoji {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .v4-tutorial-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
+        }
+        .v4-tutorial-card-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+        body.light-theme .v4-tutorial-card { color: #1e293b; }
+        body.light-theme .v4-tutorial-card-title { color: #1e293b; }
+        body.light-theme .v4-tutorial-card-desc { color: #475569; }
     </style>
     <!-- ==================== 百度统计 ==================== -->
     <script>
@@ -1648,6 +1941,7 @@
       s.parentNode.insertBefore(hm, s);
     })();
     </script>
+    <script src="keywords.js?v2"></script>
 </head>
 <body>
     <div class="floating-particles" id="particles"></div>
@@ -1766,9 +2060,93 @@
         </div>
 
         <div id="generator" class="tab-content generator-section">
+
+            <!-- ============ v3.0 每日灵感卡片 ============ -->
+            <div class="v3-inspiration-section">
+                <div class="v3-inspiration-header">
+                    <div class="v3-inspiration-title">✨ 每日灵感 · 点击一键生成</div>
+                    <div class="v3-inspiration-sub">不知道写什么？从这些现成的创意开始 →</div>
+                </div>
+                <div class="v3-inspiration-grid" id="inspirationGrid"></div>
+            </div>
+
             <div class="generator-title">🧠 智能提示词生成器</div>
             <div class="generator-subtitle">输入简单描述，AI帮你生成专业提示词</div>
             <textarea class="generator-input" id="generatorInput" placeholder="请输入你的需求描述，例如：生成一段描述美丽风景的绘画提示词..." oninput="checkInputLength()"></textarea>
+
+            <div style="margin: 16px 0; padding: 16px; background: rgba(30, 27, 75, 0.5); border: 1px solid rgba(147, 51, 234, 0.25); border-radius: 12px;">
+                <div style="font-size: 13px; color: #94a3b8; margin-bottom: 10px;">🎨 目标模型（输出格式）：</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;">
+                    <label id="modelTagPlain" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.12); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="modelType" value="plain" style="display: none;" checked onchange="updateModelType()">
+                        <div style="font-size: 20px;">🔤</div>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-top: 3px; font-weight: 600;">通用格式</div>
+                    </label>
+                    <label id="modelTagMidjourney" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid rgba(148, 163, 184, 0.3); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="modelType" value="midjourney" style="display: none;" onchange="updateModelType()">
+                        <div style="font-size: 20px;">🎨</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 600;">Midjourney</div>
+                    </label>
+                    <label id="modelTagSD" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid rgba(148, 163, 184, 0.3); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="modelType" value="sd" style="display: none;" onchange="updateModelType()">
+                        <div style="font-size: 20px;">🖼️</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 600;">Stable Diffusion</div>
+                    </label>
+                    <label id="modelTagDalle" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid rgba(148, 163, 184, 0.3); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="modelType" value="dalle" style="display: none;" onchange="updateModelType()">
+                        <div style="font-size: 20px;">✨</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 600;">DALL·E / 豆包</div>
+                    </label>
+                </div>
+
+                <!-- v4.0 语言模式选择器 -->
+                <div style="font-size: 13px; color: #94a3b8; margin-bottom: 10px; margin-top: 4px;">🌍 输出语言模式：</div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                    <label id="langTagMix" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.12); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="langMode" value="mix" style="display: none;" checked onchange="updateLangMode()">
+                        <div style="font-size: 20px;">🇨🇳</div>
+                        <div style="font-size: 11px; color: #cbd5e1; margin-top: 3px; font-weight: 600;">混合（推荐）</div>
+                        <div style="font-size: 10px; color: #64748b; margin-top: 2px;">中文描述 + 英文关键词</div>
+                    </label>
+                    <label id="langTagEn" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid rgba(148, 163, 184, 0.3); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="langMode" value="en" style="display: none;" onchange="updateLangMode()">
+                        <div style="font-size: 20px;">🇬🇧</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 600;">全英文</div>
+                        <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Midjourney/SD 最适配</div>
+                    </label>
+                    <label id="langTagZh" style="cursor: pointer; padding: 10px 8px; border-radius: 8px; border: 2px solid rgba(148, 163, 184, 0.3); text-align: center; transition: all 0.2s;">
+                        <input type="radio" name="langMode" value="zh" style="display: none;" onchange="updateLangMode()">
+                        <div style="font-size: 20px;">🀄</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 600;">全中文</div>
+                        <div style="font-size: 10px; color: #64748b; margin-top: 2px;">豆包/国内模型</div>
+                    </label>
+                </div>
+
+                <div style="height: 1px; background: linear-gradient(90deg, transparent, rgba(148,163,184,0.3), transparent); margin: 14px 0;"></div>
+
+                <div style="font-size: 13px; color: #94a3b8; margin-bottom: 10px;">⚙️ 选择生成模式：</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <label id="modeApiLabel" style="cursor: pointer; padding: 12px; border-radius: 10px; border: 2px solid rgba(148, 163, 184, 0.3); background: rgba(30, 27, 75, 0.3); display: block; transition: all 0.2s;">
+                        <input type="radio" name="genMode" id="genModeApi" value="api" style="margin-right: 6px;" onchange="updateGenMode()">
+                        <strong style="color: #94a3b8; font-size: 13px;">🚀 使用自己的 API Key</strong>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">豆包大模型 · 效果最佳</div>
+                    </label>
+                    <label id="modeSmartLabel" style="cursor: pointer; padding: 12px; border-radius: 10px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.12); display: block; transition: all 0.2s;">
+                        <input type="radio" name="genMode" id="genModeSmart" value="smart" style="margin-right: 6px;" checked onchange="updateGenMode()">
+                        <strong style="color: #a5b4fc; font-size: 13px;">✨ 本站智能模板</strong>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">免配置 · 即用型 · 效果略逊</div>
+                    </label>
+                </div>
+                <div id="apiKeyBox" style="margin-top: 12px;">
+                    <div style="font-size: 12px; color: #94a3b8; margin-bottom: 6px;">豆包 ARK API Key（ark- 开头）：</div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="apiKeyInput" placeholder="ark-xxxxxxxxxxxxxxxx"
+                               style="flex: 1; padding: 10px 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; color: #e2e8f0; font-size: 13px;">
+                        <button onclick="saveApiKey()" style="padding: 0 14px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 8px; color: white; font-size: 12px; font-weight: 600; cursor: pointer;">保存</button>
+                    </div>
+                    <div id="apiKeyStatus" style="font-size: 11px; color: #64748b; margin-top: 6px;"></div>
+                </div>
+            </div>
 
             <div class="guide-trigger" id="guideTrigger" onclick="showGuidedBuilder()">
                 <span class="guide-trigger-icon">🎯</span>
@@ -1805,11 +2183,79 @@
                 <button class="style-tag" data-style="poetic">🎭 诗意版</button>
                 <button class="style-tag" data-style="professional">💼 专业版</button>
             </div>
-            <button class="modal-btn" onclick="generatePrompt()">✨ 生成提示词</button>
+            <!-- v3.0 双按钮：生成 + 辅助功能入口 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <button class="modal-btn" onclick="handleGenButton('normal')">✨ 生成提示词</button>
+                <button class="modal-btn" style="background: linear-gradient(135deg, #f59e0b, #f97316);" onclick="handleGenButton('refine')">💎 优化提示词</button>
+                <button class="modal-btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="handleGenButton('batch')">🎭 批量 8 风格</button>
+            </div>
+
+            <!-- 历史记录入口 -->
+            <div style="text-align: center; margin-bottom: 12px;">
+                <button class="history-toggle" onclick="toggleHistory()" id="historyToggleBtn">
+                    📜 历史记录 <span id="historyCountBadge" style="font-size: 11px; background: rgba(99,102,241,0.3); padding: 2px 8px; border-radius: 10px; margin-left: 4px;">0</span>
+                    <span id="favCountBadge" style="font-size: 11px; background: rgba(244,63,94,0.3); padding: 2px 8px; border-radius: 10px; margin-left: 4px;">💖 0</span>
+                </button>
+            </div>
+
+            <!-- 历史/收藏折叠面板 -->
+            <div id="historyPanel" style="display: none; margin-bottom: 16px; padding: 16px; background: rgba(30, 27, 75, 0.5); border: 1px solid rgba(147, 51, 234, 0.25); border-radius: 12px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                    <button class="tab-pill active" onclick="switchHistoryTab('history')" id="tab-history">📜 最近生成</button>
+                    <button class="tab-pill" onclick="switchHistoryTab('favorites')" id="tab-favorites">💖 我的收藏</button>
+                    <button class="tab-pill" style="margin-left: auto; background: rgba(239, 68, 68, 0.2);" onclick="clearHistory()" id="clearHistoryBtn">清空</button>
+                </div>
+                <div id="historyListArea" style="max-height: 320px; overflow-y: auto;"></div>
+                <div id="favoritesListArea" style="display: none; max-height: 320px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- 生成结果 -->
             <div class="generator-result" id="generatorResult" style="display: none;">
-                <div class="generator-result-title">生成结果</div>
+                <div class="generator-result-title">
+                    <span id="resultThemeBadge" style="font-size: 12px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 4px 10px; border-radius: 20px; margin-right: 8px;">✨ 生成完成</span>
+                    <span id="resultModeBadge" style="font-size: 12px;"></span>
+                    生成结果
+                    <button class="fav-star" id="favStar" onclick="toggleFavorite()" title="收藏此提示词">☆</button>
+                </div>
                 <div class="generator-result-text" id="generatedPrompt"></div>
-                <button class="modal-btn" style="margin-top: 16px;" onclick="copyGeneratedPrompt()">📋 复制提示词</button>
+                <div id="refinerAddedBox" style="display: none; margin-top: 16px; padding: 14px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px;">
+                    <div style="font-size: 12px; color: #fbbf24; margin-bottom: 8px;">💎 已为你补足这些关键词：</div>
+                    <div id="refinerAddedList" style="font-size: 12px; color: #cbd5e1; line-height: 1.8;"></div>
+                </div>
+                <div id="multiFormatBox" style="display: none; margin-top: 16px;">
+                    <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">🎯 一键切换目标模型格式：</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                        <button class="format-btn" onclick="showFormat('plain')" id="btn-plain">🔤 通用格式</button>
+                        <button class="format-btn" onclick="showFormat('midjourney')" id="btn-midjourney">🎨 Midjourney</button>
+                        <button class="format-btn" onclick="showFormat('sd')" id="btn-sd">🖼️ Stable Diffusion</button>
+                        <button class="format-btn" onclick="showFormat('dalle')" id="btn-dalle">✨ DALL·E / 豆包</button>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 16px;">
+                    <button class="modal-btn" style="flex: 1;" onclick="copyGeneratedPrompt()" id="copyBtn">📋 复制提示词</button>
+                    <button class="modal-btn" style="flex: 0 0 auto; background: linear-gradient(135deg, #6366f1, #8b5cf6);" onclick="regeneratePrompt()">🔄 换一批</button>
+                </div>
+
+                <!-- v4.0 一键去绘图 + 分享链接 -->
+                <div style="margin-top: 16px; padding: 14px; background: rgba(30, 27, 75, 0.4); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 10px;">
+                    <div style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">🚀 直接去绘图平台：</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                        <button class="draw-btn" id="drawBtn1" onclick="openDrawPlatform('doubao')">💬 豆包绘图</button>
+                        <button class="draw-btn" id="drawBtn2" onclick="openDrawPlatform('midjourney')">🎨 Midjourney</button>
+                        <button class="draw-btn" id="drawBtn3" onclick="openDrawPlatform('sd')">🖼️ Stable Diffusion</button>
+                        <button class="draw-btn" id="drawBtn4" onclick="openDrawPlatform('share')">🔗 生成分享链接</button>
+                    </div>
+                    <div id="shareLinkBox" style="display: none; margin-top: 10px; padding: 8px; background: rgba(15, 23, 42, 0.8); border-radius: 6px; font-size: 11px; color: #a5b4fc; word-break: break-all; font-family: monospace;"></div>
+                </div>
+            </div>
+
+            <!-- 批量生成结果区 -->
+            <div class="generator-result" id="batchResult" style="display: none;">
+                <div class="generator-result-title">
+                    <span style="font-size: 12px; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 4px 10px; border-radius: 20px; margin-right: 8px;">🎭 批量生成</span>
+                    8 种风格变体
+                </div>
+                <div id="batchList" style="margin-top: 12px;"></div>
             </div>
         </div>
 
@@ -1953,6 +2399,33 @@
             </div>
         </div>
     </main>
+
+    <!-- v4.0 新手教学卡片（在首页底部，方便新用户阅读） -->
+    <div class="v4-tutorial-section">
+        <div class="v4-tutorial-title">🎓 3 步成为提示词高手</div>
+        <div class="v4-tutorial-grid">
+            <div class="v4-tutorial-card">
+                <div class="v4-tutorial-emoji">1️⃣</div>
+                <div class="v4-tutorial-card-title">输入一句话想法</div>
+                <div class="v4-tutorial-card-desc">比如「赛博朋克风格的少女站在霓虹雨中」，不用写英文，不用背术语。</div>
+            </div>
+            <div class="v4-tutorial-card">
+                <div class="v4-tutorial-emoji">2️⃣</div>
+                <div class="v4-tutorial-card-title">选择目标模型与语言</div>
+                <div class="v4-tutorial-card-desc">Midjourney 用户选 Midjourney 格式 + 全英文；国内用户选通用 + 中文混合。</div>
+            </div>
+            <div class="v4-tutorial-card">
+                <div class="v4-tutorial-emoji">3️⃣</div>
+                <div class="v4-tutorial-card-title">一键生成 & 分享</div>
+                <div class="v4-tutorial-card-desc">点击生成，直接复制粘贴到 AI 工具；或用「🔗 分享链接」把配置发给朋友。</div>
+            </div>
+            <div class="v4-tutorial-card v4-tutorial-card-extra">
+                <div class="v4-tutorial-emoji">💡</div>
+                <div class="v4-tutorial-card-title">进阶技巧</div>
+                <div class="v4-tutorial-card-desc">试试「优化提示词」按钮，让系统帮你补足风格词、光线、构图；不满意就换一批。</div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         © 2024 PromptFlow. All rights reserved.
@@ -3841,75 +4314,790 @@
             '基于以下描述，生成一份详细的提示词，确保AI能够准确理解并生成符合预期的结果。'
         ];
 
+        // ========== v2 智能生成核心（使用 keywords.js 统一关键词库）==========
+        let _currentGenResult = null;
+
+        // ========== v3.0 扩展：灵感卡片 ==========
+        function renderInspirationCards() {
+            const grid = document.getElementById('inspirationGrid');
+            if (!grid || typeof K_INSPIRATION_CARDS === 'undefined') return;
+            // 随机选 8 个展示
+            const pool = [...K_INSPIRATION_CARDS];
+            pool.sort(() => Math.random() - 0.5);
+            const list = pool.slice(0, 8);
+            grid.innerHTML = list.map(card => `
+                <div class="inspiration-card" data-input='${escapeAttr(card.sampleInput)}' data-theme="${card.theme}">
+                    <span class="emoji">${card.emoji}</span>
+                    <div class="title">${card.title}</div>
+                    <div class="subtitle">${card.subtitle}</div>
+                    <div class="tag">${card.tag}</div>
+                </div>
+            `).join('');
+            grid.querySelectorAll('.inspiration-card').forEach(el => {
+                el.addEventListener('click', () => {
+                    const input = el.getAttribute('data-input');
+                    document.getElementById('generatorInput').value = input;
+                    document.getElementById('generatorInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    generatePrompt();
+                });
+            });
+        }
+
+        function escapeAttr(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/'/g, '&apos;').replace(/"/g, '&quot;');
+        }
+
+        // ========== v3.0 历史记录 & 收藏 ==========
+        const LS_HISTORY_KEY = 'pf_gen_history_v3';
+        const LS_FAVS_KEY = 'pf_gen_favs_v3';
+        const MAX_HISTORY = 30;
+
+        function loadHistory() {
+            try { return JSON.parse(localStorage.getItem(LS_HISTORY_KEY) || '[]'); } catch { return []; }
+        }
+        function saveHistory(list) {
+            localStorage.setItem(LS_HISTORY_KEY, JSON.stringify(list.slice(0, MAX_HISTORY)));
+        }
+        function loadFavs() {
+            try { return JSON.parse(localStorage.getItem(LS_FAVS_KEY) || '[]'); } catch { return []; }
+        }
+        function saveFavs(list) {
+            localStorage.setItem(LS_FAVS_KEY, JSON.stringify(list));
+        }
+
+        function pushHistory(input, output) {
+            const list = loadHistory();
+            list.unshift({
+                id: 'h_' + Date.now(),
+                input: input.slice(0, 80),
+                output: output,
+                time: new Date().toLocaleString('zh-CN')
+            });
+            saveHistory(list);
+            refreshHistoryCounts();
+        }
+
+        function refreshHistoryCounts() {
+            const hBadge = document.getElementById('historyCountBadge');
+            const fBadge = document.getElementById('favCountBadge');
+            if (hBadge) hBadge.textContent = loadHistory().length + ' 条';
+            if (fBadge) fBadge.textContent = '💖 ' + loadFavs().length;
+        }
+
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            if (!panel) return;
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                switchHistoryTab('history');
+                renderHistoryList();
+            }
+        }
+
+        function switchHistoryTab(tab) {
+            ['history', 'favorites'].forEach(t => {
+                const btn = document.getElementById('tab-' + t);
+                if (btn) btn.classList.toggle('active', t === tab);
+            });
+            const hArea = document.getElementById('historyListArea');
+            const fArea = document.getElementById('favoritesListArea');
+            if (tab === 'history') {
+                if (hArea) hArea.style.display = 'block';
+                if (fArea) fArea.style.display = 'none';
+                renderHistoryList();
+            } else {
+                if (hArea) hArea.style.display = 'none';
+                if (fArea) fArea.style.display = 'block';
+                renderFavsList();
+            }
+        }
+
+        function renderHistoryList() {
+            const list = loadHistory();
+            const el = document.getElementById('historyListArea');
+            if (!el) return;
+            if (list.length === 0) {
+                el.innerHTML = '<div style="text-align:center;color:#64748b;font-size:12px;padding:20px;">暂无记录，生成一次后会显示在这里 ✨</div>';
+                return;
+            }
+            el.innerHTML = list.map(item => `
+                <div class="history-item">
+                    <div class="history-item-top">
+                        <span class="history-item-title">📝 ${item.input}</span>
+                        <span class="history-item-time">${item.time}</span>
+                    </div>
+                    <div class="history-item-text">${escapeAttr(item.output).slice(0, 200)}...</div>
+                    <div class="history-item-actions">
+                        <button onclick="reuseHistoryItem('${item.id}')">🔄 再来一次</button>
+                        <button onclick="copyTextFromHistory('${item.id}')">📋 复制</button>
+                        <button onclick="favFromHistory('${item.id}')">💖 收藏</button>
+                        <button onclick="deleteHistoryItem('${item.id}')">🗑️ 删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFavsList() {
+            const list = loadFavs();
+            const el = document.getElementById('favoritesListArea');
+            if (!el) return;
+            if (list.length === 0) {
+                el.innerHTML = '<div style="text-align:center;color:#64748b;font-size:12px;padding:20px;">收藏夹是空的，去收藏你喜欢的提示词吧 💖</div>';
+                return;
+            }
+            el.innerHTML = list.map(item => `
+                <div class="history-item">
+                    <div class="history-item-top">
+                        <span class="history-item-title">💖 ${item.input}</span>
+                        <span class="history-item-time">${item.time}</span>
+                    </div>
+                    <div class="history-item-text">${escapeAttr(item.output).slice(0, 200)}...</div>
+                    <div class="history-item-actions">
+                        <button onclick="copyTextFromFav('${item.id}')">📋 复制</button>
+                        <button onclick="unfavItem('${item.id}')">🗑️ 取消收藏</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function reuseHistoryItem(id) {
+            const list = loadHistory();
+            const item = list.find(x => x.id === id);
+            if (!item) return;
+            document.getElementById('generatorInput').value = item.input;
+            generatePrompt();
+        }
+        function copyTextFromHistory(id) {
+            const list = loadHistory();
+            const item = list.find(x => x.id === id);
+            if (!item) return;
+            copyRawText(item.output);
+        }
+        function copyTextFromFav(id) {
+            const list = loadFavs();
+            const item = list.find(x => x.id === id);
+            if (!item) return;
+            copyRawText(item.output);
+        }
+        function deleteHistoryItem(id) {
+            const list = loadHistory().filter(x => x.id !== id);
+            saveHistory(list);
+            renderHistoryList();
+            refreshHistoryCounts();
+        }
+        function clearHistory() {
+            if (!confirm('确认清空历史记录吗？（收藏不会被删除）')) return;
+            saveHistory([]);
+            renderHistoryList();
+            refreshHistoryCounts();
+        }
+        function favFromHistory(id) {
+            const list = loadHistory();
+            const item = list.find(x => x.id === id);
+            if (!item) return;
+            const favs = loadFavs();
+            if (favs.find(f => f.id === 'f_' + id)) { alert('已经收藏过了 💖'); return; }
+            favs.unshift({ id: 'f_' + id, input: item.input, output: item.output, time: new Date().toLocaleString('zh-CN') });
+            saveFavs(favs);
+            refreshHistoryCounts();
+            alert('已收藏 💖');
+        }
+        function unfavItem(id) {
+            const favs = loadFavs().filter(x => x.id !== id);
+            saveFavs(favs);
+            renderFavsList();
+            refreshHistoryCounts();
+        }
+        function copyRawText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = document.getElementById('copyBtn')?.textContent;
+                if (orig) {
+                    document.getElementById('copyBtn').textContent = '✅ 已复制';
+                    setTimeout(() => { if (document.getElementById('copyBtn')) document.getElementById('copyBtn').textContent = orig.replace('✅ 已复制', '📋 复制提示词'); }, 1500);
+                } else {
+                    alert('✅ 已复制');
+                }
+            }).catch(() => alert('复制失败，请手动选择文本复制'));
+        }
+
+        // ========== v3.0 当前结果收藏 ==========
+        let _currentFavId = null;
+        function toggleFavorite() {
+            const out = document.getElementById('generatedPrompt')?.textContent;
+            const input = document.getElementById('generatorInput')?.value || '手动生成';
+            if (!out) return;
+            const favs = loadFavs();
+            // 如果已有一模一样的 output，取消收藏
+            const existingIdx = favs.findIndex(f => f.output === out);
+            if (existingIdx >= 0) {
+                favs.splice(existingIdx, 1);
+                saveFavs(favs);
+                _currentFavId = null;
+                const star = document.getElementById('favStar');
+                if (star) { star.textContent = '☆'; star.classList.remove('active'); }
+                refreshHistoryCounts();
+                return;
+            }
+            const id = 'f_' + Date.now();
+            favs.unshift({ id, input: input.slice(0, 80), output: out, time: new Date().toLocaleString('zh-CN') });
+            saveFavs(favs);
+            _currentFavId = id;
+            const star = document.getElementById('favStar');
+            if (star) { star.textContent = '★'; star.classList.add('active'); }
+            refreshHistoryCounts();
+            alert('已添加到收藏 💖');
+        }
+
+        // ========== v3.0 提示词优化器 ==========
+        function runRefiner() {
+            const input = document.getElementById('generatorInput').value.trim();
+            if (!input) {
+                showModal('⚠️ 请输入内容', '请先输入你的原始提示词，再点击「优化提示词」。');
+                return;
+            }
+            if (typeof pfRefinePrompt !== 'function') {
+                showModal('⚠️ 加载中', '关键词库尚未加载完成，请稍后再试。');
+                return;
+            }
+            const modelType = getModelType();
+            const result = pfRefinePrompt(input, modelType);
+            // 把"补足的元素"也注入到结果 UI
+            _currentGenResult = {
+                theme: result.theme,
+                themeEmoji: result.themeEmoji,
+                formatted: result.formatted,
+                plain: result.plain,
+                midjourney: result.midjourney,
+                sd: result.sd,
+                dalle: result.dalle
+            };
+            const badge = document.getElementById('resultThemeBadge');
+            if (badge) badge.textContent = '💎 ' + result.themeEmoji + ' 已优化';
+            const out = document.getElementById('generatedPrompt');
+            if (out) out.textContent = result.formatted;
+            // 展示补足的元素
+            const box = document.getElementById('refinerAddedBox');
+            const addList = document.getElementById('refinerAddedList');
+            if (box && addList) {
+                box.style.display = 'block';
+                const parts = [];
+                Object.entries(result.added || {}).forEach(([k, v]) => {
+                    parts.push(`<div><strong>${k}</strong>：${Array.isArray(v) ? v.join(', ') : v}</div>`);
+                });
+                addList.innerHTML = parts.join('');
+            }
+            const mfBox = document.getElementById('multiFormatBox');
+            if (mfBox) { mfBox.style.display = 'block'; showFormat(modelType); }
+            document.getElementById('generatorResult').style.display = 'block';
+            document.getElementById('generatorResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            pushHistory('【优化】' + input, result.formatted);
+        }
+
+        // ========== v3.0 批量生成器 ==========
+        function runBatchGenerate() {
+            const input = document.getElementById('generatorInput').value.trim();
+            if (!input) {
+                showModal('⚠️ 请输入内容', '请先输入你的原始提示词，再点击「批量 8 风格」。');
+                return;
+            }
+            if (typeof pfBatchGenerate !== 'function') {
+                showModal('⚠️ 加载中', '关键词库尚未加载完成，请稍后再试。');
+                return;
+            }
+            const modelType = getModelType();
+            const result = pfBatchGenerate(input, modelType);
+            const batchEl = document.getElementById('batchList');
+            document.getElementById('generatorResult').style.display = 'none';
+            document.getElementById('batchResult').style.display = 'block';
+            batchEl.innerHTML = result.variations.map((v, i) => `
+                <div class="batch-card">
+                    <div class="batch-card-header">
+                        <span class="batch-card-name">${v.variationName}</span>
+                        <button class="batch-card-copy" onclick="copyBatchText(${i})">📋 复制</button>
+                    </div>
+                    <div class="batch-card-content" id="batch-content-${i}">${escapeAttr(v.formatted || v.plain)}</div>
+                </div>
+            `).join('');
+            document.getElementById('batchResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 保存一份组合文本到历史
+            pushHistory('【批量 8 风格】' + input, result.variations.map(v => v.variationName + '\n' + (v.formatted || v.plain)).join('\n\n'));
+            _batchTextCache = result.variations;
+        }
+        let _batchTextCache = [];
+        function copyBatchText(idx) {
+            const item = _batchTextCache[idx];
+            if (!item) return;
+            copyRawText(item.formatted || item.plain);
+        }
+
+        function getModelType() {
+            return document.querySelector('input[name="modelType"]:checked')?.value || 'plain';
+        }
+
+        function updateModelType() {
+            const t = getModelType();
+            const tags = {
+                plain: document.getElementById('modelTagPlain'),
+                midjourney: document.getElementById('modelTagMidjourney'),
+                sd: document.getElementById('modelTagSD'),
+                dalle: document.getElementById('modelTagDalle')
+            };
+            Object.entries(tags).forEach(([key, el]) => {
+                if (!el) return;
+                if (key === t) {
+                    el.style.borderColor = '#6366f1';
+                    el.style.background = 'rgba(99, 102, 241, 0.12)';
+                } else {
+                    el.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                    el.style.background = 'rgba(30, 27, 75, 0.3)';
+                }
+            });
+        }
+
+        function generateSmartPromptV2(input) {
+            const modelType = getModelType();
+            if (typeof pfGenerateSmart !== 'function') {
+                const fb = input + ', photorealistic, highly detailed, 8K, masterpiece, best quality';
+                return {
+                    theme: '通用', themeEmoji: '✨',
+                    formatted: fb, plain: fb,
+                    midjourney: input + ', photorealistic, masterpiece --ar 16:9 --stylize 250 --v 6.0',
+                    sd: '【正向提示词】\n' + input + ', photorealistic, masterpiece\n\n【负向提示词】\nlow quality, blurry',
+                    dalle: input + '. Highly detailed, professional quality, beautiful composition.'
+                };
+            }
+            return pfGenerateSmart(input, modelType);
+        }
+
+        function renderResultToUI(result) {
+            _currentGenResult = result;
+            const modelType = getModelType();
+            const badge = document.getElementById('resultThemeBadge');
+            if (badge) badge.textContent = result.themeEmoji + ' ' + result.theme + '主题';
+            const out = document.getElementById('generatedPrompt');
+            out.textContent = result.formatted || result.plain;
+            // 重置优化器 box
+            const rBox = document.getElementById('refinerAddedBox');
+            if (rBox) rBox.style.display = 'none';
+            const box = document.getElementById('multiFormatBox');
+            if (box) { box.style.display = 'block'; showFormat(modelType); }
+            // 自动写入历史
+            pushHistory(document.getElementById('generatorInput').value || '生成', result.formatted || result.plain);
+            // 重置收藏星标
+            const star = document.getElementById('favStar');
+            if (star) { star.textContent = '☆'; star.classList.remove('active'); }
+            _currentFavId = null;
+        }
+
+        function showFormat(formatKey) {
+            if (!_currentGenResult) return;
+            const out = document.getElementById('generatedPrompt');
+            const m = {
+                plain: _currentGenResult.plain,
+                midjourney: _currentGenResult.midjourney,
+                sd: _currentGenResult.sd,
+                dalle: _currentGenResult.dalle
+            };
+            out.textContent = m[formatKey] || m.plain;
+            ['plain', 'midjourney', 'sd', 'dalle'].forEach(k => {
+                const b = document.getElementById('btn-' + k);
+                if (b) b.classList.toggle('active', k === formatKey);
+            });
+        }
+
+        function regeneratePrompt() {
+            const input = document.getElementById('generatorInput').value.trim();
+            if (!input) return;
+            const result = generateSmartPromptV2(input);
+            renderResultToUI(result);
+        }
+
+        // 兼容性：旧函数直接调用新逻辑
+        function detectSmartStyle(text) { return '详细'; }
+        function detectSmartSubject(text) { return '人物'; }
+
+        function generateSmartPrompt(input, styleKey) {
+            const styleName = detectSmartStyle(input);
+            const subjName = detectSmartSubject(input);
+            const subject = pickRandom(smartSubjectKeywords[subjName] || smartSubjectKeywords['人物']);
+            const style = smartStyleKeywords[styleName] || smartStyleKeywords['详细'];
+            const atmosphere = pickRandom(smartAtmosphereList);
+            const composition = pickRandom(smartCompositionList);
+
+            const lines = [
+                subject,
+                style,
+                atmosphere,
+                composition,
+                smartQualityTag
+            ];
+            const plain = lines.join(', ');
+
+            return '✨ 【PromptFlow · 本地智能模板】\n\n' +
+                '输入：' + input + '\n\n' +
+                '【核心主体】' + subject + '\n' +
+                '【艺术风格】' + style + '\n' +
+                '【光线氛围】' + atmosphere + '\n' +
+                '【构图视角】' + composition + '\n' +
+                '【质量参数】' + smartQualityTag + '\n\n' +
+                '【合并为一行（直接复制使用）】\n' + plain + '\n\n' +
+                '小贴士：\n1. 想换画风？试试「引导式构建器」\n2. 想大幅提升效果？填入豆包 API Key 试试 AI 模式\n\n' +
+                '（当前模式：免配置 · 本地模板，效果略逊于 AI）';
+        }
+
         async function generatePrompt() {
-            const input = document.getElementById('generatorInput').value;
-            if (!input.trim()) {
+            const input = document.getElementById('generatorInput').value.trim();
+            if (!input) {
                 showModal('❌ 请输入内容', '请先描述你的需求。');
                 return;
             }
 
-            const apiKey = localStorage.getItem('pf_ark_api_key');
-            if (!apiKey) {
-                const newKey = prompt('请输入您的豆包 ARK API Key（ark-开头的一串）：');
-                if (!newKey) {
-                    showModal('❌ 无法生成', '需要配置 API Key 才能使用AI生成功能。');
-                    return;
-                }
-                localStorage.setItem('pf_ark_api_key', newKey);
-            }
-
+            const mode = document.querySelector('input[name="genMode"]:checked')?.value || 'smart';
             const activeStyle = document.querySelector('.style-tag.active').dataset.style;
-            const styleMap = {
-                detailed: '详细版：请生成包含丰富细节、风格描述、参数说明的完整提示词，结构清晰，便于直接复制使用。',
-                concise: '简洁版：请生成精简高效的提示词，直击要点，不啰嗦。',
-                poetic: '诗意版：请生成富有意境和画面感的描述性提示词，适合绘画和创作类场景。',
-                professional: '专业版：请生成专业级提示词，包含角色设定、任务背景、输出格式、约束条件等完整结构。'
-            };
 
-            document.getElementById('generatedPrompt').textContent = '🤖 AI 正在生成高质量提示词，请稍候...';
+            document.getElementById('generatedPrompt').textContent = mode === 'api'
+                ? '🤖 AI 正在生成高质量提示词，请稍候...'
+                : '⚡ 正在组合本地智能模板，请稍候...';
             document.getElementById('generatorResult').style.display = 'block';
 
+            if (mode === 'smart') {
+                setTimeout(() => {
+                    document.getElementById('generatedPrompt').textContent = generateSmartPrompt(input, activeStyle);
+                }, 500);
+                return;
+            }
+
+            // API Key 模式
+            const apiKey = localStorage.getItem('pf_ark_api_key') || document.getElementById('apiKeyInput')?.value.trim();
+            if (!apiKey) {
+                document.getElementById('generatedPrompt').textContent = generateSmartPrompt(input, activeStyle);
+                showModal('ℹ️ 未检测到 API Key', '已回退到本地智能模板。填入 API Key 后可获得 AI 级效果。');
+                return;
+            }
+
             try {
+                const styleMap = {
+                    detailed: '详细版：请生成包含丰富细节、风格描述、参数说明的完整提示词，结构清晰，便于直接复制使用。',
+                    concise: '简洁版：请生成精简高效的提示词，直击要点，不啰嗦。',
+                    poetic: '诗意版：请生成富有意境和画面感的描述性提示词，适合绘画和创作类场景。',
+                    professional: '专业版：请生成专业级提示词，包含角色设定、任务背景、输出格式、约束条件等完整结构。'
+                };
+
                 const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + (apiKey || newKey)
+                        'Authorization': 'Bearer ' + apiKey
                     },
                     body: JSON.stringify({
                         model: 'doubao-seedream-4-0-250528',
                         messages: [
                             {
                                 role: 'system',
-                                content: '你是一位提示词工程专家，擅长为各种AI模型编写高质量提示词。请根据用户需求生成专业、结构化的提示词模板。输出要包含：1）角色设定 2）任务描述 3）输出格式要求 4）约束条件 5）示例。使用清晰的分段和编号格式，便于用户直接复制使用。'
+                                content: '你是一位提示词工程专家，擅长为各种AI模型编写高质量提示词。请根据用户需求生成专业、结构化的提示词模板。输出要包含：1）角色设定 2）任务描述 3）输出格式要求 4）约束条件 5）示例。使用清晰的分段和编号格式。'
                             },
                             {
                                 role: 'user',
-                                content: `用户需求：${input}\n\n风格要求：${styleMap[activeStyle]}\n\n请生成一份专业的AI提示词模板，用户可以直接复制使用。`
+                                content: '用户需求：' + input + '\n风格要求：' + styleMap[activeStyle] + '\n请生成专业的AI提示词模板。'
                             }
                         ],
                         temperature: 0.7
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error('API调用失败，请检查您的 API Key');
+                if (!response.ok) throw new Error('API调用失败，请检查您的 API Key');
+                const data = await response.json();
+                document.getElementById('generatedPrompt').textContent = data.choices[0].message.content;
+            } catch (error) {
+                document.getElementById('generatedPrompt').textContent = generateSmartPrompt(input, activeStyle);
+                showModal('⚠️ AI 调用失败', error.message + '（已回退到本地智能模板）');
+            }
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) {
+                document.getElementById('apiKeyStatus').innerHTML = '<span style="color:#ef4444;">请输入 API Key</span>';
+                return;
+            }
+            localStorage.setItem('pf_ark_api_key', key);
+            document.getElementById('apiKeyStatus').innerHTML = '<span style="color:#10b981;">✅ 已保存</span>';
+            setTimeout(() => { document.getElementById('apiKeyStatus').textContent = ''; }, 3000);
+        }
+
+        // ========== v4.0 核心逻辑：语言模式 / 去绘图 / 分享 / 批量 ==========
+        const v4GlobalState = { lastInput: '', outputText: '', lastResult: null, isV4Mode: false };
+
+        function getLangMode() {
+            return document.querySelector('input[name="langMode"]:checked')?.value || 'mix';
+        }
+
+        function updateLangMode() {
+            const v = getLangMode();
+            ['Mix', 'En', 'Zh'].forEach((k, i) => {
+                const el = document.getElementById('langTag' + k);
+                if (!el) return;
+                const activeVal = ['mix', 'en', 'zh'][i];
+                if (v === activeVal) {
+                    el.style.borderColor = '#6366f1';
+                    el.style.background = 'rgba(99, 102, 241, 0.12)';
+                } else {
+                    el.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                    el.style.background = 'rgba(30, 27, 75, 0.3)';
+                }
+            });
+            // 如果刚生成过结果 → 用新语言重生成
+            if (v4GlobalState.lastInput) {
+                triggerSmartGen();
+            }
+        }
+
+        // v4 智能生成主函数（统一走 keywords.js 的 pfGenerateSmartV4）
+        function triggerSmartGen() {
+            const input = document.getElementById('generatorInput').value.trim();
+            if (!input) return;
+            const modelType = getModelType();
+            const langMode = getLangMode();
+            const batchMode = !!window._v4Batch;
+            const refineMode = !!window._v4Refine;
+
+            // 骨架屏
+            const out = document.getElementById('generatedPrompt');
+            out.innerHTML = '<div class="skeleton-line" style="width: 95%; height: 10px; margin: 6px 0;"></div>'
+                + '<div class="skeleton-line" style="width: 80%; height: 10px; margin: 6px 0;"></div>'
+                + '<div class="skeleton-line" style="width: 90%; height: 10px; margin: 6px 0;"></div>'
+                + '<div class="skeleton-line" style="width: 70%; height: 10px; margin: 6px 0;"></div>';
+            document.getElementById('generatorResult').style.display = 'block';
+            document.getElementById('batchResult').style.display = 'none';
+            const refBox = document.getElementById('refinerAddedBox');
+            if (refBox) refBox.style.display = 'none';
+            const badge = document.getElementById('resultThemeBadge');
+            if (badge) badge.textContent = '✨ 正在生成...';
+
+            setTimeout(() => {
+                // 批量模式
+                if (batchMode) {
+                    const batch = typeof pfBatchGenerate === 'function'
+                        ? pfBatchGenerate(langMode === 'en' && typeof pfTranslateChinese === 'function' ? pfTranslateChinese(input) : input, modelType)
+                        : null;
+                    if (batch) {
+                        const box = document.getElementById('batchList');
+                        document.getElementById('generatorResult').style.display = 'none';
+                        document.getElementById('batchResult').style.display = 'block';
+                        box.innerHTML = batch.variations.map((v, i) => {
+                            const formatted = (v.formatted || v.plain || '').trim();
+                            return '<div class="batch-card">'
+                                + '<div class="batch-card-header">'
+                                + '<span class="batch-card-name">' + (v.variationName || ('变体 ' + (i + 1))) + '</span>'
+                                + '<button class="batch-card-copy" onclick="v4CopyCardText(\'' + i + '\')">📋 复制</button>'
+                                + '</div>'
+                                + '<div class="batch-card-content" id="batch-card-' + i + '">' + escapeAttr(formatted) + '</div>'
+                                + '</div>';
+                        }).join('');
+                        document.getElementById('batchResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        pushHistory('【批量】' + input, batch.variations.map(v => v.variationName + '：' + (v.formatted || v.plain)).join('\n\n'));
+                        window._v4Batch = false;
+                        v4GlobalState.lastInput = input;
+                        return;
+                    }
+                    window._v4Batch = false;
                 }
 
-                const data = await response.json();
-                const generated = data.choices[0].message.content;
-                document.getElementById('generatedPrompt').textContent = generated;
-            } catch (error) {
-                const fallback = `【提示词模板 - ${activeStyle}】\n\n${promptGenerators[0]}\n\n用户需求：${input}\n\n${promptTemplates[activeStyle].prefix}\n\n${promptTemplates[activeStyle].suffix}\n\n⚠️ 注意：当前为离线模板生成，若需AI智能生成，请在下次打开时填写有效的 API Key。`;
-                document.getElementById('generatedPrompt').textContent = fallback;
-                showModal('⚠️ AI 调用失败', error.message + '（已使用本地模板生成）');
+                let result;
+                if (typeof pfGenerateSmartV4 === 'function') {
+                    result = pfGenerateSmartV4(input, { modelType, langMode });
+                } else if (typeof pfGenerateSmart === 'function') {
+                    result = pfGenerateSmart(input, modelType);
+                } else {
+                    result = { theme: '提示词', themeEmoji: '✨', formatted: input + '，高质量，精美细节', plain: input };
+                }
+
+                // refiner 补足模式
+                if (refineMode && typeof pfRefinePrompt === 'function') {
+                    const refined = pfRefinePrompt(input, modelType);
+                    result.formatted = refined.formatted || result.formatted;
+                    result.plain = refined.plain || result.plain;
+                    if (refined.midjourney) result.midjourney = refined.midjourney;
+                    if (refined.sd) result.sd = refined.sd;
+                    if (refined.dalle) result.dalle = refined.dalle;
+                    if (refined.added && refBox) {
+                        refBox.style.display = 'block';
+                        const addList = document.getElementById('refinerAddedList');
+                        if (addList) {
+                            const parts = [];
+                            Object.keys(refined.added).forEach(key => {
+                                const arr = refined.added[key];
+                                if (Array.isArray(arr) && arr.length) {
+                                    parts.push('<div><strong>' + key + '</strong>：' + arr.slice(0, 6).join('，') + '</div>');
+                                }
+                            });
+                            addList.innerHTML = parts.join('');
+                        }
+                    }
+                    window._v4Refine = false;
+                }
+
+                // 更新 UI
+                v4GlobalState.lastResult = result;
+                v4GlobalState.lastInput = input;
+                const textOut = result.formatted || result.plain || '';
+                v4GlobalState.outputText = textOut;
+                out.textContent = textOut;
+                if (badge) badge.textContent = (result.themeEmoji || '✨') + ' ' + (result.theme || '已生成');
+                const mfBox = document.getElementById('multiFormatBox');
+                if (mfBox) {
+                    mfBox.style.display = 'block';
+                    showFormat(modelType);
+                }
+                pushHistory(input, textOut);
+                document.getElementById('generatorResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
+        }
+
+        // 三个顶部按钮的入口
+        function handleGenButton(kind) {
+            if (kind === 'batch') window._v4Batch = true;
+            if (kind === 'refine') window._v4Refine = true;
+            triggerSmartGen();
+        }
+
+        function openDrawPlatform(type) {
+            const text = (v4GlobalState.outputText || document.getElementById('generatedPrompt')?.textContent || '').trim();
+            if (!text) { showModal('⚠️ 暂无内容', '请先生成提示词。'); return; }
+            let url;
+            switch (type) {
+                case 'doubao': url = 'https://www.doubao.com/chat/'; break;
+                case 'midjourney': url = 'https://www.midjourney.com/'; break;
+                case 'sd': url = 'https://stablediffusionweb.com/'; break;
+                case 'share': {
+                    const params = new URLSearchParams();
+                    params.set('input', document.getElementById('generatorInput').value || '');
+                    params.set('lang', getLangMode());
+                    params.set('model', getModelType());
+                    const shareURL = (window.location.origin + window.location.pathname) + '?' + params.toString();
+                    const box = document.getElementById('shareLinkBox');
+                    if (box) {
+                        box.style.display = 'block';
+                        box.innerHTML = '✅ 已生成分享链接（自动复制）：<br><a href="' + shareURL + '" target="_blank" rel="noopener" style="color: #a5b4fc; text-decoration: underline; word-break: break-all;">' + shareURL + '</a>';
+                    }
+                    navigator.clipboard && navigator.clipboard.writeText(shareURL).catch(() => {});
+                    return;
+                }
+                default: url = 'https://www.midjourney.com/';
             }
+            // 先把提示词复制到剪贴板
+            navigator.clipboard && navigator.clipboard.writeText(text).catch(() => {});
+            window.open(url, '_blank', 'noopener');
+        }
+
+        function v4CopyCardText(idx) {
+            const el = document.getElementById('batch-card-' + idx);
+            if (!el) return;
+            navigator.clipboard.writeText(el.textContent).then(() => {
+                showModal('✅ 已复制', '已复制到剪贴板，可直接粘贴到 AI 绘图平台使用。');
+            }).catch(() => {});
+        }
+
+        // URL 参数自动填充（分享链接打开时自动生成）
+        function parseURLAutoFill() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const input = params.get('input');
+                if (input && input.trim()) {
+                    document.getElementById('generatorInput').value = input;
+                    const lang = params.get('lang');
+                    if (lang) {
+                        const r = document.querySelector('input[name="langMode"][value="' + lang + '"]');
+                        if (r) r.checked = true;
+                    }
+                    const model = params.get('model');
+                    if (model) {
+                        const r = document.querySelector('input[name="modelType"][value="' + model + '"]');
+                        if (r) r.checked = true;
+                    }
+                    if (typeof updateLangMode === 'function') updateLangMode();
+                    if (typeof updateModelType === 'function') updateModelType();
+                    setTimeout(() => triggerSmartGen(), 400);
+                }
+            } catch (e) {}
+        }
+
+        // 主题切换（暗/亮）
+        let _themeLight = false;
+        function toggleTheme() {
+            _themeLight = !_themeLight;
+            document.body.classList.toggle('light-theme', _themeLight);
+            localStorage.setItem('pf_theme_v4', _themeLight ? 'light' : 'dark');
+        }
+
+        function updateGenMode() {
+            const mode = document.querySelector('input[name="genMode"]:checked')?.value || 'smart';
+            const apiLabel = document.getElementById('modeApiLabel');
+            const smartLabel = document.getElementById('modeSmartLabel');
+            const apiBox = document.getElementById('apiKeyBox');
+            if (mode === 'api') {
+                apiLabel.style.borderColor = '#6366f1';
+                apiLabel.style.background = 'rgba(99, 102, 241, 0.12)';
+                smartLabel.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                smartLabel.style.background = 'rgba(30, 27, 75, 0.3)';
+                apiBox.style.display = 'block';
+            } else {
+                smartLabel.style.borderColor = '#6366f1';
+                smartLabel.style.background = 'rgba(99, 102, 241, 0.12)';
+                apiLabel.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                apiLabel.style.background = 'rgba(30, 27, 75, 0.3)';
+                apiBox.style.display = 'none';
+            }
+        }
+
+        function initGenMode() {
+            // 主题恢复
+            if (localStorage.getItem('pf_theme_v4') === 'light') {
+                _themeLight = true;
+                document.body.classList.add('light-theme');
+            }
+
+            // 如果之前存了 api 模式但没有有效 Key → 自动切换到 smart 模式
+            const savedMode = localStorage.getItem('pf_gen_mode') || 'smart';
+            const savedKey = localStorage.getItem('pf_ark_api_key');
+            const effectiveMode = (savedMode === 'api' && !savedKey) ? 'smart' : savedMode;
+            if (effectiveMode !== savedMode) localStorage.setItem('pf_gen_mode', effectiveMode);
+
+            const rdo = document.getElementById('genMode' + (effectiveMode === 'api' ? 'Api' : 'Smart'));
+            if (rdo) rdo.checked = true;
+            if (savedKey && document.getElementById('apiKeyInput')) document.getElementById('apiKeyInput').value = savedKey;
+            updateGenMode();
+            if (typeof updateModelType === 'function') updateModelType();
+            if (typeof updateLangMode === 'function') updateLangMode();
+            document.querySelectorAll('input[name="genMode"]').forEach(r =>
+                r.addEventListener('change', () => localStorage.setItem('pf_gen_mode', document.querySelector('input[name="genMode"]:checked').value))
+            );
+            // v3.0 初始化
+            if (typeof renderInspirationCards === 'function') renderInspirationCards();
+            if (typeof refreshHistoryCounts === 'function') refreshHistoryCounts();
+            // v4.0 自动填充 URL 参数
+            if (typeof parseURLAutoFill === 'function') parseURLAutoFill();
         }
 
         function copyGeneratedPrompt() {
             const text = document.getElementById('generatedPrompt').textContent;
+            if (!text || text.trim().length === 0) {
+                showModal('⚠️ 暂无内容', '请先生成提示词再复制。');
+                return;
+            }
             navigator.clipboard.writeText(text).then(() => {
-                showModal('✅ 复制成功！', '提示词已复制到剪贴板。');
+                const btn = document.getElementById('copyBtn');
+                if (btn) {
+                    const original = btn.textContent;
+                    btn.textContent = '✅ 已复制到剪贴板';
+                    setTimeout(() => { btn.textContent = original; }, 1800);
+                } else {
+                    showModal('✅ 复制成功！', '提示词已复制到剪贴板。');
+                }
+            }).catch(() => {
+                showModal('⚠️ 复制失败', '请手动选中文本复制。');
             });
         }
 
@@ -3919,6 +5107,8 @@
                 this.classList.add('active');
             });
         });
+
+        if (typeof initGenMode === 'function') initGenMode();
 
         /* ===== 引导式构建器 ===== */
         const guideSteps = [
