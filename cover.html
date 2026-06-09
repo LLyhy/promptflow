@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>封面图生成器 · PromptFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0e1a;
+        --bg-2: #111827;
+        --panel: rgba(17, 24, 39, 0.7);
+        --border: rgba(148, 163, 184, 0.15);
+        --border-strong: rgba(148, 163, 184, 0.3);
+        --text: #e5e7eb;
+        --text-dim: #94a3b8;
+        --text-soft: #64748b;
+        --accent: #f97316;
+        --accent-2: #facc15;
+        --indigo: #6366f1;
+        --violet: #8b5cf6;
+        --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'DM Sans', 'Noto Sans SC', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 10%, rgba(99, 102, 241, 0.15), transparent 40%),
+            radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.12), transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08), transparent 60%);
+        z-index: -1;
+        pointer-events: none;
+    }
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0.4;
+    }
+    .nav {
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        background: rgba(10, 14, 26, 0.8);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: -0.02em;
+    }
+    .logo-mark {
+        width: 32px; height: 32px;
+        background: linear-gradient(135deg, var(--indigo), var(--accent));
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        font-size: 16px;
+        font-weight: 900;
+        color: white;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+        background: var(--accent);
+        color: white !important;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+    .nav-cta:hover { background: #ea580c; }
+
+    .page {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+    }
+    .page-head { text-align: center; margin-bottom: 50px; }
+    .eyebrow {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding: 6px 14px;
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        border-radius: 99px;
+        background: rgba(249, 115, 22, 0.08);
+    }
+    h1 {
+        font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        font-size: clamp(40px, 6vw, 72px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+        margin-bottom: 20px;
+    }
+    h1 .accent {
+        color: var(--accent);
+        font-style: italic;
+    }
+    h1 .gradient {
+        background: linear-gradient(135deg, var(--indigo), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-style: normal;
+    }
+    .page-sub {
+        font-size: 18px;
+        color: var(--text-dim);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .studio {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 32px;
+        align-items: start;
+        margin-top: 40px;
+    }
+    .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px;
+        backdrop-filter: blur(12px);
+    }
+    .panel-title {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-dim);
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .panel-title .num {
+        width: 24px; height: 24px;
+        background: linear-gradient(135deg, var(--indigo), var(--accent));
+        color: white;
+        border-radius: 6px;
+        font-size: 12px;
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+    }
+    .field { margin-bottom: 18px; }
+    .field label {
+        display: block;
+        font-size: 12px;
+        color: var(--text-dim);
+        font-weight: 600;
+        margin-bottom: 6px;
+        letter-spacing: 0.03em;
+    }
+    .field input[type=text], .field textarea, .field select {
+        width: 100%;
+        padding: 10px 12px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 13px;
+        font-family: inherit;
+        transition: border-color 0.2s;
+        resize: none;
+    }
+    .field input[type=text]:focus, .field textarea:focus, .field select:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+    .field textarea { line-height: 1.5; min-height: 40px; }
+    .preset-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .preset-chip {
+        font-size: 11px;
+        padding: 5px 10px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 99px;
+        color: var(--indigo-light, #c7d2fe);
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+        color: #a5b4fc;
+    }
+    .preset-chip:hover { background: var(--indigo); color: white; border-color: var(--indigo); }
+
+    .ratio-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+    .ratio-btn {
+        padding: 10px 4px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        color: var(--text-dim);
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+    .ratio-btn .box {
+        width: 24px;
+        background: var(--border-strong);
+        border-radius: 2px;
+        transition: all 0.2s;
+    }
+    .ratio-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .ratio-btn.active .box { background: white; }
+
+    .scheme-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+    }
+    .scheme {
+        aspect-ratio: 1;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+    }
+    .scheme.active { border-color: white; transform: scale(1.08); box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3); }
+    .scheme span {
+        position: absolute;
+        bottom: 4px;
+        left: 0; right: 0;
+        text-align: center;
+        font-size: 9px;
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .font-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    .font-btn {
+        padding: 10px 12px;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        color: var(--text-dim);
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: left;
+        font-family: inherit;
+    }
+    .font-btn:hover { border-color: var(--indigo); color: var(--text); }
+    .font-btn.active { background: linear-gradient(135deg, var(--indigo), var(--violet)); color: white; border-color: transparent; }
+    .font-btn small { display: block; font-size: 10px; opacity: 0.7; margin-top: 2px; font-family: inherit; }
+
+    .slider-row { display: flex; align-items: center; gap: 10px; }
+    .slider-row input[type=range] {
+        flex: 1;
+        accent-color: var(--accent);
+    }
+    .slider-row .val {
+        font-size: 12px;
+        color: var(--accent);
+        font-weight: 700;
+        min-width: 40px;
+        text-align: right;
+    }
+
+    .preview-wrap {
+        position: sticky;
+        top: 80px;
+    }
+    .preview-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    .preview-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    .preview-sub { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+    .export-btn {
+        background: linear-gradient(135deg, var(--accent), #ea580c);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 10px 30px -8px rgba(249, 115, 22, 0.5);
+    }
+    .export-btn:hover { transform: translateY(-1px); box-shadow: 0 15px 40px -8px rgba(249, 115, 22, 0.7); }
+
+    .preview-frame {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+        background:
+            linear-gradient(45deg, #1f2937 25%, transparent 25%),
+            linear-gradient(-45deg, #1f2937 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #1f2937 75%),
+            linear-gradient(-45deg, transparent 75%, #1f2937 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        background-color: #111827;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        min-height: 600px;
+    }
+    #coverCanvas {
+        max-width: 100%;
+        max-height: 75vh;
+        border-radius: 6px;
+        box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(148,163,184,0.15);
+        transition: transform 0.3s;
+    }
+    .badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: rgba(15, 23, 42, 0.85);
+        padding: 6px 12px;
+        border-radius: 99px;
+        font-size: 11px;
+        color: var(--text-dim);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+    .badge span { color: var(--accent); }
+
+    .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+    }
+    .toggle-row label { font-size: 13px; color: var(--text-dim); font-weight: 500; margin: 0; }
+    .switch {
+        position: relative;
+        width: 36px; height: 20px;
+        background: rgba(148, 163, 184, 0.3);
+        border-radius: 99px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .switch.on { background: var(--accent); }
+    .switch::after {
+        content: '';
+        position: absolute;
+        top: 2px; left: 2px;
+        width: 16px; height: 16px;
+        background: white;
+        border-radius: 50%;
+        transition: left 0.2s;
+    }
+    .switch.on::after { left: 18px; }
+
+    @media (max-width: 900px) {
+        .studio { grid-template-columns: 1fr; }
+        .preview-wrap { position: static; }
+        .nav-links { gap: 14px; }
+        .nav-links a:not(.nav-cta) { display: none; }
+        .page { padding: 40px 20px; }
+        .preview-frame { min-height: auto; padding: 20px; }
+    }
+    @media (max-width: 600px) {
+        h1 { font-size: 38px; }
+    }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="logo">
+        <div class="logo-mark">PF</div>
+        <div>PromptFlow <span style="color:var(--text-soft);font-weight:500;font-size:13px;">· 封面工坊</span></div>
+    </div>
+    <div class="nav-links">
+        <a href="landing.html">首页</a>
+        <a href="index.html">提示词生成器</a>
+        <a href="reverse.html">反向提纯</a>
+        <a href="cover.html" class="nav-cta">封面生成器 ✨</a>
+    </div>
+</nav>
+
+<div class="page">
+    <div class="page-head">
+        <div class="eyebrow">◆ Cover Studio · 封面生成器</div>
+        <h1>一张<span class="accent">抓眼球</span>的封面，<br>胜过<span class="gradient">一千字</span>文案。</h1>
+        <p class="page-sub">输入你的标题和副标题，选一个配色 → 实时预览 → 一键导出高清封面。适合小红书、公众号、知乎专栏、PPT封面…</p>
+    </div>
+
+    <div class="studio">
+        <!-- 左侧控制面板 -->
+        <div>
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-title"><span>内容文字</span><span class="num">A</span></div>
+                <div class="field">
+                    <label>主标题</label>
+                    <textarea id="tMain" rows="3">30秒做出<br>爆款封面图</textarea>
+                    <div class="preset-row" id="mainPresets">
+                        <span class="preset-chip" data-text="30秒做出爆款封面图">→ 爆款</span>
+                        <span class="preset-chip" data-text="新手避坑指南">→ 指南</span>
+                        <span class="preset-chip" data-text="从零到一">→ 教程</span>
+                        <span class="preset-chip" data-text="深度解析">→ 观点</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>副标题（可选）</label>
+                    <textarea id="tSub" rows="2">设计师私藏的 AI 工具清单</textarea>
+                </div>
+                <div class="field">
+                    <label>左下角小字（作者 / 系列名）</label>
+                    <input type="text" id="tAuthor" value="PromptFlow · Vol.01">
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-title"><span>尺寸比例</span><span class="num">B</span></div>
+                <div class="ratio-grid" id="ratioGrid">
+                    <button class="ratio-btn active" data-w="1080" data-h="1440" data-label="3:4"><div class="box" style="height:18px"></div>3:4</button>
+                    <button class="ratio-btn" data-w="1080" data-h="1080" data-label="1:1"><div class="box" style="height:24px"></div>1:1</button>
+                    <button class="ratio-btn" data-w="1280" data-h="720" data-label="16:9"><div class="box" style="height:12px"></div>16:9</button>
+                    <button class="ratio-btn" data-w="900" data-h="1440" data-label="竖屏"><div class="box" style="height:22px"></div>小红书</button>
+                </div>
+                <p style="font-size:11px;color:var(--text-soft);margin-top:10px;">💡 3:4 小红书最优 · 16:9 视频封面 · 1:1 朋友圈/公众号封面</p>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-title"><span>配色方案</span><span class="num">C</span></div>
+                <div class="scheme-grid" id="schemeGrid">
+                    <div class="scheme active" data-scheme="0" style="background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 60%,#f97316 100%);"><span>紫霞</span></div>
+                    <div class="scheme" data-scheme="1" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#f97316 100%);"><span>午夜</span></div>
+                    <div class="scheme" data-scheme="2" style="background:linear-gradient(135deg,#0c4a6e 0%,#0e7490 60%,#fbbf24 100%);"><span>深海</span></div>
+                    <div class="scheme" data-scheme="3" style="background:linear-gradient(135deg,#831843 0%,#be185d 60%,#fb923c 100%);"><span>赤焰</span></div>
+                    <div class="scheme" data-scheme="4" style="background:linear-gradient(135deg,#065f46 0%,#047857 60%,#a7f3d0 100%);"><span>森林</span></div>
+                    <div class="scheme" data-scheme="5" style="background:linear-gradient(135deg,#f5f5f4 0%,#e7e5e4 60%,#57534e 100%);"><span>极简白</span></div>
+                    <div class="scheme" data-scheme="6" style="background:linear-gradient(135deg,#18181b 0%,#3f3f46 60%,#facc15 100%);"><span>黑金</span></div>
+                    <div class="scheme" data-scheme="7" style="background:linear-gradient(135deg,#fef3c7 0%,#fde68a 60%,#f97316 100%);"><span>日落</span></div>
+                    <div class="scheme" data-scheme="8" style="background:linear-gradient(135deg,#cffafe 0%,#67e8f9 60%,#6366f1 100%);"><span>薄荷</span></div>
+                    <div class="scheme" data-scheme="9" style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 60%,#ec4899 100%);"><span>星河</span></div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-title"><span>字体风格</span><span class="num">D</span></div>
+                <div class="font-grid" id="fontGrid">
+                    <button class="font-btn active" data-font="serif">Playfair Display<small>杂志衬线 · 高级感</small></button>
+                    <button class="font-btn" data-font="bold">Impact Bold<small>粗体大字 · 爆款风</small></button>
+                    <button class="font-btn" data-font="cn-serif">思源宋体<small>中文古风 · 文艺</small></button>
+                    <button class="font-btn" data-font="cn-sans">思源黑体<small>现代清爽 · 通用</small></button>
+                    <button class="font-btn" data-font="minimal">Helvetica Neue<small>极简英文 · 科技</small></button>
+                    <button class="font-btn" data-font="magazine">Didot<small>杂志排版 · 轻奢</small></button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title"><span>细节调整</span><span class="num">E</span></div>
+                <div class="field">
+                    <label>字号比例</label>
+                    <div class="slider-row"><input type="range" id="sSize" min="60" max="160" value="110"><span class="val" id="sSizeV">110</span></div>
+                </div>
+                <div class="field">
+                    <label>标题字间距</label>
+                    <div class="slider-row"><input type="range" id="sSpacing" min="-3" max="20" value="4"><span class="val" id="sSpacingV">4</span></div>
+                </div>
+                <div class="toggle-row">
+                    <label>顶部 / 底部装饰线</label>
+                    <div class="switch on" id="tLines" onclick="toggleSwitch(this,'lines')"></div>
+                </div>
+                <div class="toggle-row">
+                    <label>几何装饰图形</label>
+                    <div class="switch on" id="tShapes" onclick="toggleSwitch(this,'shapes')"></div>
+                </div>
+                <div class="toggle-row">
+                    <label>渐隐底部条（副标题区）</label>
+                    <div class="switch on" id="tBar" onclick="toggleSwitch(this,'bar')"></div>
+                </div>
+                <div class="toggle-row">
+                    <label>噪点纹理质感</label>
+                    <div class="switch" id="tGrain" onclick="toggleSwitch(this,'grain')"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧预览区 -->
+        <div class="preview-wrap">
+            <div class="preview-head">
+                <div>
+                    <div class="preview-title">实时预览</div>
+                    <div class="preview-sub">所见即所得，实时响应你的每次调整</div>
+                </div>
+                <button class="export-btn" onclick="exportCover()">⬇ 导出高清封面</button>
+            </div>
+            <div class="preview-frame">
+                <div class="badge"><span id="dimLabel">1080</span> × <span id="dimLabel2">1440</span> px</div>
+                <canvas id="coverCanvas" width="1080" height="1440"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="keywords.js?v2"></script>
+<script>
+// ============ 封面生成器 ============
+const state = {
+    width: 1080,
+    height: 1440,
+    scheme: 0,
+    font: 'serif',
+    size: 110,
+    spacing: 4,
+    lines: true,
+    shapes: true,
+    bar: true,
+    grain: false
+};
+
+const schemes = [
+    { // 0 紫霞
+        bg: ['#6366f1', '#8b5cf6', '#f97316'],
+        titleColor: '#ffffff',
+        subColor: 'rgba(255,255,255,0.85)',
+        accent: '#fff',
+        label: '紫霞'
+    },
+    { // 1 午夜
+        bg: ['#0f172a', '#1e293b', '#f97316'],
+        titleColor: '#f97316',
+        subColor: '#cbd5e1',
+        accent: '#f97316',
+        label: '午夜'
+    },
+    { // 2 深海
+        bg: ['#0c4a6e', '#0e7490', '#fbbf24'],
+        titleColor: '#ffffff',
+        subColor: '#a5f3fc',
+        accent: '#fbbf24',
+        label: '深海'
+    },
+    { // 3 赤焰
+        bg: ['#831843', '#be185d', '#fb923c'],
+        titleColor: '#ffffff',
+        subColor: '#fecdd3',
+        accent: '#fbbf24',
+        label: '赤焰'
+    },
+    { // 4 森林
+        bg: ['#065f46', '#047857', '#a7f3d0'],
+        titleColor: '#ffffff',
+        subColor: '#d1fae5',
+        accent: '#fef3c7',
+        label: '森林'
+    },
+    { // 5 极简白
+        bg: ['#f5f5f4', '#e7e5e4', '#57534e'],
+        titleColor: '#1c1917',
+        subColor: '#57534e',
+        accent: '#f97316',
+        label: '极简白'
+    },
+    { // 6 黑金
+        bg: ['#18181b', '#3f3f46', '#facc15'],
+        titleColor: '#facc15',
+        subColor: '#e4e4e7',
+        accent: '#facc15',
+        label: '黑金'
+    },
+    { // 7 日落
+        bg: ['#fef3c7', '#fde68a', '#f97316'],
+        titleColor: '#7c2d12',
+        subColor: '#9a3412',
+        accent: '#b91c1c',
+        label: '日落'
+    },
+    { // 8 薄荷
+        bg: ['#cffafe', '#67e8f9', '#6366f1'],
+        titleColor: '#0c4a6e',
+        subColor: '#0e7490',
+        accent: '#1e40af',
+        label: '薄荷'
+    },
+    { // 9 星河
+        bg: ['#1e1b4b', '#312e81', '#ec4899'],
+        titleColor: '#ffffff',
+        subColor: '#c7d2fe',
+        accent: '#f472b6',
+        label: '星河'
+    }
+];
+
+const canvas = document.getElementById('coverCanvas');
+const ctx = canvas.getContext('2d');
+
+// -------- 绘制逻辑 --------
+function drawCover() {
+    const W = state.width, H = state.height;
+    canvas.width = W; canvas.height = H;
+    const sc = schemes[state.scheme];
+
+    // 背景渐变
+    const grd = ctx.createLinearGradient(0, 0, W, H);
+    grd.addColorStop(0, sc.bg[0]);
+    grd.addColorStop(0.55, sc.bg[1]);
+    grd.addColorStop(1, sc.bg[2]);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+
+    // 几何装饰图形（半圆/圆环/斜线）
+    if (state.shapes) {
+        ctx.save();
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle = sc.accent;
+        ctx.beginPath();
+        ctx.arc(W, 0, 280, Math.PI * 0.5, Math.PI);
+        ctx.fill();
+
+        ctx.globalAlpha = 0.12;
+        ctx.beginPath();
+        ctx.arc(W - 80, 160, 180, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = 0.22;
+        ctx.strokeStyle = sc.accent;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(100, H - 120, 100, Math.PI * 1.5, Math.PI * 2);
+        ctx.stroke();
+
+        // 细对角线
+        ctx.globalAlpha = 0.08;
+        ctx.strokeStyle = sc.accent;
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 15; i++) {
+            ctx.beginPath();
+            const y = H * 0.25 + i * 30;
+            ctx.moveTo(0, y);
+            ctx.lineTo(W * 0.35, y - 200);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    // 噪点（canvas 简易实现：在底层叠加半透明噪点）
+    if (state.grain) {
+        const grain = ctx.getImageData(0, 0, W, H);
+        for (let i = 0; i < grain.data.length; i += 4) {
+            const r = (Math.random() - 0.5) * 20;
+            grain.data[i] = Math.max(0, Math.min(255, grain.data[i] + r));
+            grain.data[i + 1] = Math.max(0, Math.min(255, grain.data[i + 1] + r));
+            grain.data[i + 2] = Math.max(0, Math.min(255, grain.data[i + 2] + r));
+        }
+        ctx.putImageData(grain, 0, 0);
+    }
+
+    // 顶部装饰线（细线 + 编号）
+    if (state.lines) {
+        ctx.save();
+        ctx.strokeStyle = sc.accent;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(80, 120);
+        ctx.lineTo(80 + 80, 120);
+        ctx.stroke();
+
+        ctx.fillStyle = sc.accent;
+        ctx.font = '600 28px "DM Sans", sans-serif';
+        ctx.fillText('— COVER 01 —', 80, 170);
+        ctx.restore();
+    }
+
+    // 主标题 — 多行自动换行
+    const mainText = (document.getElementById('tMain').value || '').trim();
+    const subText = (document.getElementById('tSub').value || '').trim();
+    const authorText = (document.getElementById('tAuthor').value || '').trim();
+
+    const titleSize = Math.round((W / 1080) * state.size);
+    const subSize = Math.round(titleSize * 0.32);
+
+    let titleFont;
+    switch (state.font) {
+        case 'bold':
+            titleFont = `900 ${titleSize}px "Impact", "Arial Black", "Noto Sans SC", sans-serif`;
+            break;
+        case 'cn-serif':
+            titleFont = `900 ${titleSize}px "Noto Serif SC", "Songti SC", "STSong", serif`;
+            break;
+        case 'cn-sans':
+            titleFont = `700 ${titleSize}px "Noto Sans SC", "PingFang SC", sans-serif`;
+            break;
+        case 'minimal':
+            titleFont = `500 ${titleSize}px "Helvetica Neue", "Noto Sans SC", sans-serif`;
+            break;
+        case 'magazine':
+            titleFont = `400 ${titleSize}px "Didot", "Playfair Display", "Noto Serif SC", serif`;
+            break;
+        default: // serif Playfair
+            titleFont = `800 ${titleSize}px "Playfair Display", "Noto Serif SC", serif`;
+    }
+    const subFont = `500 ${subSize}px "DM Sans", "Noto Sans SC", sans-serif`;
+
+    // 主标题换行处理：优先按用户的换行，否则按宽度自动换行
+    let titleLines = mainText.split(/\n/);
+    const maxW = W - 180;
+
+    // 手动按宽度做智能换行
+    const wrapLines = [];
+    ctx.font = titleFont;
+    for (const raw of titleLines) {
+        // 中英文混合：按字切分
+        const chars = raw.split('');
+        let cur = '';
+        for (const ch of chars) {
+            const test = cur + ch;
+            if (ctx.measureText(test).width > maxW && cur.length > 0) {
+                wrapLines.push(cur.trim());
+                cur = ch;
+            } else {
+                cur = test;
+            }
+        }
+        if (cur.trim()) wrapLines.push(cur.trim());
+    }
+
+    // 排版：垂直居中，底部留副标题条
+    const lineHeight = titleSize * 1.18;
+    const textTotalH = wrapLines.length * lineHeight;
+    const startY = H / 2 - textTotalH / 2 + state.shapes ? 0 : 0;
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = sc.titleColor;
+    ctx.font = titleFont;
+    ctx.shadowColor = 'rgba(0,0,0,0.25)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetY = 4;
+
+    wrapLines.forEach((line, i) => {
+        ctx.save();
+        // 字间距
+        const chars = line.split('');
+        const gap = state.spacing;
+        let x = 90;
+        const y = startY + i * lineHeight + (state.font === 'bold' ? 0 : 0);
+        ctx.textBaseline = 'top';
+        for (let c = 0; c < chars.length; c++) {
+            ctx.fillText(chars[c], x, y);
+            x += ctx.measureText(chars[c]).width + gap;
+        }
+        ctx.restore();
+    });
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+
+    // 副标题条（渐隐的矩形）
+    if (state.bar) {
+        const barY = startY + textTotalH + 40;
+        const barH = subSize * 2.8;
+
+        ctx.save();
+        const g2 = ctx.createLinearGradient(80, 0, W * 0.7, 0);
+        g2.addColorStop(0, 'rgba(0,0,0,0.45)');
+        g2.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g2;
+        ctx.fillRect(80, barY, W * 0.7, barH);
+        ctx.fillStyle = sc.subColor;
+        ctx.font = subFont;
+        ctx.textBaseline = 'middle';
+        ctx.fillText(subText, 100, barY + barH / 2);
+        ctx.restore();
+    } else if (subText) {
+        // 直接渲染副标题文字
+        ctx.save();
+        ctx.fillStyle = sc.subColor;
+        ctx.font = subFont;
+        ctx.textBaseline = 'top';
+        ctx.textAlign = 'left';
+        ctx.fillText(subText, 90, startY + textTotalH + 50);
+        ctx.restore();
+    }
+
+    // 底部信息：作者名 + 底部装饰线
+    if (state.lines) {
+        ctx.save();
+        ctx.fillStyle = sc.accent;
+        ctx.textAlign = 'right';
+        ctx.font = '600 ' + Math.round(titleSize * 0.22) + 'px "DM Sans", sans-serif';
+        ctx.fillText(authorText.toUpperCase ? authorText : authorText, W - 80, H - 80);
+
+        ctx.strokeStyle = sc.accent;
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(80, H - 110);
+        ctx.lineTo(W - 80, H - 110);
+        ctx.stroke();
+        ctx.restore();
+    } else if (authorText) {
+        ctx.save();
+        ctx.fillStyle = sc.accent;
+        ctx.textAlign = 'right';
+        ctx.font = '600 ' + Math.round(titleSize * 0.22) + 'px "DM Sans", sans-serif';
+        ctx.fillText(authorText, W - 80, H - 80);
+        ctx.restore();
+    }
+
+    // 左上角编号装饰（带圆形）
+    if (state.shapes) {
+        ctx.save();
+        ctx.strokeStyle = sc.accent;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.4;
+        ctx.beginPath();
+        ctx.arc(W - 150, 150, 60, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // 更新尺寸标签
+    document.getElementById('dimLabel').textContent = W;
+    document.getElementById('dimLabel2').textContent = H;
+}
+
+function toggleSwitch(el, key) {
+    el.classList.toggle('on');
+    state[key] = el.classList.contains('on');
+    drawCover();
+}
+
+// -------- UI 绑定 --------
+document.querySelectorAll('#ratioGrid .ratio-btn').forEach(b => {
+    b.addEventListener('click', () => {
+        document.querySelectorAll('#ratioGrid .ratio-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        state.width = parseInt(b.dataset.w);
+        state.height = parseInt(b.dataset.h);
+        drawCover();
+    });
+});
+document.querySelectorAll('#schemeGrid .scheme').forEach((el, i) => {
+    el.addEventListener('click', () => {
+        document.querySelectorAll('#schemeGrid .scheme').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        state.scheme = i;
+        drawCover();
+    });
+});
+document.querySelectorAll('#fontGrid .font-btn').forEach(b => {
+    b.addEventListener('click', () => {
+        document.querySelectorAll('#fontGrid .font-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        state.font = b.dataset.font;
+        drawCover();
+    });
+});
+document.querySelectorAll('#mainPresets .preset-chip').forEach(c => {
+    c.addEventListener('click', () => {
+        document.getElementById('tMain').value = c.dataset.text;
+        drawCover();
+    });
+});
+
+['tMain', 'tSub', 'tAuthor'].forEach(id => {
+    document.getElementById(id).addEventListener('input', drawCover);
+});
+
+document.getElementById('sSize').addEventListener('input', e => {
+    state.size = parseInt(e.target.value);
+    document.getElementById('sSizeV').textContent = e.target.value;
+    drawCover();
+});
+document.getElementById('sSpacing').addEventListener('input', e => {
+    state.spacing = parseInt(e.target.value);
+    document.getElementById('sSpacingV').textContent = e.target.value;
+    drawCover();
+});
+
+// 导出
+function exportCover() {
+    const link = document.createElement('a');
+    link.download = `promptflow-cover-${state.width}x${state.height}-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
+    link.click();
+
+    // 微反馈
+    const btn = document.querySelector('.export-btn');
+    const old = btn.textContent;
+    btn.textContent = '✅ 已保存';
+    setTimeout(() => btn.textContent = old, 1500);
+}
+
+// 初始绘制
+drawCover();
+</script>
+</body>
+</html>
