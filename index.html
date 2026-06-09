@@ -5253,6 +5253,14 @@
             customs: {}
         };
 
+        // v5.0：统一获取 option 的 tags 字符串（兼容两种数据结构）
+        function getOptValue(opt) {
+            if (Array.isArray(opt.tags) && opt.tags.length > 0) return opt.tags.join(', ');
+            if (opt.hint && typeof opt.hint === 'string') return opt.hint;
+            if (opt.label) return opt.label;
+            return '';
+        }
+
         function renderGuideSteps() {
             const stepsEl = document.getElementById('guideSteps');
             const panelsEl = document.getElementById('guidePanels');
@@ -5278,17 +5286,18 @@
 
                 let optsHtml = '<div class="guide-options">';
                 step.options.forEach(opt => {
-                    const isSelected = guideState.selections[step.id] === opt.tags.join(', ');
-                    optsHtml += `<div class="guide-option${isSelected ? ' selected' : ''}" onclick="selectGuideOption('${step.id}', '${opt.tags.join(', ')}', this)">${opt.label}</div>`;
+                    const optValue = getOptValue(opt);
+                    const isSelected = guideState.selections[step.id] === optValue;
+                    optsHtml += `<div class="guide-option${isSelected ? ' selected' : ''}" onclick="selectGuideOption('${step.id}', '${optValue.replace(/'/g, "\\'")}', this)">${opt.label}</div>`;
                 });
                 optsHtml += '</div>';
                 optsHtml += `<div class="guide-custom">
-                    <div class="guide-custom-label">${step.customLabel}（输入英文关键词，用逗号分隔）</div>
+                    <div class="guide-custom-label">${step.customLabel || '自定义'}（输入英文关键词，用逗号分隔）</div>
                     <input class="guide-custom-input" id="guideCustom_${step.id}" placeholder="例如：cute, fluffy, pink background..." value="${guideState.customs[step.id] || ''}" oninput="onGuideCustom('${step.id}', this.value)">
                 </div>`;
 
                 panel.innerHTML = `
-                    <div class="guide-panel-title"><span class="emoji">${step.emoji}</span> ${step.hint}</div>
+                    <div class="guide-panel-title"><span class="emoji">${step.emoji}</span> ${step.hint || step.title}</div>
                     ${optsHtml}
                     <div class="guide-nav">
                         <button class="guide-prev" ${idx === 0 ? 'disabled' : ''} onclick="prevGuideStep()">← 上一步</button>
