@@ -1,0 +1,17 @@
+{
+  "name": "PromptFlow",
+  "short_name": "PromptFlow",
+  "description": "AI提示词宝库 - 释放AI的无限潜能",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://api.dicebear.com/7.x/avataaars/svg?seed=PromptFlow",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

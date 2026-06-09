@@ -1151,15 +1151,84 @@ ${langInfo.features.join("，")}
             section.style.display = "block";
         }
 
-        function analyzeImage() {
-            const styleWords = getRandomKeywords(imageKeywordDB.style, 3);
-            const subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
-            const sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
-            const techWords = getRandomKeywords(imageKeywordDB.tech, 4);
+        async function analyzeImage() {
+            document.getElementById("fileStats").innerHTML = `
+                <div class="stat-card"><div class="stat-value">${(selectedFile.size / 1024).toFixed(1)}KB</div><div class="stat-label">文件大小</div></div>
+                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">AI分析中...</div></div>
+                <div class="stat-card"><div class="stat-value">✨</div><div class="stat-label">生成关键词</div></div>
+            `;
+            document.getElementById("resultsArea").classList.add("show");
+            document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
+
+            const apiKey = localStorage.getItem('pf_ark_api_key');
+            let imageAnalysis = null;
+
+            if (apiKey) {
+                try {
+                    const base64 = await fileToBase64(selectedFile);
+                    const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + apiKey
+                        },
+                        body: JSON.stringify({
+                            model: 'doubao-1-5-vision-pro-32k-250628',
+                            messages: [
+                                {
+                                    role: 'user',
+                                    content: [
+                                        {
+                                            type: 'image_url',
+                                            image_url: { url: base64 }
+                                        },
+                                        {
+                                            type: 'text',
+                                            text: '请仔细分析这张图片，按以下格式输出分析结果：\n1.【主体】画面中主要的物体或人物（2-4个关键词）\n2.【风格】艺术风格/画风/摄影风格（2-3个关键词）\n3.【场景】环境/背景/场景描述（2-4个关键词）\n4.【色彩】主色调/氛围色（2-3个）\n5.【构图】构图方式/光影效果（2-3个）\n6.【画质】分辨率/清晰度/细节描述（2-3个）\n7.【情绪】整体氛围/情感表达（1-2个）\n\n请用中文输出，每项用逗号分隔的关键词，便于生成AI绘画提示词。'
+                                        }
+                                    ]
+                                }
+                            ]
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        imageAnalysis = data.choices[0].message.content;
+                    }
+                } catch (e) {
+                    console.warn('图像分析API失败，使用关键词库', e);
+                }
+            }
+
+            let styleWords, subjectWords, sceneWords, techWords;
+            
+            if (imageAnalysis) {
+                const parseKeywords = (text, tag) => {
+                    const match = text.match(new RegExp(`【${tag}】(.+?)(?:\n|$)`));
+                    if (match) return match[1].split(/[，,、]/).map(k => k.trim()).filter(k => k);
+                    return [];
+                };
+                
+                subjectWords = parseKeywords(imageAnalysis, '主体');
+                styleWords = parseKeywords(imageAnalysis, '风格');
+                sceneWords = [...parseKeywords(imageAnalysis, '场景'), ...parseKeywords(imageAnalysis, '色彩'), ...parseKeywords(imageAnalysis, '构图')];
+                techWords = [...parseKeywords(imageAnalysis, '画质'), ...parseKeywords(imageAnalysis, '情绪')];
+                
+                if (subjectWords.length === 0) subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
+                if (styleWords.length === 0) styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+                if (sceneWords.length === 0) sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+                if (techWords.length === 0) techWords = getRandomKeywords(imageKeywordDB.tech, 4);
+            } else {
+                styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+                subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
+                sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+                techWords = getRandomKeywords(imageKeywordDB.tech, 4);
+            }
 
             document.getElementById("fileStats").innerHTML = `
                 <div class="stat-card"><div class="stat-value">${(selectedFile.size / 1024).toFixed(1)}KB</div><div class="stat-label">文件大小</div></div>
-                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">图片分析</div></div>
+                <div class="stat-card"><div class="stat-value">${imageAnalysis ? '🤖 AI分析' : '🎨 智能识别'}</div><div class="stat-label">已完成</div></div>
                 <div class="stat-card"><div class="stat-value">${styleWords.length + subjectWords.length + sceneWords.length + techWords.length}</div><div class="stat-label">关键词数</div></div>
             `;
             
@@ -1168,7 +1237,7 @@ ${langInfo.features.join("，")}
             renderKeywords("statsKeywords", sceneWords);
 
             const fullPrompt = `【AI 绘画提示词】
-
+${imageAnalysis ? '\n📊 AI图像分析结果：\n' + imageAnalysis + '\n' : ''}
 🎯 画面描述：
 ${[...subjectWords, ...sceneWords].join("，")}
 
@@ -1182,9 +1251,17 @@ ${techWords.join("，")}
 ${[...styleWords, ...subjectWords, ...sceneWords, ...techWords].join("，")}`;
 
             document.getElementById("fullPrompt").textContent = fullPrompt;
-            document.getElementById("resultsArea").classList.add("show");
             renderDynamicModelCompare("image");
             document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
         }
 
         function analyzeCode() {
