@@ -36,73 +36,75 @@ const K_CATEGORY_KEYWORDS = {
 };
 
 // ---------- 5.2 AI 绘画各维度中文关键词（用于维度识别和预填）----------
+// ---------- 5.2 通用关键词库（所有场景共享，结构统一） ----------
+// 统一格式：{ label, keywords: [中英文混合], hint: string }
 const K_IMG_DIM_KEYWORDS = {
     style: {
         name: '风格',
         emoji: '🎭',
         options: [
-            { label: '写实摄影', zh: ['写实', '真实', '照片', '摄影', '写真', '高清', '逼真'], en: 'photorealistic, ultra realistic, professional photography' },
-            { label: '日系动漫', zh: ['动漫', '二次元', '日系', '漫画', '动画', '插画'], en: 'anime style, Japanese animation, vibrant colors, clean line art' },
-            { label: '赛博朋克', zh: ['赛博朋克', '科幻', '未来', '霓虹', '高科技'], en: 'cyberpunk, neon lights, futuristic city, holographic, sci-fi' },
-            { label: '油画质感', zh: ['油画', '古典', '艺术', '艺术感'], en: 'oil painting, classical art, impasto texture, fine art' },
-            { label: '水彩清新', zh: ['水彩', '清新', '淡雅', '水墨'], en: 'watercolor painting, soft colors, delicate brushwork, wash technique' },
-            { label: '极简主义', zh: ['极简', '简约', '干净', '几何', '留白'], en: 'minimalist, clean composition, geometric shapes, negative space' },
-            { label: '3D 渲染', zh: ['3d', '三维', '渲染', '皮克斯', '卡通3d'], en: '3D render, octane render, Pixar style, volumetric lighting' },
-            { label: '中国水墨', zh: ['水墨', '国画', '禅意', '中式', '山水画'], en: 'Chinese ink painting, traditional art, zen atmosphere, oriental art' }
+            { label: '写实摄影', keywords: ['写实', '真实', '照片', '摄影', '写真', '高清', '逼真', 'photorealistic', 'realistic'], hint: 'photorealistic, ultra realistic, professional photography' },
+            { label: '日系动漫', keywords: ['动漫', '二次元', '日系', '漫画', '动画', '插画', 'anime', 'manga'], hint: 'anime style, Japanese animation, vibrant colors, clean line art' },
+            { label: '赛博朋克', keywords: ['赛博朋克', '赛博', '朋克', '科幻', '未来', '霓虹', '高科技', 'cyberpunk', 'sci-fi'], hint: 'cyberpunk, neon lights, futuristic city, holographic, sci-fi' },
+            { label: '油画质感', keywords: ['油画', '古典', '艺术'], hint: 'oil painting, classical art, impasto texture, fine art' },
+            { label: '水彩清新', keywords: ['水彩', '清新', '淡雅'], hint: 'watercolor painting, soft colors, delicate brushwork' },
+            { label: '极简主义', keywords: ['极简', '简约', '干净', '几何', '留白', 'minimalist'], hint: 'minimalist, clean composition, geometric shapes, negative space' },
+            { label: '3D 渲染', keywords: ['3d', '三维', '渲染', '皮克斯'], hint: '3D render, octane render, Pixar style, volumetric lighting' },
+            { label: '中国水墨', keywords: ['水墨', '国画', '禅意', '中式', '山水'], hint: 'Chinese ink painting, traditional art, zen atmosphere, oriental art' }
         ]
     },
     lighting: {
         name: '光线',
         emoji: '💡',
         options: [
-            { label: '黄金时刻', zh: ['黄昏', '日落', '日出', '傍晚', '黄金'], en: 'golden hour lighting, sunset backlight, warm tones' },
-            { label: '柔和光线', zh: ['柔和', '柔光', '自然光', '窗边', '柔'], en: 'soft daylight, diffused light, softbox lighting, natural window light' },
-            { label: '霓虹光', zh: ['霓虹', '发光', '夜光', '赛博'], en: 'neon glow, neon lights, neon reflections, holographic glow' },
-            { label: '电影级光影', zh: ['电影', '光影', '戏剧', '氛围光'], en: 'cinematic lighting, dramatic chiaroscuro, volumetric light' },
-            { label: '逆光/轮廓光', zh: ['逆光', '轮廓', '剪影', '边缘光'], en: 'backlighting, rim light, god rays, silhouette' },
-            { label: '月光夜景', zh: ['月光', '夜晚', '夜色', '星光'], en: 'moonlight, night scene, starry sky, moody lighting' },
-            { label: '棚拍灯光', zh: ['棚拍', '工作室', '灯光', '影棚'], en: 'studio lighting, three-point lighting, LED panel lights' },
-            { label: '高反差', zh: ['高对比', '硬朗', '高反差', '明暗'], en: 'high contrast, dramatic shadows, bold lighting' }
+            { label: '黄金时刻', keywords: ['黄昏', '日落', '日出', '傍晚', '夕阳', '黄金', 'golden hour', '日落时分', '黄昏时分'], hint: 'golden hour lighting, sunset backlight, warm tones' },
+            { label: '柔和光线', keywords: ['柔和', '柔光', '自然光', '窗边', '柔', 'soft light', '自然光照'], hint: 'soft daylight, diffused light, softbox lighting, natural window light' },
+            { label: '霓虹光', keywords: ['霓虹', '发光', '夜光', 'neon', '霓虹灯'], hint: 'neon glow, neon lights, neon reflections' },
+            { label: '电影级光影', keywords: ['电影', '光影', '戏剧', '氛围光', 'cinematic', '电影级', '电影感'], hint: 'cinematic lighting, dramatic chiaroscuro, volumetric light' },
+            { label: '逆光/轮廓光', keywords: ['逆光', '轮廓', '剪影', '边缘光', 'rim light'], hint: 'backlighting, rim light, god rays, silhouette' },
+            { label: '月光夜景', keywords: ['月光', '夜晚', '夜色', '星光', '夜景', '月亮', '星空'], hint: 'moonlight, night scene, starry sky, moody lighting' },
+            { label: '棚拍灯光', keywords: ['棚拍', '工作室', '影棚', 'studio', '摄影棚', '灯光'], hint: 'studio lighting, three-point lighting, LED panel lights' },
+            { label: '高反差', keywords: ['高对比', '硬朗', '高反差', '明暗', '对比', 'contrast'], hint: 'high contrast, dramatic shadows, bold lighting' }
         ]
     },
     composition: {
         name: '构图',
         emoji: '📐',
         options: [
-            { label: '特写镜头', zh: ['特写', '近景', '放大', '细节'], en: 'close-up shot, macro, detailed view' },
-            { label: '半身照', zh: ['半身', '上半身', '胸部以上'], en: 'half body shot, waist up, portrait composition' },
-            { label: '全身照', zh: ['全身', '完整', '从头到脚'], en: 'full body shot, full figure, complete view' },
-            { label: '俯视角', zh: ['俯视', '鸟瞰', '从上往下'], en: "top-down view, bird's eye view, aerial perspective" },
-            { label: '仰视角', zh: ['仰视', '低角度', '从下往上'], en: 'low angle shot, looking up, dramatic perspective' },
-            { label: '侧面轮廓', zh: ['侧面', '侧影', '轮廓'], en: 'side view, profile shot, lateral view' },
-            { label: '对称构图', zh: ['对称', '居中', '平衡'], en: 'symmetrical composition, centered, balanced' },
-            { label: '三分法', zh: ['三分', '平衡构图'], en: 'rule of thirds, balanced composition, golden ratio' }
+            { label: '特写镜头', keywords: ['特写', '近景', '放大', '细节', 'close-up'], hint: 'close-up shot, macro, detailed view' },
+            { label: '半身照', keywords: ['半身', '上半身', 'waist'], hint: 'half body shot, waist up, portrait composition' },
+            { label: '全身照', keywords: ['全身', '完整', '从头到脚', 'full body'], hint: 'full body shot, full figure, complete view' },
+            { label: '俯视角', keywords: ['俯视', '鸟瞰', '从上往下', 'top down'], hint: "top-down view, bird's eye view, aerial perspective" },
+            { label: '仰视角', keywords: ['仰视', '低角度', '从下往上', 'low angle'], hint: 'low angle shot, looking up, dramatic perspective' },
+            { label: '侧面轮廓', keywords: ['侧面', '侧影', '轮廓', 'profile'], hint: 'side view, profile shot, lateral view' },
+            { label: '对称构图', keywords: ['对称', '居中', '平衡', 'symmetry'], hint: 'symmetrical composition, centered, balanced' },
+            { label: '三分法', keywords: ['三分', '平衡构图', 'rule of thirds'], hint: 'rule of thirds, balanced composition, golden ratio' }
         ]
     },
     quality: {
         name: '质量',
         emoji: '✨',
         options: [
-            { label: '8K 超高清', zh: ['8k', '超高', '超清'], en: '8K resolution, ultra high detail, highly detailed, masterpiece' },
-            { label: '4K 高清', zh: ['4k', '高清', '高分辨率'], en: '4K resolution, high detail, high resolution, best quality' },
-            { label: '电影级', zh: ['电影', '胶片', 'cinematic'], en: 'cinematic, film quality, movie still, cinematic framing' },
-            { label: '杂志封面', zh: ['杂志', '封面', '时尚', '时装'], en: 'magazine cover, editorial, professional photography, vogue style' },
-            { label: '最佳渲染', zh: ['最佳', '顶级', '最高', '精美'], en: 'best quality, masterpiece, absurdres, intricate details, award winning' },
-            { label: '国家地理风格', zh: ['国家地理', '地理', '纪实'], en: 'national geographic style, documentary photography, photojournalism' }
+            { label: '8K 超高清', keywords: ['8k', '超高', '超清', 'masterpiece'], hint: '8K resolution, ultra high detail, masterpiece' },
+            { label: '4K 高清', keywords: ['4k', '高清', '高分辨率', 'best quality'], hint: '4K resolution, high detail, high resolution' },
+            { label: '电影级', keywords: ['电影', '胶片', 'cinematic', 'film'], hint: 'cinematic, film quality, movie still, cinematic framing' },
+            { label: '杂志封面', keywords: ['杂志', '封面', '时尚', '时装', 'vogue'], hint: 'magazine cover, editorial, professional photography' },
+            { label: '最佳渲染', keywords: ['最佳', '顶级', '最高', '精美', 'masterpiece'], hint: 'best quality, masterpiece, intricate details' },
+            { label: '国家地理风格', keywords: ['国家地理', '地理', '纪实'], hint: 'national geographic style, documentary photography' }
         ]
     },
     subject: {
         name: '主体',
         emoji: '👤',
         options: [
-            { label: '美丽女性', zh: ['女性', '女人', '女孩', '少女', '女生'], en: 'beautiful young woman, elegant pose, gorgeous eyes' },
-            { label: '帅气男性', zh: ['男性', '男人', '男孩', '男生', '帅哥'], en: 'handsome man, confident expression, stylish' },
-            { label: '萌宠动物', zh: ['猫', '狗', '宠物', '动物', '小猫', '小狗'], en: 'cute animal, fluffy cat, adorable dog, wildlife photography' },
-            { label: '自然风景', zh: ['风景', '山', '海', '森林', '湖', '河'], en: 'landscape, majestic mountains, peaceful forest, ocean view' },
-            { label: '城市建筑', zh: ['城市', '建筑', '街道', '高楼'], en: 'cityscape, modern architecture, urban street, skyscrapers' },
-            { label: '产品静物', zh: ['产品', '商品', '静物', '展示'], en: 'product photography, commercial shot, e-commerce photo, clean background' },
-            { label: '机甲科幻', zh: ['机甲', '机器人', '科幻', '未来战士'], en: 'mecha, giant robot, futuristic armor, sci-fi warrior' },
-            { label: '奇幻生物', zh: ['龙', '精灵', '奇幻', '幻想', '魔法生物'], en: 'fantasy creature, mythical beast, magical, ethereal' }
+            { label: '美丽女性', keywords: ['女性', '女人', '女孩', '少女', '女生', 'lady', 'woman', 'girl', '裙子', '连衣裙'], hint: 'beautiful young woman, elegant pose, gorgeous eyes' },
+            { label: '帅气男性', keywords: ['男性', '男人', '男孩', '男生', '帅哥', '男士', 'man', 'boy'], hint: 'handsome man, confident expression, stylish' },
+            { label: '萌宠动物', keywords: ['猫', '小猫', '猫咪', '狗', '小狗', '宠物', '动物', 'cat', 'dog', 'kitten', 'puppy', '小动物'], hint: 'cute animal, fluffy cat, adorable dog' },
+            { label: '自然风景', keywords: ['风景', '山', '海', '海洋', '森林', '湖', '河', '海边', 'landscape', '自然'], hint: 'landscape, majestic mountains, peaceful forest, ocean view' },
+            { label: '城市建筑', keywords: ['城市', '建筑', '街道', '高楼', '都市', 'city', '大厦', '摩天楼', '夜景'], hint: 'cityscape, modern architecture, urban street, skyscrapers' },
+            { label: '产品静物', keywords: ['产品', '商品', '静物', '展示', '静物摄影'], hint: 'product photography, commercial shot, e-commerce photo' },
+            { label: '机甲科幻', keywords: ['机甲', '机器人', '未来战士', 'robot', 'mecha', '机械'], hint: 'mecha, giant robot, futuristic armor, sci-fi warrior' },
+            { label: '奇幻生物', keywords: ['龙', '精灵', '奇幻', '幻想', 'dragon', '魔法生物'], hint: 'fantasy creature, mythical beast, magical, ethereal' }
         ]
     }
 };
@@ -503,92 +505,110 @@ const K_SCENARIO_GUIDE_STEPS = {
 
 // ---------- 5.4 核心：智能识别函数 ----------
 // 输入：用户原始输入字符串
-// 输出：{
-//   category: 'image' | 'xiaohongshu' | 'video' | 'code' | 'writing',
-//   categoryName: 'AI 绘画',
-//   categoryEmoji: '🎨',
-//   detected: { stepId: { label, value, en } }   // 已命中维度
-//   missing: [stepId...]                       // 建议补齐的维度
-//   confidence: 0~1                            // 识别置信度
-// }
+// 输出：{ category, categoryName, categoryEmoji, detected, missing, confidence, rawInput }
 function pfSmartDetect(input) {
     if (!input || !input.trim()) return null;
     const text = input.trim();
     const lower = text.toLowerCase();
 
-    // Step 1: 分类识别 — 看哪个场景命中的关键词最多
+    // -------- Step 1: 分类识别（带加权 + 负向信号防误判） --------
     let bestCategory = 'image';
     let bestCategoryHits = 0;
-    const categoryHits = {};
     Object.entries(K_CATEGORY_KEYWORDS).forEach(([catKey, cat]) => {
         let hits = 0;
         cat.triggers.forEach(kw => {
             if (lower.includes(kw.toLowerCase())) hits++;
         });
-        // 对中文描述的额外加权：如果用户输入大量中文（非代码类），偏向写作/小红书
-        const zhCharCount = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
-        const enCharCount = text.length - zhCharCount;
-        // 代码关键词强信号
-        if (catKey === 'code' && /\b(function|const|let|var|if|else|for|while|class|import|def|return)\b/.test(lower)) hits += 5;
+        // 分类强信号（带权）
+        if (catKey === 'code' && /\b(function|const|let|var|if|else|for|while|class|import|def|return|python|javascript|java|html|css)\b/.test(lower)) hits += 5;
         if (catKey === 'code' && /[(){}\[\];=]/.test(text)) hits += 1;
-        // 小红书标记词强信号
-        if (catKey === 'xiaohongshu' && /(姐妹|宝子|yyds|种草|测评)/.test(text)) hits += 5;
-        // 视频标记词强信号
-        if (catKey === 'video' && /(抖音|视频|脚本|口播|vlog|镜头)/.test(text)) hits += 3;
-        // 绘画英文关键词强信号
-        if (catKey === 'image' && /(photorealistic|cinematic|anime|illustration|painting|render|portrait|landscape|golden\s*hour|8k|4k)/.test(lower)) hits += 3;
+        if (catKey === 'xiaohongshu' && /(姐妹|宝子|yyds|种草|测评|小红书|笔记|探店|好物|推荐|搭配)/.test(text)) hits += 5;
+        if (catKey === 'video' && /(抖音|视频|视频号|快手|短视频|脚本|口播|vlog|拍摄|剪辑|bgm|节奏|镜头)/.test(text)) hits += 4;
+        if (catKey === 'writing' && /(年终总结|工作报告|演讲稿|邮件|检讨|自我介绍|简历|通知|公告|文章|写作)/.test(text)) hits += 5;
+        if (catKey === 'image' && /(photorealistic|cinematic|anime|illustration|painting|render|portrait|landscape|golden\s*hour|8k|4k|3d|特写|构图|光线|风格|绘画|插画|封面|头像|壁纸)/.test(lower)) hits += 3;
+        // 负向信号 — 若输入明显是代码类关键词但被归类为 image 时降权
+        if (catKey === 'image' && /(python|函数|代码|编程|javascript|java|react|vue)/.test(lower)) hits -= 3;
+        if (catKey === 'writing' && /(python|函数|代码|编程|javascript|react)/.test(lower)) hits -= 3;
+        if (catKey === 'xiaohongshu' && /(python|函数|代码|编程)/.test(lower)) hits -= 2;
+        if (catKey === 'video' && /(python|代码|函数|编程)/.test(lower)) hits -= 2;
 
-        categoryHits[catKey] = hits;
         if (hits > bestCategoryHits) {
             bestCategoryHits = hits;
             bestCategory = catKey;
         }
     });
+    if (bestCategoryHits === 0) bestCategory = 'image'; // 默认 AI 绘画
 
-    // 如果没有任何命中（冷启动状态），默认用 AI 绘画
-    if (bestCategoryHits === 0) bestCategory = 'image';
-
-    // Step 2: 对识别到的场景，按维度做关键词匹配
+    // -------- Step 2: 按场景做维度识别 --------
     const scenarioConfig = K_SCENARIO_GUIDE_STEPS[bestCategory];
     const detected = {};
     const missing = [];
+
+    if (!scenarioConfig || !scenarioConfig.steps) {
+        return {
+            category: bestCategory,
+            categoryName: K_CATEGORY_KEYWORDS[bestCategory].name,
+            categoryEmoji: K_CATEGORY_KEYWORDS[bestCategory].emoji,
+            detected: {},
+            missing: [],
+            confidence: 0,
+            rawInput: text
+        };
+    }
 
     scenarioConfig.steps.forEach(step => {
         let bestOpt = null;
         let bestOptHits = 0;
         step.options.forEach(opt => {
+            // 从 opt.keywords 读关键词（统一结构）；
+            // 兼容旧结构：若有 opt.zh 用 zh，若有 opt.tags 用 tags 当关键词
+            const kws = opt.keywords || opt.zh || opt.tags || [];
             let hits = 0;
-            opt.zh.forEach(kw => {
-                if (lower.includes(kw.toLowerCase())) hits++;
+            kws.forEach(kw => {
+                if (!kw) return;
+                const kwLower = kw.toString().toLowerCase();
+                if (kwLower.length < 1) return;
+                if (lower.includes(kwLower)) hits += (kwLower.length >= 2 ? 1 : 0.5);
             });
-            // 英文关键词也测试
-            const enLower = opt.en.toLowerCase();
-            // 如果用户输入包含英文关键词，也记命中
-            const englishWords = lower.match(/[a-z]+/g) || [];
-            englishWords.forEach(w => {
-                if (w.length >= 3 && enLower.includes(w)) hits++;
-            });
+            // 也测试英文提示（如"cinematic"）
+            if (opt.hint && typeof opt.hint === 'string') {
+                const hintLower = opt.hint.toLowerCase();
+                const enWords = lower.match(/[a-z]{2,}/g) || [];
+                enWords.forEach(w => {
+                    if (hintLower.includes(w)) hits += 0.5;
+                });
+            }
             if (hits > bestOptHits) {
                 bestOptHits = hits;
                 bestOpt = opt;
             }
         });
-        if (bestOptHits >= 1) {
+        // 需要至少 1 个命中才记录（浮点比较）
+        if (bestOpt && bestOptHits >= 1) {
+            // 兼容两种数据结构：opt.tags 数组或 opt.hint 字符串
+            let valueStr;
+            if (Array.isArray(bestOpt.tags) && bestOpt.tags.length > 0) {
+                valueStr = bestOpt.tags.join(', ');
+            } else if (bestOpt.hint) {
+                valueStr = bestOpt.hint;
+            } else {
+                valueStr = bestOpt.label;
+            }
             detected[step.id] = {
                 stepId: step.id,
                 label: bestOpt.label,
-                value: bestOpt.tags.join(', '),
-                en: bestOpt.en
+                value: valueStr,
+                en: bestOpt.hint || valueStr
             };
         } else {
             missing.push(step.id);
         }
     });
 
-    // Step 3: 置信度 = 已命中维度 / 总维度数
+    // -------- Step 3: 置信度 --------
     const totalDims = scenarioConfig.steps.length;
     const detectedDims = Object.keys(detected).length;
-    const confidence = detectedDims / totalDims;
+    const confidence = totalDims > 0 ? detectedDims / totalDims : 0;
 
     return {
         category: bestCategory,
@@ -599,6 +619,13 @@ function pfSmartDetect(input) {
         confidence,
         rawInput: text
     };
+}
+
+// ---------- 5.4.1 统一获取 option 的显示值（兼容两种数据结构） ----------
+function pfGetOptionValue(opt) {
+    if (Array.isArray(opt.tags) && opt.tags.length > 0) return opt.tags.join(', ');
+    if (opt.hint) return opt.hint;
+    return opt.label;
 }
 
 // ---------- 5.5 预填结果 → 输出成最终提示词 ----------
