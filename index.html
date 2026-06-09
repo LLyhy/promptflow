@@ -1403,6 +1403,117 @@
         .guide-trigger:hover { background: rgba(14, 165, 233, 0.15); border-color: #38bdf8; }
         .guide-trigger.show { display: block; }
 
+        /* ===== v5.0 智能识别浮层 ===== */
+        .smart-detect-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(14, 165, 233, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        .smart-detect-banner.show { display: block; }
+        .smart-detect-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .smart-detect-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #a5b4fc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .smart-detect-category {
+            font-size: 12px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
+            padding: 3px 10px;
+            border-radius: 8px;
+        }
+        .smart-detect-body { font-size: 12.5px; color: #cbd5e1; line-height: 1.7; }
+        .smart-detect-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .smart-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        .smart-chip.detected { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .smart-chip.missing { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .smart-detect-action {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 9px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .smart-detect-action:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+        .smart-detect-close {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px 8px;
+            line-height: 1;
+        }
+        .smart-detect-close:hover { color: #fff; }
+        /* AI 模式紫色版本 */
+        .smart-detect-banner.ai-mode {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(168, 85, 247, 0.1));
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+        .smart-detect-banner.ai-mode .smart-detect-title { color: #d8b4fe; }
+        .smart-detect-banner.ai-mode .smart-detect-category { background: rgba(168, 85, 247, 0.2); color: #e9d5ff; }
+        .ai-variation-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ai-variation-card:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.5);
+            transform: translateX(3px);
+        }
+        .ai-variation-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #e9d5ff;
+            margin-bottom: 4px;
+        }
+        .ai-variation-text {
+            font-size: 11.5px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .guided-builder {
             display: none;
             background: rgba(15, 23, 42, 0.7);
@@ -2073,6 +2184,21 @@
             <div class="generator-title">🧠 智能提示词生成器</div>
             <div class="generator-subtitle">输入简单描述，AI帮你生成专业提示词</div>
             <textarea class="generator-input" id="generatorInput" placeholder="请输入你的需求描述，例如：生成一段描述美丽风景的绘画提示词..." oninput="checkInputLength()"></textarea>
+
+            <!-- v5.0 智能识别浮层 -->
+            <div class="smart-detect-banner" id="smartDetectBanner" style="display:none;">
+                <div class="smart-detect-header">
+                    <div class="smart-detect-title">
+                        <span id="smartDetectEmoji">🤖</span>
+                        <span id="smartDetectTitle">智能识别你的需求</span>
+                    </div>
+                    <button class="smart-detect-close" onclick="hideSmartDetect()" title="关闭提示">×</button>
+                </div>
+                <div class="smart-detect-body" id="smartDetectBody"></div>
+                <button class="smart-detect-action" id="smartDetectAction" onclick="enterGuideFromDetect()">
+                    🎯 进入引导式构建器，自动预填识别到的内容
+                </button>
+            </div>
 
             <div style="margin: 16px 0; padding: 16px; background: rgba(30, 27, 75, 0.5); border: 1px solid rgba(147, 51, 234, 0.25); border-radius: 12px;">
                 <div style="font-size: 13px; color: #94a3b8; margin-bottom: 10px;">🎨 目标模型（输出格式）：</div>
@@ -4958,6 +5084,13 @@
 
         // 三个顶部按钮的入口
         function handleGenButton(kind) {
+            // 如果浮层存在且被识别过，先把浮层里的内容作为预填
+            if (lastDetection && K_SCENARIO_GUIDE_STEPS[lastDetection.category]) {
+                currentGuideCategory = lastDetection.category;
+                if (K_SCENARIO_GUIDE_STEPS[currentGuideCategory]) {
+                    guideSteps = K_SCENARIO_GUIDE_STEPS[currentGuideCategory].steps;
+                }
+            }
             if (kind === 'batch') window._v4Batch = true;
             if (kind === 'refine') window._v4Refine = true;
             triggerSmartGen();
@@ -5110,106 +5243,9 @@
 
         if (typeof initGenMode === 'function') initGenMode();
 
-        /* ===== 引导式构建器 ===== */
-        const guideSteps = [
-            {
-                id: 'subject', emoji: '🐱', title: '主体',
-                hint: '你想画什么？',
-                options: [
-                    { label: '人物', tags: ['portrait', 'character', 'person', 'face', 'full body'] },
-                    { label: '动物', tags: ['animal', 'cat', 'dog', 'wildlife', 'bird'] },
-                    { label: '风景', tags: ['landscape', 'mountain', 'ocean', 'forest', 'sky'] },
-                    { label: '建筑', tags: ['architecture', 'building', 'cityscape', 'skyscraper', 'interior'] },
-                    { label: '物品', tags: ['object', 'product', 'still life', 'food', 'flower'] },
-                    { label: '植物', tags: ['plant', 'tree', 'garden', 'grass', 'moss'] },
-                    { label: '科幻', tags: ['sci-fi', 'robot', 'spacecraft', 'alien', 'future tech'] },
-                    { label: '幻想', tags: ['fantasy', 'dragon', 'magic', 'elf', 'medieval'] },
-                ],
-                customLabel: '自定义主体'
-            },
-            {
-                id: 'style', emoji: '🎨', title: '风格',
-                hint: '想要什么艺术风格？',
-                options: [
-                    { label: '写实摄影', tags: ['photorealistic', 'realistic photography', 'DSLR quality', 'high detail'] },
-                    { label: '赛博朋克', tags: ['cyberpunk', 'neon lights', 'futuristic city', 'holographic', 'dark atmosphere'] },
-                    { label: '水墨国风', tags: ['Chinese ink painting', '水墨', 'traditional', 'brush stroke', 'ink wash'] },
-                    { label: '日系动漫', tags: ['anime style', 'Japanese anime', 'cel shading', 'manga'] },
-                    { label: '油画', tags: ['oil painting', 'impressionist', 'classical', 'canvas texture'] },
-                    { label: '3D 建模', tags: ['3D render', 'Cinema 4D', 'octane render', 'blender', 'volumetric lighting'] },
-                    { label: '像素风', tags: ['pixel art', '8-bit', 'retro game', 'pixelated'] },
-                    { label: '蒸汽朋克', tags: ['steampunk', 'Victorian', 'brass gears', 'airship', 'mechanical'] },
-                    { label: '极简主义', tags: ['minimalist', 'clean', 'simple', 'negative space', 'elegant'] },
-                    { label: '插画', tags: ['digital illustration', 'flat design', 'vector art', 'clean lines'] },
-                    { label: '抽象艺术', tags: ['abstract', 'geometric', 'color field', 'modern art'] },
-                    { label: '科幻未来', tags: ['sci-fi', 'futuristic', 'high-tech', 'sleek design', 'clean futurism'] },
-                ],
-                customLabel: '自定义风格'
-            },
-            {
-                id: 'mood', emoji: '💡', title: '氛围',
-                hint: '想要什么光线和氛围？',
-                options: [
-                    { label: '黄金时刻', tags: ['golden hour', 'warm sunlight', 'sunset', 'golden light'] },
-                    { label: '霓虹夜景', tags: ['neon lights', 'night city', 'urban night', 'colorful glow'] },
-                    { label: '柔和日光', tags: ['soft daylight', 'natural light', 'overcast', 'diffused light'] },
-                    { label: '戏剧性阴影', tags: ['dramatic lighting', 'chiaroscuro', 'high contrast', 'Rembrandt lighting'] },
-                    { label: '梦幻散景', tags: ['bokeh', 'soft focus', 'dreamy', 'blurred background', 'lens flare'] },
-                    { label: '电影光效', tags: ['cinematic lighting', 'volumetric light', 'God rays', 'film grain'] },
-                    { label: '冷色调', tags: ['cool tones', 'blue hour', 'moody', 'cold atmosphere'] },
-                    { label: '暖色调', tags: ['warm tones', 'cozy', 'intimate', 'amber light'] },
-                    { label: '纯黑背景', tags: ['pure black background', 'studio lighting', 'spotlight', 'dark studio'] },
-                    { label: '纯白背景', tags: ['white background', 'minimal', 'product photography', 'clean'] },
-                ],
-                customLabel: '自定义氛围'
-            },
-            {
-                id: 'scene', emoji: '🌍', title: '场景',
-                hint: '放在什么环境里？',
-                options: [
-                    { label: '城市街头', tags: ['city street', 'urban', 'downtown', 'street photography'] },
-                    { label: '大自然', tags: ['nature', 'outdoor', 'wilderness', 'natural environment'] },
-                    { label: '室内空间', tags: ['indoor', 'interior', 'room', 'indoor lighting'] },
-                    { label: '太空宇宙', tags: ['space', 'galaxy', 'cosmos', 'nebula', 'stars'] },
-                    { label: '海底世界', tags: ['underwater', 'ocean', 'marine life', 'coral reef', 'deep sea'] },
-                    { label: '森林', tags: ['forest', 'woods', 'trees', 'moss', 'enchanted forest'] },
-                    { label: '沙漠', tags: ['desert', 'sand dunes', 'arid', 'oasis', 'sunbaked'] },
-                    { label: '雪景', tags: ['snow', 'winter', 'icy', 'frozen', 'snowy landscape'] },
-                    { label: '云端天空', tags: ['sky', 'clouds', 'heaven', 'ethereal', 'floating'] },
-                    { label: '废墟', tags: ['ruins', 'abandoned', 'post-apocalyptic', 'decay', 'weathered'] },
-                ],
-                customLabel: '自定义场景'
-            },
-            {
-                id: 'composition', emoji: '📐', title: '构图',
-                hint: '想要什么视角和构图？',
-                options: [
-                    { label: '特写', tags: ['close-up', 'macro', 'detail shot', 'extreme close-up'] },
-                    { label: '半身像', tags: ['half body', 'waist up', 'portrait composition'] },
-                    { label: '全身照', tags: ['full body', 'full shot', 'complete figure'] },
-                    { label: '俯视', tags: ['top-down view', 'bird\'s eye view', 'aerial perspective'] },
-                    { label: '仰视', tags: ['low angle', 'worm\'s eye view', 'dramatic perspective', 'looking up'] },
-                    { label: '侧面', tags: ['side view', 'profile', 'lateral view'] },
-                    { label: '三点透视', tags: ['three-point perspective', 'dramatic angle', 'cinematic framing'] },
-                    { label: '对称构图', tags: ['symmetrical', 'centered', 'balanced composition'] },
-                    { label: '对角线', tags: ['diagonal composition', 'dynamic', 'rule of thirds'] },
-                    { label: '框架构图', tags: ['framing', 'through window', 'archway', 'contained'] },
-                ],
-                customLabel: '自定义构图'
-            },
-            {
-                id: 'quality', emoji: '✨', title: '质量',
-                hint: '想要什么质量级别？',
-                options: [
-                    { label: '8K 超高清', tags: ['8K resolution', 'ultra high detail', 'highly detailed'] },
-                    { label: '4K 高清', tags: ['4K resolution', 'high detail', 'detailed'] },
-                    { label: '电影感', tags: ['cinematic', 'film quality', 'movie still', 'cinematic framing'] },
-                    { label: '杂志封面', tags: ['magazine cover', 'editorial', 'professional photography'] },
-                    { label: '最佳渲染', tags: ['best quality', 'masterpiece', 'absurdres', 'incredible detail'] },
-                ],
-                customLabel: '自定义质量参数'
-            }
-        ];
+        /* ===== 引导式构建器（v5.0：按场景动态配置） ===== */
+        let currentGuideCategory = 'image';
+        let guideSteps = K_SCENARIO_GUIDE_STEPS[currentGuideCategory].steps;
 
         let guideState = {
             currentStep: 0,
@@ -5388,6 +5424,10 @@
         function showGuidedBuilder() {
             document.getElementById('guidedBuilder').classList.add('show');
             document.getElementById('guideTrigger').classList.remove('show');
+            // 确保 guideSteps 与当前类别一致
+            if (K_SCENARIO_GUIDE_STEPS && K_SCENARIO_GUIDE_STEPS[currentGuideCategory]) {
+                guideSteps = K_SCENARIO_GUIDE_STEPS[currentGuideCategory].steps;
+            }
             guideState = { currentStep: 0, selections: {}, customs: {} };
             renderGuideSteps();
         }
@@ -5396,19 +5436,164 @@
             document.getElementById('guidedBuilder').classList.remove('show');
         }
 
+        /* ===== v5.0 智能识别触发：输入 5 字符 + 停止 5 秒后识别 ===== */
         let inputCheckTimer = null;
+        let lastDetection = null;
+
         function checkInputLength() {
             clearTimeout(inputCheckTimer);
-            inputCheckTimer = setTimeout(() => {
-                const val = document.getElementById('generatorInput').value.trim();
-                const trigger = document.getElementById('guideTrigger');
-                const builder = document.getElementById('guidedBuilder');
-                if (val.length > 0 && val.length < 15 && !builder.classList.contains('show')) {
-                    trigger.classList.add('show');
-                } else {
-                    trigger.classList.remove('show');
+            const val = document.getElementById('generatorInput').value.trim();
+            const trigger = document.getElementById('guideTrigger');
+            const builder = document.getElementById('guidedBuilder');
+            // 旧的引导触发器（短输入提示）
+            if (val.length > 0 && val.length < 15 && !builder.classList.contains('show')) {
+                trigger.classList.add('show');
+            } else {
+                trigger.classList.remove('show');
+            }
+            // v5.0：超过 5 字符，停止 5 秒后触发智能识别
+            if (val.length >= 5) {
+                inputCheckTimer = setTimeout(() => {
+                    runSmartDetect(val);
+                }, 5000);
+            } else {
+                // 输入太少，隐藏识别浮层
+                const banner = document.getElementById('smartDetectBanner');
+                if (banner) banner.classList.remove('show');
+            }
+        }
+
+        function hideSmartDetect() {
+            const banner = document.getElementById('smartDetectBanner');
+            if (banner) banner.classList.remove('show');
+        }
+
+        function runSmartDetect(text) {
+            if (!window.pfSmartDetect) return;
+            const result = pfSmartDetect(text);
+            if (!result) return;
+            lastDetection = result;
+
+            const banner = document.getElementById('smartDetectBanner');
+            const emojiEl = document.getElementById('smartDetectEmoji');
+            const titleEl = document.getElementById('smartDetectTitle');
+            const bodyEl = document.getElementById('smartDetectBody');
+            const actionBtn = document.getElementById('smartDetectAction');
+            if (!banner || !emojiEl || !titleEl || !bodyEl) return;
+
+            // 根据是否有 API Key 决定本地模式 vs AI 多方案模式
+            const hasKey = localStorage.getItem('pf_ark_api_key');
+            banner.classList.toggle('ai-mode', !!hasKey);
+
+            emojiEl.textContent = result.categoryEmoji || '🎯';
+            titleEl.innerHTML = `识别到 · <span class="smart-detect-category">${result.categoryName}</span>`;
+
+            if (hasKey && pfBuildAIVariations) {
+                // AI 模式：展示 3 套方案卡片
+                const variations = pfBuildAIVariations(text, result.category);
+                let html = `<div style="font-size:12.5px;color:#cbd5e1;line-height:1.7;margin-bottom:4px;">🤖 AI 为你准备了 <strong>3 套方案</strong>，点击任意一套直接预填：</div>`;
+                variations.templates.forEach((tpl, idx) => {
+                    const firstKeys = Object.keys(tpl).filter(k => k !== 'index' && k !== 'name' && k !== 'emoji').slice(0, 3);
+                    const detailText = firstKeys.map(k => {
+                        const stepCfg = guideSteps.find(s => s.id === k);
+                        const label = stepCfg ? stepCfg.title : k;
+                        return `${label}：${String(tpl[k]).slice(0, 20)}`;
+                    }).join(' · ');
+                    html += `<div class="ai-variation-card" onclick="applyAIVariation(${idx})">
+                        <div class="ai-variation-title">${tpl.emoji || '✨'} <strong>方案 ${idx + 1}：${tpl.name}</strong></div>
+                        <div class="ai-variation-text">${detailText}</div>
+                    </div>`;
+                });
+                bodyEl.innerHTML = html;
+                actionBtn.textContent = '🎯 进入引导式构建器，手动调整';
+            } else {
+                // 本地模式：展示已识别维度 + 缺失维度建议
+                const stepConfigs = K_SCENARIO_GUIDE_STEPS[result.category].steps;
+                let detectedHtml = '';
+                let missingHtml = '';
+                // 已识别
+                Object.keys(result.detected).forEach(stepId => {
+                    const item = result.detected[stepId];
+                    const stepCfg = stepConfigs.find(s => s.id === stepId);
+                    const label = stepCfg ? stepCfg.emoji + ' ' + stepCfg.title : stepId;
+                    detectedHtml += `<span class="smart-chip detected">✓ ${label} · ${item.label}</span>`;
+                });
+                result.missing.forEach(stepId => {
+                    const stepCfg = stepConfigs.find(s => s.id === stepId);
+                    const label = stepCfg ? stepCfg.emoji + ' ' + stepCfg.title : stepId;
+                    missingHtml += `<span class="smart-chip missing">+ ${label}</span>`;
+                });
+
+                let html = '';
+                if (Object.keys(result.detected).length > 0) {
+                    html += `<div>✅ 已识别到：<div class="smart-detect-row">${detectedHtml}</div></div>`;
                 }
-            }, 800);
+                if (result.missing.length > 0) {
+                    html += `<div style="margin-top:8px;">🎯 建议补充：<div class="smart-detect-row">${missingHtml}</div></div>`;
+                }
+                if (Object.keys(result.detected).length === 0) {
+                    html = `<div>我把你的描述归类为「${result.categoryName}」。点击下方按钮进入构建器，一步步选好所有维度。</div>`;
+                }
+                bodyEl.innerHTML = html;
+                actionBtn.textContent = '🎯 进入引导式构建器，自动预填识别内容';
+            }
+
+            banner.classList.add('show');
+        }
+
+        function enterGuideFromDetect() {
+            if (!lastDetection || !K_SCENARIO_GUIDE_STEPS[lastDetection.category]) return;
+            currentGuideCategory = lastDetection.category;
+            guideSteps = K_SCENARIO_GUIDE_STEPS[lastDetection.category].steps;
+
+            // 清空旧状态 + 根据识别结果自动预填
+            const selections = {};
+            const customs = {};
+            Object.keys(lastDetection.detected).forEach(stepId => {
+                const item = lastDetection.detected[stepId];
+                selections[stepId] = item.value;
+            });
+            guideState = { currentStep: 0, selections, customs };
+            // 如果存在缺失维度，跳到第一个缺失项
+            if (lastDetection.missing.length > 0) {
+                const firstMissingIdx = guideSteps.findIndex(s => s.id === lastDetection.missing[0]);
+                if (firstMissingIdx >= 0) guideState.currentStep = firstMissingIdx;
+            }
+            // 显示构建器
+            showGuidedBuilder();
+            renderGuideSteps();
+            updateGuidePreview();
+            // 滚到构建器
+            document.getElementById('guidedBuilder').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function applyAIVariation(idx) {
+            if (!lastDetection || !window.pfBuildAIVariations) return;
+            const variations = pfBuildAIVariations(lastDetection.rawInput, lastDetection.category);
+            const tpl = variations.templates[idx];
+            if (!tpl) return;
+            currentGuideCategory = lastDetection.category;
+            guideSteps = K_SCENARIO_GUIDE_STEPS[lastDetection.category].steps;
+
+            const selections = {};
+            Object.keys(tpl).forEach(k => {
+                if (k === 'index' || k === 'name' || k === 'emoji') return;
+                // 把模板字段映射到 step id
+                let stepId = k;
+                // 兼容字段名
+                if (!guideSteps.find(s => s.id === stepId)) {
+                    const alt = guideSteps.find(s =>
+                        s.title.includes(k) || k.includes(s.title) ||
+                        k.toLowerCase().includes(s.id));
+                    if (alt) stepId = alt.id;
+                }
+                selections[stepId] = String(tpl[k]);
+            });
+            guideState = { currentStep: 0, selections, customs: {} };
+            showGuidedBuilder();
+            renderGuideSteps();
+            updateGuidePreview();
+            document.getElementById('guidedBuilder').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         document.getElementById('userAvatar').addEventListener('click', function(e) {
