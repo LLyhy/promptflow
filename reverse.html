@@ -512,6 +512,30 @@
             position: relative;
             z-index: 1;
         }
+
+        /* ========== v2 新增样式 ========== */
+        .theme-btn {
+            padding: 10px 8px;
+            background: rgba(30, 27, 75, 0.4);
+            border: 1.5px solid rgba(148, 163, 184, 0.25);
+            border-radius: 10px;
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .theme-btn:hover {
+            background: rgba(63, 51, 139, 0.4);
+            border-color: #8b5cf6;
+            transform: translateY(-1px);
+        }
+        .theme-btn.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -530,6 +554,30 @@
     <main>
         <div class="hero">
             <h1>🔍 反向提纯工具</h1>
+
+            <div style="margin: 20px 0; padding: 16px; background: rgba(30, 27, 75, 0.5); border: 1px solid rgba(147, 51, 234, 0.25); border-radius: 12px;">
+                <div style="font-size: 13px; color: #94a3b8; margin-bottom: 10px;">⚙️ 选择分析模式：</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <label id="rModeApi" style="cursor: pointer; padding: 12px; border-radius: 10px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.12); display: block;">
+                        <input type="radio" name="rMode" id="rModeApiInput" value="api" onchange="updateReverseMode()">
+                        <strong style="color: #a5b4fc; font-size: 13px;"> 🤖 AI视觉分析（推荐）</strong>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">豆包视觉模型 · 准确率最高</div>
+                    </label>
+                    <label id="rModeSmart" style="cursor: pointer; padding: 12px; border-radius: 10px; border: 2px solid rgba(148, 163, 184, 0.3); display: block;">
+                        <input type="radio" name="rMode" id="rModeSmartInput" value="smart" checked onchange="updateReverseMode()">
+                        <strong style="color: #cbd5e1; font-size: 13px;"> ✨ 关键词组合</strong>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">免配置 · 本地规则</div>
+                    </label>
+                </div>
+                <div id="rKeyBox" style="margin-top: 12px;">
+                    <div style="font-size: 12px; color: #94a3b8; margin-bottom: 6px;">豆包 ARK API Key：</div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="rApiKey" placeholder="ark-xxxxxxxxxxxxxxxx" style="flex: 1; padding: 10px 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; color: #e2e8f0; font-size: 13px;">
+                        <button onclick="saveReverseKey()" style="padding: 0 14px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 8px; color: white; font-size: 12px; font-weight: 600; cursor: pointer;">保存</button>
+                    </div>
+                    <div id="rKeyStatus" style="font-size: 11px; color: #64748b; margin-top: 6px;"></div>
+                </div>
+            </div>
             <p>上传图片或代码文件，自动分析并生成对应的提示词</p>
         </div>
 
@@ -547,6 +595,11 @@
         <input type="file" id="fileInput" accept="image/*">
 
         <div class="preview-area" id="previewArea"></div>
+
+        <div id="imageThemeSection" style="margin: 16px 0; padding: 14px; background: rgba(30, 27, 75, 0.4); border: 1px solid rgba(147, 51, 234, 0.2); border-radius: 12px; display:none;">
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">🎯 选择图片主题（影响提示词质量）：</div>
+            <div id="themeButtons" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;"></div>
+        </div>
 
         <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyze()">开始分析 ✨</button>
 
@@ -733,7 +786,61 @@
         © 2024 PromptFlow. All rights reserved.
     </footer>
 
+    <script src="keywords.js?v2"></script>
     <script>
+        // ========= 反向提纯 v2 升级逻辑 =========
+        const _themeList = [
+            { key: 'portrait_real', name: '人像写真', emoji: '📸' },
+            { key: 'anime_illustration', name: '动漫插画', emoji: '🎌' },
+            { key: 'cyberpunk_city', name: '赛博朋克', emoji: '🌃' },
+            { key: 'landscape_photo', name: '风景摄影', emoji: '🏞️' },
+            { key: 'product_photo', name: '产品摄影', emoji: '📦' },
+            { key: 'oil_painting_art', name: '油画艺术', emoji: '🖼️' },
+            { key: 'architecture_city', name: '建筑城市', emoji: '🏛️' },
+            { key: 'animal_creature', name: '动物生物', emoji: '🐾' },
+            { key: 'anime_illustration', name: '通用', emoji: '✨' },
+            { key: 'landscape_photo', name: '风景', emoji: '🌄' }
+        ];
+        let _selectedTheme = 'anime_illustration';
+
+        function renderThemeButtons() {
+            const container = document.getElementById('themeButtons');
+            if (!container) return;
+            const uniqueThemes = [];
+            const seen = new Set();
+            _themeList.forEach(t => {
+                if (seen.has(t.key)) return;
+                seen.add(t.key);
+                uniqueThemes.push(t);
+            });
+            container.innerHTML = uniqueThemes.map(t =>
+                `<button class="theme-btn" data-theme="${t.key}" onclick="selectTheme('${t.key}')">${t.emoji} ${t.name}</button>`
+            ).join('');
+            selectTheme(_selectedTheme);
+        }
+
+        function selectTheme(key) {
+            _selectedTheme = key;
+            document.querySelectorAll('.theme-btn').forEach(b => {
+                if (b.dataset.theme === key) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+        }
+
+        function showThemeSection() {
+            const sec = document.getElementById('imageThemeSection');
+            if (sec) sec.style.display = 'block';
+            renderThemeButtons();
+        }
+
+        function hideThemeSection() {
+            const sec = document.getElementById('imageThemeSection');
+            if (sec) sec.style.display = 'none';
+        }
+
         const imageKeywordDB = {
             style: ["写实风格", "卡通风格", "油画风格", "水彩风格", "素描风格", "赛博朋克", "蒸汽朋克", "动漫风格", "漫画风格", "3D渲染", "像素艺术", "低多边形", "极简主义", "超现实主义"],
             subject: ["人物肖像", "风景", "城市建筑", "动物", "植物", "科技产品", "食物", "交通工具", "抽象艺术", "角色设计"],
@@ -804,11 +911,13 @@
                     uploadIcon.textContent = "🖼️";
                     uploadText.textContent = "点击或拖拽上传图片";
                     uploadHint.textContent = "支持 JPG、PNG、WebP 格式";
+                    if (typeof hideThemeSection === 'function') hideThemeSection();
                 } else {
                     fileInput.accept = ".txt,.md,.js,.ts,.tsx,.jsx,.py,.java,.cpp,.c,.cs,.go,.rs,.rb,.php,.swift,.kt,.html,.css,.json,.yaml,.yml,.xml,.sql,.sh,.bash,.vue,.ini,.conf";
                     uploadIcon.textContent = "📝";
                     uploadText.textContent = "点击或拖拽上传代码文件";
                     uploadHint.textContent = "支持 代码、文本、配置文件等";
+                    if (typeof hideThemeSection === 'function') hideThemeSection();
                 }
                 
                 selectedFile = null;
@@ -831,6 +940,7 @@
                         previewArea.innerHTML = `<img class="image-preview" src="${event.target.result}">`;
                         previewArea.classList.add("show");
                         document.getElementById("analyzeBtn").disabled = false;
+                        if (typeof showThemeSection === 'function') showThemeSection();
                     };
                     reader.readAsDataURL(file);
                 } else {
@@ -1154,76 +1264,77 @@ ${langInfo.features.join("，")}
         async function analyzeImage() {
             document.getElementById("fileStats").innerHTML = `
                 <div class="stat-card"><div class="stat-value">${(selectedFile.size / 1024).toFixed(1)}KB</div><div class="stat-label">文件大小</div></div>
-                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">AI分析中...</div></div>
+                <div class="stat-card"><div class="stat-value">🎨</div><div class="stat-label">分析中...</div></div>
                 <div class="stat-card"><div class="stat-value">✨</div><div class="stat-label">生成关键词</div></div>
             `;
             document.getElementById("resultsArea").classList.add("show");
             document.getElementById("resultsArea").scrollIntoView({ behavior: "smooth" });
 
-            const apiKey = localStorage.getItem('pf_ark_api_key');
+            const rMode = document.querySelector('input[name="rMode"]:checked')?.value || 'smart';
+            const apiKey = localStorage.getItem('pf_ark_api_key') || document.getElementById('rApiKey')?.value?.trim();
             let imageAnalysis = null;
 
-            if (apiKey) {
+            // 模式 smart：直接用本地关键词库生成
+            if (rMode === 'smart') {
+                document.getElementById('rApiHintMsg').innerHTML = '';
+            } else if (apiKey) {
                 try {
                     const base64 = await fileToBase64(selectedFile);
                     const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + apiKey
-                        },
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
                         body: JSON.stringify({
                             model: 'doubao-1-5-vision-pro-32k-250628',
-                            messages: [
-                                {
-                                    role: 'user',
-                                    content: [
-                                        {
-                                            type: 'image_url',
-                                            image_url: { url: base64 }
-                                        },
-                                        {
-                                            type: 'text',
-                                            text: '请仔细分析这张图片，按以下格式输出分析结果：\n1.【主体】画面中主要的物体或人物（2-4个关键词）\n2.【风格】艺术风格/画风/摄影风格（2-3个关键词）\n3.【场景】环境/背景/场景描述（2-4个关键词）\n4.【色彩】主色调/氛围色（2-3个）\n5.【构图】构图方式/光影效果（2-3个）\n6.【画质】分辨率/清晰度/细节描述（2-3个）\n7.【情绪】整体氛围/情感表达（1-2个）\n\n请用中文输出，每项用逗号分隔的关键词，便于生成AI绘画提示词。'
-                                        }
-                                    ]
-                                }
-                            ]
+                            messages: [{
+                                role: 'user',
+                                content: [
+                                    { type: 'image_url', image_url: { url: base64 } },
+                                    { type: 'text', text: '请仔细分析这张图片，按以下格式输出分析结果：\n1.【主体】画面中主要的物体或人物（2-4个关键词）\n2.【风格】艺术风格/画风/摄影风格（2-3个关键词）\n3.【场景】环境/背景/场景描述（2-4个关键词）\n4.【色彩】主色调/氛围色（2-3个）\n5.【构图】构图方式/光影效果（2-3个）\n6.【画质】分辨率/清晰度/细节描述（2-3个）\n7.【情绪】整体氛围/情感表达（1-2个）\n\n请用中文输出，每项用逗号分隔的关键词，便于生成AI绘画提示词。' }
+                                ]
+                            }]
                         })
                     });
-
                     if (response.ok) {
                         const data = await response.json();
                         imageAnalysis = data.choices[0].message.content;
                     }
                 } catch (e) {
-                    console.warn('图像分析API失败，使用关键词库', e);
+                    console.warn('AI视觉分析失败，降级到本地关键词', e);
                 }
             }
 
             let styleWords, subjectWords, sceneWords, techWords;
-            
+
             if (imageAnalysis) {
                 const parseKeywords = (text, tag) => {
-                    const match = text.match(new RegExp(`【${tag}】(.+?)(?:\n|$)`));
+                    const match = text.match(new RegExp('【' + tag + '】(.+?)(?:\\n|$)'));
                     if (match) return match[1].split(/[，,、]/).map(k => k.trim()).filter(k => k);
                     return [];
                 };
-                
+
                 subjectWords = parseKeywords(imageAnalysis, '主体');
                 styleWords = parseKeywords(imageAnalysis, '风格');
                 sceneWords = [...parseKeywords(imageAnalysis, '场景'), ...parseKeywords(imageAnalysis, '色彩'), ...parseKeywords(imageAnalysis, '构图')];
                 techWords = [...parseKeywords(imageAnalysis, '画质'), ...parseKeywords(imageAnalysis, '情绪')];
-                
+
                 if (subjectWords.length === 0) subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
                 if (styleWords.length === 0) styleWords = getRandomKeywords(imageKeywordDB.style, 3);
                 if (sceneWords.length === 0) sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
                 if (techWords.length === 0) techWords = getRandomKeywords(imageKeywordDB.tech, 4);
             } else {
-                styleWords = getRandomKeywords(imageKeywordDB.style, 3);
-                subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
-                sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
-                techWords = getRandomKeywords(imageKeywordDB.tech, 4);
+                // Smart 模式：优先使用统一关键词库（根据用户选择的主题）
+                if (typeof pfGenerateSmart !== 'undefined') {
+                    const result = pfGenerateFromTheme(_selectedTheme);
+                    subjectWords = result.subject;
+                    styleWords = result.style;
+                    sceneWords = result.scene;
+                    techWords = result.tech;
+                } else {
+                    styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+                    subjectWords = getRandomKeywords(imageKeywordDB.subject, 2);
+                    sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+                    techWords = getRandomKeywords(imageKeywordDB.tech, 4);
+                }
             }
 
             document.getElementById("fileStats").innerHTML = `
@@ -1304,6 +1415,51 @@ ${[...styleWords, ...subjectWords, ...sceneWords, ...techWords].join("，")}`;
         }
 
         createParticles();
+
+        function updateReverseMode() {
+            const mode = document.querySelector('input[name="rMode"]:checked')?.value || 'smart';
+            const apiLbl = document.getElementById('rModeApi');
+            const smartLbl = document.getElementById('rModeSmart');
+            const keyBox = document.getElementById('rKeyBox');
+            if (mode === 'api') {
+                apiLbl.style.borderColor = '#6366f1';
+                apiLbl.style.background = 'rgba(99, 102, 241, 0.12)';
+                smartLbl.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                smartLbl.style.background = 'rgba(30, 27, 75, 0.3)';
+                keyBox.style.display = 'block';
+            } else {
+                smartLbl.style.borderColor = '#6366f1';
+                smartLbl.style.background = 'rgba(99, 102, 241, 0.12)';
+                apiLbl.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+                apiLbl.style.background = 'rgba(30, 27, 75, 0.3)';
+                keyBox.style.display = 'none';
+            }
+        }
+
+        function saveReverseKey() {
+            const key = document.getElementById('rApiKey').value.trim();
+            const status = document.getElementById('rKeyStatus');
+            if (!key) { status.innerHTML = '<span style="color:#ef4444;">请输入 API Key</span>'; return; }
+            localStorage.setItem('pf_ark_api_key', key);
+            status.innerHTML = '<span style="color:#10b981;">✅ 已保存</span>';
+            setTimeout(() => status.textContent = '', 3000);
+        }
+
+        function initReverseMode() {
+            const savedMode = localStorage.getItem('pf_reverse_mode') || 'smart';
+            const savedKey = localStorage.getItem('pf_ark_api_key');
+            const effectiveMode = (savedMode === 'api' && !savedKey) ? 'smart' : savedMode;
+            if (effectiveMode !== savedMode) localStorage.setItem('pf_reverse_mode', effectiveMode);
+
+            const rdo = document.getElementById(effectiveMode === 'api' ? 'rModeApiInput' : 'rModeSmartInput');
+            if (rdo) rdo.checked = true;
+            if (savedKey && document.getElementById('rApiKey')) document.getElementById('rApiKey').value = savedKey;
+            updateReverseMode();
+            document.querySelectorAll('input[name="rMode"]').forEach(r =>
+                r.addEventListener('change', () => localStorage.setItem('pf_reverse_mode', document.querySelector('input[name="rMode"]:checked').value))
+            );
+        }
+        initReverseMode();
     </script>
 </body>
 </html>
