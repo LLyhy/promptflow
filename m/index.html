@@ -599,9 +599,181 @@
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
         }
-        .generator-btn:active {
-            transform: scale(0.98);
+        .generator-btn:active { transform: scale(0.98); }
+
+        /* ===== 引导式构建器（移动端） ===== */
+        .guide-trigger-m {
+            display: none;
+            padding: 12px;
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px dashed rgba(14, 165, 233, 0.4);
+            border-radius: 12px;
+            text-align: center;
+            color: #38bdf8;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 12px;
         }
+        .guide-trigger-m.show { display: block; }
+        .guide-sheet {
+            display: none;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            max-height: 85vh;
+            overflow-y: auto;
+            z-index: 9999;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            border-top: 1px solid rgba(99, 102, 241, 0.3);
+        }
+        .guide-sheet.show { display: block; }
+        .guide-sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .guide-sheet-title { font-size: 15px; font-weight: 700; color: #fff; }
+        .guide-sheet-close {
+            background: rgba(148,163,184,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 30px; height: 30px;
+            color: #94a3b8;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .guide-step-pills {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .guide-step-pill {
+            flex-shrink: 0;
+            padding: 6px 14px;
+            background: rgba(148,163,184,0.1);
+            border: 1px solid rgba(148,163,184,0.15);
+            border-radius: 20px;
+            color: #64748b;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .guide-step-pill.active { background: rgba(14,165,233,0.2); border-color: #38bdf8; color: #38bdf8; }
+        .guide-step-pill.done { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #10b981; }
+        .guide-panel-m { display: none; }
+        .guide-panel-m.show { display: block; }
+        .guide-panel-hint { font-size: 12px; color: #64748b; margin-bottom: 10px; }
+        .guide-opts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .guide-opt-btn {
+            padding: 10px 8px;
+            background: rgba(30, 27, 75, 0.6);
+            border: 1px solid rgba(148,163,184,0.15);
+            border-radius: 10px;
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+            line-height: 1.4;
+            transition: all 0.2s;
+        }
+        .guide-opt-btn:active { transform: scale(0.97); }
+        .guide-opt-btn.selected { background: rgba(14,165,233,0.2); border-color: #38bdf8; color: #38bdf8; }
+        .guide-custom-m { margin-top: 8px; }
+        .guide-custom-m input {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(30,27,75,0.6);
+            border: 1px solid rgba(148,163,184,0.2);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+        .guide-custom-m input:focus { outline: none; border-color: #38bdf8; }
+        .guide-custom-m input::placeholder { color: #475569; }
+        .guide-nav-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .guide-nav-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+        }
+        .guide-nav-prev { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
+        .guide-nav-next { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
+        .guide-preview-m {
+            margin-top: 14px;
+            background: rgba(6,11,26,0.7);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 12px;
+            padding: 12px;
+        }
+        .guide-preview-label { font-size: 10px; color: #06b6d4; letter-spacing: 1px; margin-bottom: 6px; font-family: monospace; }
+        .guide-preview-tags { font-size: 11px; color: #38bdf8; line-height: 1.7; word-break: break-all; font-family: monospace; }
+        .guide-preview-empty { font-size: 11px; color: #475569; font-style: italic; }
+        .guide-action-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .guide-use-btn-m {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .guide-copy-btn-m {
+            padding: 12px 16px;
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.4);
+            border-radius: 10px;
+            color: #10b981;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .guide-ai-btn-m {
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px;
+            background: rgba(139,92,246,0.12);
+            border: 1px solid rgba(139,92,246,0.3);
+            border-radius: 10px;
+            color: #a78bfa;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .guide-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9998;
+        }
+        .guide-overlay.show { display: block; }
+
         .generator-result {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(148, 163, 184, 0.2);
@@ -734,7 +906,12 @@
         <!-- Generator view -->
         <div id="generatorView" style="display:none">
             <div class="section-title">🧠 智能提示词生成器</div>
-            <textarea class="generator-input" id="generatorInput" placeholder="描述你的需求，例如：帮我写一个赛博朋克风格少女的绘画提示词..."></textarea>
+            <textarea class="generator-input" id="generatorInput" placeholder="描述你的需求，例如：帮我写一个赛博朋克风格少女的绘画提示词..." oninput="mCheckInput()"></textarea>
+
+            <div class="guide-trigger-m" id="guideTriggerM" onclick="mOpenGuide()">
+                🎯 输入太简短？试试引导式构建器 →
+            </div>
+
             <div class="style-tabs" id="styleTabs">
                 <div class="style-tab active" data-style="detailed">📝 详细版</div>
                 <div class="style-tab" data-style="concise">✍️ 简洁版</div>
@@ -760,6 +937,26 @@
             <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
             <img id="imagePreview" class="upload-preview" />
             <div id="reverseResult" style="display:none"></div>
+        </div>
+    </div>
+
+    <!-- 引导式构建器 底部弹出 -->
+    <div class="guide-overlay" id="guideOverlay" onclick="mCloseGuide()"></div>
+    <div class="guide-sheet" id="guideSheet">
+        <div class="guide-sheet-header">
+            <div class="guide-sheet-title">🎯 引导式构建器</div>
+            <button class="guide-sheet-close" onclick="mCloseGuide()">✕</button>
+        </div>
+        <div class="guide-step-pills" id="guideStepPills"></div>
+        <div id="guidePanelsM"></div>
+        <div class="guide-preview-m" id="guidePreviewM">
+            <div class="guide-preview-label">// 实时预览</div>
+            <div id="guidePreviewTextM"><span class="guide-preview-empty">选择选项后，这里实时预览提示词...</span></div>
+            <div class="guide-action-btns">
+                <button class="guide-use-btn-m" onclick="mUseGuide()">✨ 使用</button>
+                <button class="guide-copy-btn-m" onclick="mCopyGuide()">📋 复制</button>
+            </div>
+            <button class="guide-ai-btn-m" onclick="mSendToAI()">🤖 发送给 AI 优化</button>
         </div>
     </div>
 
@@ -1434,6 +1631,222 @@
 
     function emptyState(icon, text) {
         return `<div class="empty-state"><div class="empty-icon">${icon}</div><div class="empty-text">${text}</div></div>`;
+    }
+
+    // ==== 移动端引导式构建器 ====
+    const mGuideSteps = [
+        { id: 'subject', emoji: '🐱', title: '主体', hint: '你想画什么？',
+          options: [
+            { label: '人物', tags: ['portrait', 'character', 'person', 'face', 'full body'] },
+            { label: '动物', tags: ['animal', 'cat', 'dog', 'wildlife', 'bird'] },
+            { label: '风景', tags: ['landscape', 'mountain', 'ocean', 'forest', 'sky'] },
+            { label: '建筑', tags: ['architecture', 'building', 'cityscape', 'skyscraper', 'interior'] },
+            { label: '物品', tags: ['object', 'product', 'still life', 'food', 'flower'] },
+            { label: '植物', tags: ['plant', 'tree', 'garden', 'grass', 'moss'] },
+            { label: '科幻', tags: ['sci-fi', 'robot', 'spacecraft', 'alien', 'future tech'] },
+            { label: '幻想', tags: ['fantasy', 'dragon', 'magic', 'elf', 'medieval'] },
+          ], customLabel: '自定义主体' },
+        { id: 'style', emoji: '🎨', title: '风格', hint: '想要什么艺术风格？',
+          options: [
+            { label: '写实摄影', tags: ['photorealistic', 'realistic photography', 'DSLR quality', 'high detail'] },
+            { label: '赛博朋克', tags: ['cyberpunk', 'neon lights', 'futuristic city', 'holographic', 'dark atmosphere'] },
+            { label: '水墨国风', tags: ['Chinese ink painting', '水墨', 'traditional', 'brush stroke', 'ink wash'] },
+            { label: '日系动漫', tags: ['anime style', 'Japanese anime', 'cel shading', 'manga'] },
+            { label: '油画', tags: ['oil painting', 'impressionist', 'classical', 'canvas texture'] },
+            { label: '3D建模', tags: ['3D render', 'Cinema 4D', 'octane render', 'blender', 'volumetric lighting'] },
+            { label: '像素风', tags: ['pixel art', '8-bit', 'retro game', 'pixelated'] },
+            { label: '极简主义', tags: ['minimalist', 'clean', 'simple', 'negative space', 'elegant'] },
+            { label: '插画', tags: ['digital illustration', 'flat design', 'vector art', 'clean lines'] },
+            { label: '抽象艺术', tags: ['abstract', 'geometric', 'color field', 'modern art'] },
+          ], customLabel: '自定义风格' },
+        { id: 'mood', emoji: '💡', title: '氛围', hint: '想要什么光线和氛围？',
+          options: [
+            { label: '黄金时刻', tags: ['golden hour', 'warm sunlight', 'sunset', 'golden light'] },
+            { label: '霓虹夜景', tags: ['neon lights', 'night city', 'urban night', 'colorful glow'] },
+            { label: '柔和日光', tags: ['soft daylight', 'natural light', 'overcast', 'diffused light'] },
+            { label: '戏剧性阴影', tags: ['dramatic lighting', 'chiaroscuro', 'high contrast', 'Rembrandt lighting'] },
+            { label: '梦幻散景', tags: ['bokeh', 'soft focus', 'dreamy', 'blurred background', 'lens flare'] },
+            { label: '电影光效', tags: ['cinematic lighting', 'volumetric light', 'God rays', 'film grain'] },
+            { label: '冷色调', tags: ['cool tones', 'blue hour', 'moody', 'cold atmosphere'] },
+            { label: '暖色调', tags: ['warm tones', 'cozy', 'intimate', 'amber light'] },
+            { label: '纯黑背景', tags: ['pure black background', 'studio lighting', 'spotlight', 'dark studio'] },
+            { label: '纯白背景', tags: ['white background', 'minimal', 'product photography', 'clean'] },
+          ], customLabel: '自定义氛围' },
+        { id: 'scene', emoji: '🌍', title: '场景', hint: '放在什么环境里？',
+          options: [
+            { label: '城市街头', tags: ['city street', 'urban', 'downtown', 'street photography'] },
+            { label: '大自然', tags: ['nature', 'outdoor', 'wilderness', 'natural environment'] },
+            { label: '室内空间', tags: ['indoor', 'interior', 'room', 'indoor lighting'] },
+            { label: '太空宇宙', tags: ['space', 'galaxy', 'cosmos', 'nebula', 'stars'] },
+            { label: '海底世界', tags: ['underwater', 'ocean', 'marine life', 'coral reef', 'deep sea'] },
+            { label: '森林', tags: ['forest', 'woods', 'trees', 'moss', 'enchanted forest'] },
+            { label: '沙漠', tags: ['desert', 'sand dunes', 'arid', 'oasis', 'sunbaked'] },
+            { label: '雪景', tags: ['snow', 'winter', 'icy', 'frozen', 'snowy landscape'] },
+          ], customLabel: '自定义场景' },
+        { id: 'composition', emoji: '📐', title: '构图', hint: '想要什么视角和构图？',
+          options: [
+            { label: '特写', tags: ['close-up', 'macro', 'detail shot', 'extreme close-up'] },
+            { label: '半身像', tags: ['half body', 'waist up', 'portrait composition'] },
+            { label: '全身照', tags: ['full body', 'full shot', 'complete figure'] },
+            { label: '俯视', tags: ['top-down view', "bird's eye view", 'aerial perspective'] },
+            { label: '仰视', tags: ['low angle', "worm's eye view", 'dramatic perspective', 'looking up'] },
+            { label: '侧面', tags: ['side view', 'profile', 'lateral view'] },
+            { label: '对称构图', tags: ['symmetrical', 'centered', 'balanced composition'] },
+            { label: '对角线', tags: ['diagonal composition', 'dynamic', 'rule of thirds'] },
+          ], customLabel: '自定义构图' },
+        { id: 'quality', emoji: '✨', title: '质量', hint: '想要什么质量级别？',
+          options: [
+            { label: '8K超高清', tags: ['8K resolution', 'ultra high detail', 'highly detailed'] },
+            { label: '4K高清', tags: ['4K resolution', 'high detail', 'detailed'] },
+            { label: '电影感', tags: ['cinematic', 'film quality', 'movie still', 'cinematic framing'] },
+            { label: '杂志封面', tags: ['magazine cover', 'editorial', 'professional photography'] },
+            { label: '最佳渲染', tags: ['best quality', 'masterpiece', 'absurdres', 'incredible detail'] },
+          ], customLabel: '自定义质量参数' },
+    ];
+
+    let mGuideState = { currentStep: 0, selections: {}, customs: {} };
+
+    function mRenderGuide() {
+        const pillsEl = document.getElementById('guideStepPills');
+        const panelsEl = document.getElementById('guidePanelsM');
+        if (!pillsEl || !panelsEl) return;
+
+        pillsEl.innerHTML = '';
+        panelsEl.innerHTML = '';
+
+        mGuideSteps.forEach((step, idx) => {
+            const pill = document.createElement('div');
+            pill.className = 'guide-step-pill';
+            if (idx === mGuideState.currentStep) pill.classList.add('active');
+            else if (mGuideState.selections[step.id]) pill.classList.add('done');
+            pill.innerHTML = `${step.emoji} ${step.title}`;
+            pill.onclick = () => { mGuideState.currentStep = idx; mRenderGuide(); };
+            pillsEl.appendChild(pill);
+
+            const panel = document.createElement('div');
+            panel.className = 'guide-panel-m' + (idx === mGuideState.currentStep ? ' show' : '');
+            panel.id = 'mPanel_' + step.id;
+
+            let optsHtml = '<div class="guide-opts-grid">';
+            step.options.forEach(opt => {
+                const isSelected = mGuideState.selections[step.id] === opt.tags.join(', ');
+                optsHtml += `<div class="guide-opt-btn${isSelected ? ' selected' : ''}" onclick="mSelectOpt('${step.id}', '${opt.tags.join(', ').replace(/'/g, "\\'")}', this)">${opt.label}</div>`;
+            });
+            optsHtml += '</div>';
+            optsHtml += `<div class="guide-custom-m">
+                <input id="mCustom_${step.id}" placeholder="输入英文关键词，用逗号分隔..." value="${mGuideState.customs[step.id] || ''}" oninput="mCustomInput('${step.id}', this.value)">
+            </div>`;
+
+            panel.innerHTML = `
+                <div class="guide-panel-hint">${step.emoji} ${step.hint}</div>
+                ${optsHtml}
+                <div class="guide-nav-btns">
+                    <button class="guide-nav-btn guide-nav-prev" ${idx === 0 ? 'disabled' : ''} onclick="mPrevStep()">← 上一步</button>
+                    <button class="guide-nav-btn guide-nav-next" onclick="mNextStep()">${idx === mGuideSteps.length - 1 ? '🎯 生成' : '下一步 →'}</button>
+                </div>
+            `;
+            panelsEl.appendChild(panel);
+        });
+        mUpdatePreview();
+    }
+
+    function mSelectOpt(stepId, tags, el) {
+        mGuideState.selections[stepId] = tags;
+        mGuideState.customs[stepId] = '';
+        const input = document.getElementById('mCustom_' + stepId);
+        if (input) input.value = '';
+        mRenderGuide();
+    }
+
+    function mCustomInput(stepId, val) {
+        mGuideState.customs[stepId] = val;
+        if (val.trim()) mGuideState.selections[stepId] = val;
+        else delete mGuideState.selections[stepId];
+        mRenderGuide();
+    }
+
+    function mPrevStep() {
+        if (mGuideState.currentStep > 0) { mGuideState.currentStep--; mRenderGuide(); }
+    }
+
+    function mNextStep() {
+        if (mGuideState.currentStep < mGuideSteps.length - 1) {
+            mGuideState.currentStep++;
+            mRenderGuide();
+        } else {
+            mUpdatePreview();
+            showToast('✨ 提示词已生成，可使用或发送给AI优化！');
+        }
+    }
+
+    function mUpdatePreview() {
+        const el = document.getElementById('guidePreviewTextM');
+        if (!el) return;
+        const allTags = [];
+        mGuideSteps.forEach(step => {
+            const val = mGuideState.selections[step.id];
+            if (val) val.split(',').map(t => t.trim()).filter(t => t).forEach(t => allTags.push(t));
+        });
+        if (allTags.length === 0) {
+            el.innerHTML = '<span class="guide-preview-empty">选择选项后，这里实时预览提示词...</span>';
+            return;
+        }
+        el.innerHTML = `<div class="guide-preview-tags">${allTags.join(', ')}</div>`;
+    }
+
+    function mGetGuideText() {
+        const allTags = [];
+        mGuideSteps.forEach(step => {
+            const val = mGuideState.selections[step.id];
+            if (val) val.split(',').map(t => t.trim()).filter(t => t).forEach(t => allTags.push(t));
+        });
+        return allTags.join(', ');
+    }
+
+    function mOpenGuide() {
+        document.getElementById('guideOverlay').classList.add('show');
+        document.getElementById('guideSheet').classList.add('show');
+        mGuideState = { currentStep: 0, selections: {}, customs: {} };
+        mRenderGuide();
+    }
+
+    function mCloseGuide() {
+        document.getElementById('guideOverlay').classList.remove('show');
+        document.getElementById('guideSheet').classList.remove('show');
+    }
+
+    function mCopyGuide() {
+        const text = mGetGuideText();
+        if (!text) { showToast('请先选择选项'); return; }
+        copyText(text);
+        showToast('✅ 已复制到剪贴板');
+    }
+
+    function mUseGuide() {
+        const text = mGetGuideText();
+        if (!text) { showToast('请先选择选项'); return; }
+        document.getElementById('generatorInput').value = text;
+        mCloseGuide();
+        showToast('✅ 已填入生成器');
+    }
+
+    function mSendToAI() {
+        const text = mGetGuideText();
+        if (!text) { showToast('请先选择选项'); return; }
+        document.getElementById('generatorInput').value = text;
+        mCloseGuide();
+        generatePrompt();
+    }
+
+    let mInputTimer;
+    function mCheckInput() {
+        clearTimeout(mInputTimer);
+        mInputTimer = setTimeout(() => {
+            const val = document.getElementById('generatorInput').value.trim();
+            const trigger = document.getElementById('guideTriggerM');
+            if (val.length > 0 && val.length < 15) trigger.classList.add('show');
+            else trigger.classList.remove('show');
+        }, 800);
     }
 
     // 启动
