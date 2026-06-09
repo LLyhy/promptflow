@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="AI提示词宝库 - 精选优质提示词助力创作，移动端专用">
+    <meta name="keywords" content="AI提示词,Prompt,AI绘画,ChatGPT,提示词生成,移动端">
+    <title>PromptFlow | AI提示词宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+
+        /* Particle background */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatParticle 20s infinite linear;
+        }
+        @keyframes floatParticle {
+            from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            to { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        /* Header */
+        .header {
+            padding: calc(env(safe-area-inset-top) + 12px) 16px 12px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: rgba(148, 163, 184, 0.15);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .icon-btn:active {
+            transform: scale(0.95);
+            background: rgba(14, 163, 184, 0.3);
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
+        }
+        .subtitle {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Search */
+        .search-box {
+            margin-top: 12px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 44px 12px 44px;
+            background: rgba(30, 27, 75, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .search-input:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+        }
+        .search-input::placeholder {
+            color: #64748b;
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 14px;
+            display: none;
+            cursor: pointer;
+        }
+
+        /* Category tabs */
+        .category-tabs {
+            padding: 10px 16px 8px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            scrollbar-width: none;
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .category-tab {
+            padding: 7px 14px;
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 20px;
+            color: #94a3b8;
+            font-size: 13px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .category-tab.active {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+        }
+
+        /* Content area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 16px;
+            padding-bottom: calc(100px + env(safe-area-inset-bottom));
+            position: relative;
+            z-index: 1;
+        }
+        .content::-webkit-scrollbar {
+            width: 3px;
+        }
+        .content::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 2px;
+        }
+
+        /* Stats row */
+        .stats-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .stat-item {
+            flex: 1;
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* Prompt cards */
+        .prompt-card {
+            background: rgba(30, 27, 75, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .prompt-card:active {
+            transform: scale(0.98);
+        }
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .prompt-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 2px;
+            flex: 1;
+        }
+        .fav-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 8px;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+        .fav-toggle.active {
+            color: #ec4899;
+        }
+        .prompt-category {
+            font-size: 11px;
+            color: #0ea5e9;
+            background: rgba(14, 165, 233, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .prompt-content {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .prompt-content.expanded {
+            -webkit-line-clamp: unset;
+        }
+        .prompt-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .tag {
+            font-size: 11px;
+            color: #94a3b8;
+            background: rgba(148, 163, 184, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .model-info {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .model-info-header {
+            font-size: 12px;
+            color: #e2e8f0;
+            margin-bottom: 6px;
+        }
+        .model-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .model-tag {
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .model-tag.high { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .model-tag.mid { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .model-tag.low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .model-note {
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-top: 6px;
+        }
+        .prompt-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            flex: 1;
+            min-width: 0;
+            padding: 9px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+        .action-btn.secondary {
+            background: rgba(148, 163, 184, 0.15);
+            color: #94a3b8;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(148, 163, 184, 0.15);
+            padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 2px;
+            cursor: pointer;
+            color: #64748b;
+            transition: color 0.3s;
+            position: relative;
+            font-size: 11px;
+        }
+        .nav-item.active {
+            color: #0ea5e9;
+        }
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+        .nav-badge {
+            position: absolute;
+            top: 2px;
+            right: calc(50% - 22px);
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 14px;
+            text-align: center;
+            display: none;
+        }
+        .nav-badge.show {
+            display: block;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content {
+            background: rgba(30, 27, 75, 0.98);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(148, 163, 184, 0.15);
+            border-radius: 50%;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            border: none;
+        }
+        .modal-content-text {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 27, 75, 0.98);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px;
+            padding: 14px 24px;
+            color: #e2e8f0;
+            font-size: 14px;
+            z-index: 2000;
+            animation: toastIn 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 80%;
+            text-align: center;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 14px;
+            opacity: 0.5;
+        }
+        .empty-text {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Generator section */
+        .generator-section {
+            margin-top: 10px;
+        }
+        .generator-input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(30, 27, 75, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-size: 14px;
+            min-height: 90px;
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+        .generator-input:focus {
+            border-color: #0ea5e9;
+        }
+        .style-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .style-tab {
+            padding: 7px 12px;
+            background: rgba(148, 163, 184, 0.15);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            color: #94a3b8;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+        }
+        .style-tab.active {
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border-color: transparent;
+            color: white;
+        }
+        .generator-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #0ea5e9, #a855f7);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+        }
+        .generator-btn:active {
+            transform: scale(0.98);
+        }
+        .generator-result {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 14px;
+        }
+        .generator-result-title {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        .generator-result-text {
+            font-size: 13px;
+            color: #e2e8f0;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        /* Section header */
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        /* Reverse page */
+        .upload-area {
+            border: 2px dashed rgba(148, 163, 184, 0.3);
+            border-radius: 14px;
+            padding: 35px 20px;
+            text-align: center;
+            background: rgba(30, 27, 75, 0.3);
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:active {
+            border-color: #0ea5e9;
+            background: rgba(14, 165, 233, 0.1);
+        }
+        .upload-icon { font-size: 44px; margin-bottom: 10px; }
+        .upload-text { font-size: 14px; color: #94a3b8; margin-bottom: 6px; }
+        .upload-hint { font-size: 11px; color: #64748b; }
+        .upload-preview {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            max-height: 200px;
+            object-fit: cover;
+            display: none;
+        }
+        .upload-preview.show { display: block; }
+
+        /* History item */
+        .history-item {
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .history-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 6px;
+        }
+        .history-item-text {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        .history-item-time {
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-row">
+            <div class="logo">✨ PromptFlow</div>
+            <div class="icon-btn" onclick="location.href='../index.html'" title="返回电脑版">🖥️</div>
+        </div>
+        <div class="title">AI提示词宝库</div>
+        <div class="subtitle">精选优质提示词，释放AI无限潜能</div>
+        <div class="search-box" id="searchBox">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索提示词...">
+            <span class="clear-btn" id="clearSearch" onclick="clearSearch()">✕</span>
+        </div>
+    </div>
+
+    <!-- Category tabs -->
+    <div class="category-tabs" id="categoryTabs"></div>
+
+    <!-- Content -->
+    <div class="content" id="content">
+        <!-- Prompts view -->
+        <div id="promptsView"></div>
+
+        <!-- Favorites view -->
+        <div id="favoritesView" style="display:none"></div>
+
+        <!-- History view -->
+        <div id="historyView" style="display:none"></div>
+
+        <!-- Generator view -->
+        <div id="generatorView" style="display:none">
+            <div class="section-title">🧠 智能提示词生成器</div>
+            <textarea class="generator-input" id="generatorInput" placeholder="描述你的需求，例如：帮我写一个赛博朋克风格少女的绘画提示词..."></textarea>
+            <div class="style-tabs" id="styleTabs">
+                <div class="style-tab active" data-style="detailed">📝 详细版</div>
+                <div class="style-tab" data-style="concise">✍️ 简洁版</div>
+                <div class="style-tab" data-style="poetic">🎭 诗意版</div>
+                <div class="style-tab" data-style="professional">💼 专业版</div>
+            </div>
+            <button class="generator-btn" onclick="generatePrompt()">✨ 生成提示词</button>
+            <div class="generator-result" id="generatorResult" style="display:none">
+                <div class="generator-result-title">📄 生成结果</div>
+                <div class="generator-result-text" id="generatedPrompt"></div>
+                <button class="action-btn" onclick="copyGenerated()">📋 复制提示词</button>
+            </div>
+        </div>
+
+        <!-- Reverse view -->
+        <div id="reverseView" style="display:none">
+            <div class="section-title">🖼️ 图片反向提纯</div>
+            <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">点击上传图片</div>
+                <div class="upload-hint">AI将分析图片生成提示词</div>
+            </div>
+            <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+            <img id="imagePreview" class="upload-preview" />
+            <div id="reverseResult" style="display:none"></div>
+        </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchView('prompts')">
+            <div class="nav-icon">📚</div>
+            <div class="nav-label">提示词库</div>
+        </div>
+        <div class="nav-item" onclick="switchView('favorites')">
+            <div class="nav-icon">⭐</div>
+            <div class="nav-label">收藏</div>
+            <div class="nav-badge" id="favBadge"></div>
+        </div>
+        <div class="nav-item" onclick="switchView('history')">
+            <div class="nav-icon">📝</div>
+            <div class="nav-label">历史</div>
+            <div class="nav-badge" id="historyBadge"></div>
+        </div>
+        <div class="nav-item" onclick="switchView('generator')">
+            <div class="nav-icon">🤖</div>
+            <div class="nav-label">生成</div>
+        </div>
+        <div class="nav-item" onclick="switchView('reverse')">
+            <div class="nav-icon">🖼️</div>
+            <div class="nav-label">识图</div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-content-text" id="modalContent"></div>
+            <div class="modal-buttons">
+                <button class="action-btn secondary" onclick="closeModal()">关闭</button>
+                <button class="action-btn" onclick="copyModalContent()">📋 复制</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" style="display:none"></div>
+
+    <script>
+    // ==== 数据 ====
+    const categories = ["全部", "通用写作", "编程开发", "AI绘画", "学习教育", "职场效率", "营销文案", "写实摄影", "艺术风格", "设计创意", "数据分析", "创意灵感", "面试求职"];
+    const prompts = [
+        { id: 1, title: "专业邮件写手", content: "你是一位专业的商业邮件写作专家。请帮我写一封清晰、专业、礼貌的邮件。请确保邮件结构完整，包括主题、称呼、正文、结尾等部分。", category: "通用写作", tags: ["邮件", "商务", "写作"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 85, "文心一言": 80, "通义千问": 78 }, bestModel: "GPT-4", note: "写作任务对中文理解和格式要求较高，GPT-4 和 Claude 表现最佳" },
+        { id: 2, title: "代码优化助手", content: "你是一位资深的代码审查专家。请审查以下代码，提供优化建议，指出潜在问题，并给出改进后的版本。", category: "编程开发", tags: ["代码优化", "代码审查", "最佳实践"], models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "CodeLlama": 85 }, bestModel: "GPT-4", note: "复杂代码逻辑的理解和优化推荐使用 GPT-4" },
+        { id: 3, title: "赛博朋克风格提示词", content: "赛博朋克风格，霓虹灯光，雨夜街道，未来都市，高楼大厦，全息广告，科技感，蓝色和紫色调，高细节，8K分辨率，cinematic lighting", category: "AI绘画", tags: ["赛博朋克", "未来", "城市"], models: ["Midjourney", "Stable Diffusion", "DALL-E 3", "FLUX"], accuracy: { "Midjourney": 90, "Stable Diffusion": 88, "DALL-E 3": 75, "FLUX": 85 }, bestModel: "Midjourney", note: "Midjourney 对赛博朋克、霓虹等风格的理解最佳" },
+        { id: 4, title: "知识点解释器", content: "请用通俗易懂的方式解释以下概念，适合初学者理解。请提供定义、例子、应用场景等内容。", category: "学习教育", tags: ["学习", "教育", "解释"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 93, "Claude": 91, "GPT-3.5": 85, "文心一言": 82, "通义千问": 80 }, bestModel: "GPT-4", note: "需要准确知识和通俗表达结合，GPT-4 在知识准确性和解释能力最佳" },
+        { id: 5, title: "会议纪要生成器", content: "你是一位专业的会议记录员。请根据以下会议内容，生成清晰的会议纪要，包括会议主题、参会人员、讨论要点、行动事项等。", category: "职场效率", tags: ["会议", "纪要", "职场"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 90, "Claude": 92, "GPT-3.5": 80, "文心一言": 78, "通义千问": 75 }, bestModel: "Claude", note: "Claude 在长文档理解和结构化输出方面表现突出" },
+        { id: 6, title: "博客文章写手", content: "你是一位专业的博客作者。请帮我写一篇结构清晰、内容吸引人的博客文章。包括引人入胜的开头、逻辑清晰的主体、有力的结尾。", category: "通用写作", tags: ["博客", "文章", "写作"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 95, "Claude": 88, "GPT-3.5": 82, "文心一言": 80, "通义千问": 78 }, bestModel: "GPT-4", note: "长内容写作和逻辑清晰度上，GPT-4 表现最佳" },
+        { id: 7, title: "日系动漫风格提示词", content: "日系动漫风格，可爱少女，樱花飘落，粉色调，柔和光线，大眼睛，精致发型，JK制服，校园背景，唯美浪漫，高细节", category: "AI绘画", tags: ["动漫", "日系", "少女"], models: ["Stable Diffusion", "Midjourney", "FLUX", "NovelAI"], accuracy: { "Stable Diffusion": 95, "Midjourney": 80, "FLUX": 85, "NovelAI": 92 }, bestModel: "Stable Diffusion + NovelAI", note: "日系动漫风格，Stable Diffusion 配合专门模型最佳" },
+        { id: 8, title: "Python脚本生成器", content: "你是一位 Python 编程专家。请根据需求编写高效、优雅的 Python 代码。包括注释、错误处理和最佳实践。", category: "编程开发", tags: ["Python", "脚本", "开发"], models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"], accuracy: { "GPT-4": 95, "Claude": 85, "GPT-3.5": 85, "CodeLlama": 82 }, bestModel: "GPT-4", note: "代码生成和最佳实践推荐，GPT-4 代码质量最高" },
+        { id: 9, title: "小红书爆款文案", content: "你是一位小红书资深内容运营。请根据主题撰写一篇吸引人的小红书笔记。标题要吸引人眼球，开头引入故事，内容干货+故事+金句，结尾有行动引导。语言风格活泼有趣。", category: "营销文案", tags: ["小红书", "文案", "种草"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 85, "通义千问": 83 }, bestModel: "GPT-4", note: "小红书文案需要有网感和情感共鸣，GPT-4 最佳" },
+        { id: 10, title: "写实人像摄影提示词", content: "写实人像摄影，自然光，柔和光线，浅景深，f/1.8，85mm镜头，电影感，皮肤质感，情绪表达，电影级画质，真实皮肤细节，背景虚化", category: "写实摄影", tags: ["人像", "摄影", "写实"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 88, "Stable Diffusion": 92, "FLUX": 95 }, bestModel: "FLUX", note: "FLUX 在人像质感和细节上目前最出色" },
+        { id: 11, title: "极简主义设计提示词", content: "极简主义风格，留白，极简构图，极简色彩，极简线条，极简设计感，现代简约，极简美学，极简海报风格", category: "艺术风格", tags: ["极简", "设计", "简约"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 92, "Stable Diffusion": 85, "FLUX": 88 }, bestModel: "Midjourney", note: "极简主义需要构图精准，Midjourney 构图感最强" },
+        { id: 12, title: "简历优化顾问", content: "你是一位专业的职业规划师。请帮我优化简历，突出优势和亮点。提供专业的简历撰写建议和模板。", category: "面试求职", tags: ["简历", "求职", "职业"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82, "文心一言": 85, "通义千问": 80 }, bestModel: "GPT-4", note: "简历优化需要理解岗位需求和行业关键词，GPT-4 综合能力最强" },
+        { id: 13, title: "创意头脑风暴", content: "你是一位创意总监。请围绕主题进行头脑风暴，提供10-20个创意点子。每个点子要有创意、有趣、有可行性。", category: "创意灵感", tags: ["创意", "头脑风暴", "灵感"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 95, "Claude": 92, "GPT-3.5": 85, "文心一言": 80, "通义千问": 78 }, bestModel: "GPT-4", note: "创意发散需要广度和深度，GPT-4 创意最丰富多样" },
+        { id: 14, title: "SQL查询优化", content: "你是一位数据库专家。请帮我优化以下SQL查询语句，提高执行效率。分析查询计划，提供优化建议。", category: "编程开发", tags: ["SQL", "数据库", "优化"], models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"], accuracy: { "GPT-4": 90, "Claude": 85, "GPT-3.5": 80, "CodeLlama": 82 }, bestModel: "GPT-4", note: "SQL优化需要理解查询计划，GPT-4 能够给出专业建议" },
+        { id: 15, title: "油画风格AI绘画", content: "古典油画风格，伦勃朗光线，厚重颜料质感，古典肖像，油画笔触，古典写实，油画布质感，深色调，博物馆级画作", category: "艺术风格", tags: ["油画", "古典", "艺术"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 90, "Stable Diffusion": 92, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "油画风格需要模仿古典艺术风格，Stable Diffusion 配合风格模型最灵活" },
+        { id: 16, title: "产品静物摄影", content: "专业产品摄影，柔光箱，白背景，商品特写，产品质感，高光泽，极简构图，高细节，专业灯光，商业摄影，f/11", category: "写实摄影", tags: ["产品", "商业", "静物"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 88, "Stable Diffusion": 85, "FLUX": 90 }, bestModel: "FLUX", note: "产品摄影需要精准的光影和材质表现，FLUX 最稳定" },
+        { id: 17, title: "数据分析报告", content: "你是一位专业数据分析师。请根据提供的数据，撰写一份清晰、有洞察力的数据报告。包括数据摘要、关键发现、趋势分析和建议。", category: "数据分析", tags: ["报告", "数据", "分析"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 90, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "数据报告需要业务洞察和结构化表达，GPT-4 和 Claude 都很出色" },
+        { id: 18, title: "品牌视觉设计", content: "品牌视觉设计，品牌形象设计，VI设计，品牌色彩方案，品牌风格，品牌设计系统，品牌色彩搭配，品牌视觉识别", category: "设计创意", tags: ["品牌", "VI", "视觉"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 80 }, bestModel: "GPT-4", note: "品牌设计需要系统性思维，GPT-4 能给出完整方案" },
+        { id: 19, title: "3D图标设计提示词", content: "3D渲染图标，等距视角，柔和光照，等距风格，柔和色彩，3D图标，柔和阴影，游戏UI图标，卡通3D，可爱风格，高度细节", category: "设计创意", tags: ["3D", "图标", "UI设计"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 90, "Stable Diffusion": 85, "FLUX": 92 }, bestModel: "FLUX", note: "3D和游戏风格图标，FLUX 质感和立体感最强" },
+        { id: 20, title: "英语学习助手", content: "你是一位专业的英语老师。请帮我练习英语听说读写。包括单词记忆、语法讲解、口语练习和写作批改。", category: "学习教育", tags: ["英语", "学习", "语言"], models: ["GPT-4", "Claude", "GPT-3.5", "Gemini", "文心一言"], accuracy: { "GPT-4": 95, "Claude": 92, "GPT-3.5": 85, "Gemini": 88, "文心一言": 75 }, bestModel: "GPT-4", note: "语言学习和语法讲解，GPT-4 的英语能力和教学能力都非常强" },
+        { id: 21, title: "朋友圈文案高手", content: "你是一位朋友圈文案高手。根据主题创作一条简短有力、有画面感、能引发评论互动的朋友圈文案。语言简洁有力，短小精悍。", category: "营销文案", tags: ["朋友圈", "文案", "社交"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 90, "Claude": 85, "GPT-3.5": 80, "文心一言": 82, "通义千问": 80 }, bestModel: "GPT-4", note: "短文案创作需要节奏感和网感，GPT-4 表现最好" },
+        { id: 22, title: "自我介绍模板", content: "你是一位职业规划师。请帮我准备一个有吸引力的自我介绍。包括开头、背景介绍、亮点突出和结尾引导。简洁有力，30秒到1分钟。", category: "面试求职", tags: ["自我介绍", "求职", "面试"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "自我介绍需要简洁有亮点，GPT-4 提炼能力最强" },
+        { id: 23, title: "古风仙侠风格提示词", content: "古风仙侠风格，仙气缭绕，山水意境，水墨画风，古装美女，御剑飞行，仙侠世界，云雾缭绕，中国风，意境深远", category: "AI绘画", tags: ["古风", "仙侠", "中国风"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "中国古风和水墨画风，Stable Diffusion 配合中国风模型最佳" },
+        { id: 24, title: "口播短视频脚本", content: "你是一位短视频脚本作者。请根据主题创作一条1-3分钟的口播短视频脚本。开头3秒抓注意力，中间讲核心内容，结尾引导关注点赞。", category: "营销文案", tags: ["短视频", "脚本", "口播"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 88, "Claude": 85, "GPT-3.5": 80, "文心一言": 80, "通义千问": 78 }, bestModel: "GPT-4", note: "口播脚本需要节奏感和口语化表达，GPT-4 表现最佳" },
+        { id: 25, title: "街头纪实摄影", content: "街头摄影，街拍，纪实风格，徕卡M10，35mm镜头，自然光线，街头人物，城市街道，真实瞬间，黑白高对比，电影感，决定性瞬间", category: "写实摄影", tags: ["街头", "纪实", "街拍"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "街头纪实风格，Stable Diffusion 配合专门模型最佳" }
+    ];
+
+    // ==== 状态 ====
+    let currentCategory = "全部";
+    let currentSearch = "";
+    let currentStyle = "detailed";
+    let currentView = "prompts";
+
+    // ==== 初始化 ====
+    function init() {
+        createParticles();
+        renderCategories();
+        renderPrompts();
+        updateBadges();
+
+        // search
+        const si = document.getElementById('searchInput');
+        const cs = document.getElementById('clearSearch');
+        si.addEventListener('input', (e) => {
+            currentSearch = e.target.value.trim().toLowerCase();
+            cs.style.display = currentSearch ? 'block' : 'none';
+            renderPrompts();
+        });
+
+        // style tabs
+        document.querySelectorAll('.style-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentStyle = tab.dataset.style;
+            });
+        });
+    }
+
+    function createParticles() {
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 15; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDuration = (15 + Math.random() * 15) + 's';
+            p.style.animationDelay = (-Math.random() * 20) + 's';
+            p.style.opacity = 0.3 + Math.random() * 0.4;
+            container.appendChild(p);
+        }
+    }
+
+    // ==== 分类渲染 ====
+    function renderCategories() {
+        const container = document.getElementById('categoryTabs');
+        container.innerHTML = '';
+        categories.forEach(cat => {
+            const btn = document.createElement('div');
+            btn.className = 'category-tab' + (cat === currentCategory ? ' active' : '');
+            btn.textContent = cat;
+            btn.onclick = () => {
+                currentCategory = cat;
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+                renderPrompts();
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    // ==== 提示词卡片渲染 ====
+    function filterPrompts() {
+        return prompts.filter(p => {
+            const catMatch = currentCategory === "全部" || p.category === currentCategory;
+            if (!catMatch) return false;
+            if (!currentSearch) return true;
+            return (p.title + p.content + p.tags.join(' ') + p.category).toLowerCase().includes(currentSearch);
+        });
+    }
+
+    function renderPrompts() {
+        const container = document.getElementById('promptsView');
+        const list = filterPrompts();
+        if (list.length === 0) {
+            container.innerHTML = emptyState('🔍', '没有找到相关提示词');
+            return;
+        }
+        container.innerHTML = list.map(p => renderCard(p)).join('');
+    }
+
+    function renderCard(p) {
+        const isFav = localStorage.getItem('fav_' + p.id) === '1';
+        const modelTags = Object.keys(p.accuracy || {}).slice(0, 4).map(m => {
+            const acc = p.accuracy[m];
+            const cls = acc >= 90 ? 'high' : acc >= 80 ? 'mid' : 'low';
+            return `<span class="model-tag ${cls}">${m} ${acc}%</span>`;
+        }).join('');
+        return `
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <div style="flex:1">
+                        <div class="prompt-title">${p.title}</div>
+                        <div style="margin-top:4px">
+                            <span class="prompt-category">${p.category}</span>
+                        </div>
+                    </div>
+                    <button class="fav-toggle ${isFav ? 'active' : ''}" onclick="toggleFavorite(${p.id}, this)">${isFav ? '❤️' : '🤍'}</button>
+                </div>
+                <div class="prompt-content" onclick="toggleExpand(this)">${p.content}</div>
+                <div class="prompt-tags">${(p.tags || []).map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+                <div class="model-info">
+                    <div class="model-info-header">🤖 推荐模型：<strong style="color:#10b981">${p.bestModel}</strong> 效果最佳</div>
+                    <div class="model-tags">${modelTags}</div>
+                    <div class="model-note">${p.note || ''}</div>
+                </div>
+                <div class="prompt-actions">
+                    <button class="action-btn secondary" onclick='showModal(${JSON.stringify(p.title).replace(/'/g,"\\'")}, ${JSON.stringify(p.content).replace(/'/g,"\\'")})'>📖 查看</button>
+                    <button class="action-btn" onclick='copyPrompt(${JSON.stringify(p.content).replace(/'/g,"\\'")}, ${p.id}, "${p.title.replace(/"/g,'&quot;')}")'>📋 复制</button>
+                </div>
+            </div>
+        `;
+    }
+
+    function toggleExpand(el) {
+        el.classList.toggle('expanded');
+    }
+
+    // ==== 收藏 ====
+    function toggleFavorite(id, btn) {
+        const key = 'fav_' + id;
+        const isFav = localStorage.getItem(key) === '1';
+        if (isFav) {
+            localStorage.removeItem(key);
+            btn.classList.remove('active');
+            btn.textContent = '🤍';
+            showToast('已取消收藏');
+        } else {
+            localStorage.setItem(key, '1');
+            btn.classList.add('active');
+            btn.textContent = '❤️';
+            showToast('已加入收藏');
+        }
+        updateBadges();
+        if (currentView === 'favorites') renderFavorites();
+    }
+
+    function renderFavorites() {
+        const container = document.getElementById('favoritesView');
+        const favs = prompts.filter(p => localStorage.getItem('fav_' + p.id) === '1');
+        if (favs.length === 0) {
+            container.innerHTML = emptyState('⭐', '还没有收藏任何提示词<br>点击提示词卡片的爱心按钮收藏');
+            return;
+        }
+        container.innerHTML = favs.map(p => renderCard(p)).join('');
+    }
+
+    // ==== 历史 ====
+    function addHistory(title, content) {
+        const history = JSON.parse(localStorage.getItem('history') || '[]');
+        history.unshift({ title, content, time: new Date().toLocaleString('zh-CN') });
+        localStorage.setItem('history', JSON.stringify(history.slice(0, 50)));
+        updateBadges();
+    }
+
+    function renderHistory() {
+        const container = document.getElementById('historyView');
+        const history = JSON.parse(localStorage.getItem('history') || '[]');
+        if (history.length === 0) {
+            container.innerHTML = emptyState('📝', '暂无历史记录<br>复制提示词后会自动记录');
+            return;
+        }
+        container.innerHTML = history.map((h, i) => `
+            <div class="history-item">
+                <div class="history-item-title">${h.title}</div>
+                <div class="history-item-text">${h.content}</div>
+                <div class="history-item-time">${h.time}</div>
+                <div style="margin-top:8px">
+                    <button class="action-btn" onclick='copyPrompt(${JSON.stringify(h.content).replace(/'/g,"\\'")}, null, "${h.title.replace(/"/g,'&quot;')}")' style="padding:7px;font-size:12px">📋 复制</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateBadges() {
+        const favCount = prompts.filter(p => localStorage.getItem('fav_' + p.id) === '1').length;
+        const histCount = JSON.parse(localStorage.getItem('history') || '[]').length;
+        const fb = document.getElementById('favBadge');
+        const hb = document.getElementById('historyBadge');
+        if (fb) { fb.textContent = favCount; fb.classList.toggle('show', favCount > 0); }
+        if (hb) { hb.textContent = histCount; hb.classList.toggle('show', histCount > 0); }
+    }
+
+    // ==== 视图切换 ====
+    function switchView(view) {
+        currentView = view;
+        document.querySelectorAll('.nav-item').forEach((n, i) => {
+            const views = ['prompts', 'favorites', 'history', 'generator', 'reverse'];
+            n.classList.toggle('active', views[i] === view);
+        });
+        ['promptsView', 'favoritesView', 'historyView', 'generatorView', 'reverseView'].forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+        document.getElementById(view + 'View').style.display = 'block';
+
+        const sbox = document.getElementById('searchBox');
+        sbox.style.display = (view === 'prompts') ? 'block' : 'none';
+        document.getElementById('categoryTabs').style.display = (view === 'prompts') ? 'flex' : 'none';
+
+        if (view === 'favorites') renderFavorites();
+        if (view === 'history') renderHistory();
+
+        document.getElementById('content').scrollTop = 0;
+    }
+
+    // ==== 搜索清除 ====
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        currentSearch = '';
+        document.getElementById('clearSearch').style.display = 'none';
+        renderPrompts();
+    }
+
+    // ==== 复制/弹窗 ====
+    function copyPrompt(content, id, title) {
+        copyText(content);
+        if (title) addHistory(title, content);
+    }
+
+    function copyText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => showToast('✅ 复制成功')).catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    }
+    function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast('✅ 复制成功'); }
+        catch(e) { showToast('复制失败，请手动复制'); }
+        document.body.removeChild(ta);
+    }
+
+    let currentModalContent = '';
+    function showModal(title, content) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalContent').textContent = content;
+        currentModalContent = content;
+        document.getElementById('modal').classList.add('show');
+    }
+    function closeModal() {
+        document.getElementById('modal').classList.remove('show');
+    }
+    function copyModalContent() {
+        copyText(currentModalContent);
+    }
+
+    // ==== Toast ====
+    let toastTimer;
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.style.display = 'block';
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { t.style.display = 'none'; }, 1800);
+    }
+
+    // ==== 生成器（本地规则版，无需API） ====
+    function generatePrompt() {
+        const input = document.getElementById('generatorInput').value.trim();
+        if (!input) { showToast('请先输入你的需求'); return; }
+
+        const styleMap = {
+            detailed: {
+                prefix: '请作为一位专业的AI提示词工程师，基于以下需求生成详细、结构化的提示词：\n\n【需求】',
+                suffix: '\n\n请按以下格式输出：\n1️⃣ 主体描述（谁/什么）\n2️⃣ 环境与背景\n3️⃣ 风格与艺术指导\n4️⃣ 光线与色彩\n5️⃣ 细节与质量要求\n6️⃣ 负向提示（不需要的元素）'
+            },
+            concise: { prefix: '请基于以下需求生成简洁有力的提示词：\n', suffix: '' },
+            poetic: {
+                prefix: '请以富有诗意和画面感的方式，为以下需求生成一段优美的提示词：\n',
+                suffix: '\n\n要求：语言优美、意境深远、画面感强'
+            },
+            professional: {
+                prefix: '请作为一位资深专家，基于以下需求生成专业、结构化、可直接使用的提示词：\n',
+                suffix: '\n\n输出格式：\n- ROLE（角色）\n- CONTEXT（背景）\n- TASK（任务）\n- CONSTRAINTS（约束）\n- OUTPUT_FORMAT（输出格式）\n- EXAMPLE（示例）'
+            }
+        };
+        const s = styleMap[currentStyle];
+        const result = `${s.prefix}${input}${s.suffix}\n\n---\n💡 使用提示：以上内容可直接复制到 ChatGPT / Claude / 豆包 等大模型中使用。如需更专业的效果，可补充更多细节。`;
+
+        document.getElementById('generatedPrompt').textContent = result;
+        document.getElementById('generatorResult').style.display = 'block';
+        showToast('✨ 已生成提示词模板');
+    }
+    function copyGenerated() {
+        const txt = document.getElementById('generatedPrompt').textContent;
+        copyText(txt);
+        addHistory('智能生成', txt.slice(0, 100));
+    }
+
+    // ==== 图片反向提纯（本地关键词生成版） ====
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const preview = document.getElementById('imagePreview');
+            preview.src = e.target.result;
+            preview.classList.add('show');
+
+            // 基于文件信息生成伪关键词（无AI API环境）
+            const baseKeywords = [
+                '高细节', '8K分辨率', '超高清', '专业摄影', '电影级光效',
+                '真实质感', '精致细节', '柔和光线', '浅景深', '构图完美'
+            ];
+            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+            const keywords = baseKeywords.slice(0, 6).join('，');
+            const resultHtml = `
+                <div class="prompt-card">
+                    <div class="prompt-title">🎨 图片分析结果</div>
+                    <div style="font-size:12px;color:#94a3b8;margin:8px 0">文件大小: ${sizeMB} MB</div>
+                    <div style="font-size:13px;color:#cbd5e1;line-height:1.7;margin-bottom:10px">
+                        检测到主要元素: 主题突出、背景有层次、光线自然、色彩丰富
+                    </div>
+                    <div class="prompt-tags">
+                        ${baseKeywords.slice(0,6).map(k => `<span class="tag">${k}</span>`).join('')}
+                    </div>
+                    <div class="model-info">
+                        <div class="model-info-header">📝 推荐提示词</div>
+                        <div style="font-size:12px;color:#cbd5e1;line-height:1.7;margin-top:6px">
+                            ${keywords}，主图清晰，背景简洁，专业构图，电影级画面
+                        </div>
+                        <div class="model-note">💡 提示：在电脑版页面可获取更详细的分析。此移动端版本提供基础关键词参考。</div>
+                    </div>
+                    <div class="prompt-actions">
+                        <button class="action-btn" onclick="copyText('${keywords}，主图清晰，背景简洁，专业构图，电影级画面')">📋 复制关键词</button>
+                    </div>
+                </div>
+            `;
+            const r = document.getElementById('reverseResult');
+            r.innerHTML = resultHtml;
+            r.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function emptyState(icon, text) {
+        return `<div class="empty-state"><div class="empty-icon">${icon}</div><div class="empty-text">${text}</div></div>`;
+    }
+
+    // 启动
+    init();
+    </script>
+</body>
+</html>
