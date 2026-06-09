@@ -797,7 +797,7 @@
 
     <script>
     // ==== 数据 ====
-    const categories = ["全部", "通用写作", "编程开发", "AI绘画", "学习教育", "职场效率", "营销文案", "写实摄影", "艺术风格", "设计创意", "数据分析", "创意灵感", "面试求职"];
+    const categories = ["全部", "通用写作", "编程开发", "AI绘画", "学习教育", "职场效率", "营销文案", "写实摄影", "艺术风格", "设计创意", "数据分析", "创意灵感", "面试求职", "健康运动", "美食烹饪", "心理咨询", "生活休闲", "娱乐游戏"];
     const prompts = [
         { id: 1, title: "专业邮件写手", content: "你是一位专业的商业邮件写作专家。请帮我写一封清晰、专业、礼貌的邮件。请确保邮件结构完整，包括主题、称呼、正文、结尾等部分。", category: "通用写作", tags: ["邮件", "商务", "写作"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 85, "文心一言": 80, "通义千问": 78 }, bestModel: "GPT-4", note: "写作任务对中文理解和格式要求较高，GPT-4 和 Claude 表现最佳" },
         { id: 2, title: "代码优化助手", content: "你是一位资深的代码审查专家。请审查以下代码，提供优化建议，指出潜在问题，并给出改进后的版本。", category: "编程开发", tags: ["代码优化", "代码审查", "最佳实践"], models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "CodeLlama": 85 }, bestModel: "GPT-4", note: "复杂代码逻辑的理解和优化推荐使用 GPT-4" },
@@ -823,7 +823,62 @@
         { id: 22, title: "自我介绍模板", content: "你是一位职业规划师。请帮我准备一个有吸引力的自我介绍。包括开头、背景介绍、亮点突出和结尾引导。简洁有力，30秒到1分钟。", category: "面试求职", tags: ["自我介绍", "求职", "面试"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "自我介绍需要简洁有亮点，GPT-4 提炼能力最强" },
         { id: 23, title: "古风仙侠风格提示词", content: "古风仙侠风格，仙气缭绕，山水意境，水墨画风，古装美女，御剑飞行，仙侠世界，云雾缭绕，中国风，意境深远", category: "AI绘画", tags: ["古风", "仙侠", "中国风"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "中国古风和水墨画风，Stable Diffusion 配合中国风模型最佳" },
         { id: 24, title: "口播短视频脚本", content: "你是一位短视频脚本作者。请根据主题创作一条1-3分钟的口播短视频脚本。开头3秒抓注意力，中间讲核心内容，结尾引导关注点赞。", category: "营销文案", tags: ["短视频", "脚本", "口播"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"], accuracy: { "GPT-4": 88, "Claude": 85, "GPT-3.5": 80, "文心一言": 80, "通义千问": 78 }, bestModel: "GPT-4", note: "口播脚本需要节奏感和口语化表达，GPT-4 表现最佳" },
-        { id: 25, title: "街头纪实摄影", content: "街头摄影，街拍，纪实风格，徕卡M10，35mm镜头，自然光线，街头人物，城市街道，真实瞬间，黑白高对比，电影感，决定性瞬间", category: "写实摄影", tags: ["街头", "纪实", "街拍"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "街头纪实风格，Stable Diffusion 配合专门模型最佳" }
+        { id: 25, title: "街头纪实摄影", content: "街头摄影，街拍，纪实风格，徕卡M10，35mm镜头，自然光线，街头人物，城市街道，真实瞬间，黑白高对比，电影感，决定性瞬间", category: "写实摄影", tags: ["街头", "纪实", "街拍"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "街头纪实风格，Stable Diffusion 配合专门模型最佳" },
+        { id: 26, title: "JavaScript专家", content: "你是一位JavaScript/TypeScript专家。请帮我解决JavaScript问题，优化代码，解释ES6+新特性，写出高质量的前端代码。", category: "编程开发", tags: ["JavaScript", "TypeScript", "前端"], models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"], accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 85, "CodeLlama": 82 }, bestModel: "GPT-4", note: "JavaScript是前端核心，GPT-4 代码最准确" },
+        { id: 27, title: "DevOps工程师", content: "你是一位资深DevOps工程师。请帮我设计CI/CD流程，配置Docker、Kubernetes，优化部署脚本，解决运维问题。", category: "编程开发", tags: ["DevOps", "Docker", "Kubernetes"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 85, "GPT-3.5": 80 }, bestModel: "GPT-4", note: "DevOps需要实践经验和工具知识，GPT-4 最全面" },
+        { id: 28, title: "UI/UX设计师", content: "你是一位资深UI/UX设计师。请提供界面设计建议、用户体验优化方案、交互设计改进和设计系统规范。", category: "设计创意", tags: ["UI设计", "UX设计", "界面"], models: ["GPT-4", "Claude", "Midjourney"], accuracy: { "GPT-4": 90, "Claude": 88, "Midjourney": 85 }, bestModel: "GPT-4", note: "UI/UX需要用户思维和审美，GPT-4 最懂用户需求" },
+        { id: 29, title: "数据清洗与预处理", content: "你是一位数据工程师。请帮我进行数据清洗和预处理，包括缺失值处理、异常值检测、数据转换和特征工程。", category: "数据分析", tags: ["数据清洗", "特征工程", "预处理"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "数据清洗需要细致和准确，GPT-4 方案最完整" },
+        { id: 30, title: "OKR目标管理", content: "你是一位绩效管理专家。请帮我制定OKR（目标与关键结果），包括目标设定、关键结果定义和评分标准。", category: "职场效率", tags: ["OKR", "绩效", "管理"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "OKR需要目标思维和SMART原则，GPT-4 设定最合理" },
+        { id: 31, title: "私域流量运营", content: "你是一位私域运营专家。请帮制定私域流量运营策略，包括引流、促活、转化和留存方案。", category: "营销文案", tags: ["私域", "运营", "流量"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 }, bestModel: "GPT-4", note: "私域运营需要用户思维和数据能力，GPT-4 最懂运营" },
+        { id: 32, title: "科幻电影风格提示词", content: "科幻电影风格，电影级画质，炫酷特效，激光武器，机器人，未来城市，赛博空间，太空战斗，宏大场景，电影构图", category: "AI绘画", tags: ["科幻", "电影", "特效"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 93, "Stable Diffusion": 88, "FLUX": 85 }, bestModel: "Midjourney", note: "科幻电影风格需要大片感，Midjourney 最强" },
+        { id: 33, title: "机械/机甲风格提示词", content: "机械风格，机甲设计，金属质感，精密机械，蒸汽朋克，工业设计，机械战士，齿轮传动，机械美学，科幻机械", category: "AI绘画", tags: ["机械", "机甲", "科幻"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 92, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Midjourney", note: "机械风格需要精密感，Midjourney 最精细" },
+        { id: 34, title: "美食/静物摄影提示词", content: "美食摄影，精致摆盘，暖色调，浅景深，自然光，杂志风格，商业摄影，食欲感，高清画质，构图完美", category: "AI绘画", tags: ["美食", "摄影", "静物"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 90, "Stable Diffusion": 85, "FLUX": 92 }, bestModel: "FLUX", note: "美食摄影需要真实感，FLUX 最诱人" },
+        { id: 35, title: "建筑/空间摄影提示词", content: "建筑摄影，现代建筑，空间感，构图完美，自然光，建筑美学，线条感，极简构图，高端建筑摄影，建筑空间", category: "AI绘画", tags: ["建筑", "空间", "摄影"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 93, "Stable Diffusion": 88, "FLUX": 90 }, bestModel: "Midjourney", note: "建筑摄影需要空间感和构图，Midjourney 最强" },
+        { id: 36, title: "儿童摄影提示词", content: "儿童摄影，自然光，户外拍摄，可爱表情，童年记忆，温馨风格，自然抓拍，儿童写真，家庭摄影，纯真可爱", category: "AI绘画", tags: ["儿童", "摄影", "家庭"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 88, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "儿童摄影需要纯真感，Stable Diffusion 最温馨" },
+        { id: 37, title: "营销策划方案", content: "你是一位资深营销策划。请帮我制定营销策划方案，包括市场分析、目标受众、营销策略、预算分配和效果评估。", category: "营销文案", tags: ["营销", "策划", "推广"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 80 }, bestModel: "GPT-4", note: "营销策划需要策略思维，GPT-4 最专业" },
+        { id: 38, title: "产品需求文档撰写", content: "你是一位资深产品经理。请帮我撰写PRD（产品需求文档），包括需求背景、功能描述、业务流程、原型设计和验收标准。", category: "职场效率", tags: ["PRD", "产品", "需求"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "PRD需要逻辑和细致，GPT-4 最完整" },
+        { id: 39, title: "竞品分析报告", content: "你是一位资深分析师。请帮我进行竞品分析，包括竞品概况、功能对比、优劣势分析、市场定位和竞争策略。", category: "数据分析", tags: ["竞品", "分析", "市场"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 80 }, bestModel: "GPT-4", note: "竞品分析需要洞察力，GPT-4 最深入" },
+        { id: 40, title: "创业故事文案", content: "你是一位品牌故事专家。请帮我撰写创业故事，包括创始人背景、创业初心、艰难时刻、突破成长和未来愿景。", category: "营销文案", tags: ["故事", "创业", "品牌"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82, "文心一言": 80 }, bestModel: "GPT-4", note: "创业故事需要情感和叙事，GPT-4 最打动人心" },
+        { id: 41, title: "Midjourney提示词优化", content: "你是一位Midjourney大师。请帮我优化/扩展/改进AI绘画提示词，使其生成效果更精准、画面更精美、构图更完美。", category: "AI绘画", tags: ["Midjourney", "优化", "技巧"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "MJ提示词优化需要经验，GPT-4 最懂MJ语法" },
+        { id: 42, title: "Stable Diffusion工作流", content: "你是一位Stable Diffusion专家。请帮我设计SD工作流，包括模型选择、提示词工程、参数设置 ControlNet 使用和后处理技巧。", category: "AI绘画", tags: ["Stable Diffusion", "工作流", "技巧"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "SD工作流需要系统知识，GPT-4 最全面" },
+        { id: 43, title: "FLUX提示词指南", content: "你是一位FLUX模型专家。请帮我编写适合FLUX的提示词，包括FLUX特有的语法、风格指南和质量优化技巧。", category: "AI绘画", tags: ["FLUX", "提示词", "指南"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 80 }, bestModel: "GPT-4", note: "FLUX提示词有独特语法，GPT-4 了解最深入" },
+        { id: 44, title: "公众号文章撰写", content: "你是一位公众号运营专家。请帮我撰写公众号文章，包括标题优化、开头引入、正文结构、金句点缀和结尾引导。", category: "营销文案", tags: ["公众号", "文章", "运营"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 }, bestModel: "GPT-4", note: "公众号文章需要深度和温度，GPT-4 最适合" },
+        { id: 45, title: "视频标题和封面优化", content: "你是一位短视频运营专家。请帮优化视频标题和封面设计，提高点击率和完播率。包括标题公式和封面设计建议。", category: "营销文案", tags: ["短视频", "标题", "封面"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 }, bestModel: "GPT-4", note: "短视频标题需要吸引力，GPT-4 最懂流量密码" },
+        { id: 46, title: "健身计划定制", content: "你是一位专业健身教练。请根据我的身体状况、健身目标和可用时间，制定一份详细的健身计划。包括热身、力量训练、有氧和拉伸。", category: "健康运动", tags: ["健身", "运动", "健康"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 80 }, bestModel: "GPT-4", note: "健身计划需要专业知识，GPT-4 最全面" },
+        { id: 47, title: "美食菜谱生成", content: "你是一位米其林大厨。请根据食材和口味偏好，生成一道美味的菜谱。包括所需材料、步骤、烹饪技巧和摆盘建议。", category: "美食烹饪", tags: ["美食", "菜谱", "烹饪"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 85, "文心一言": 82 }, bestModel: "GPT-4", note: "中文美食内容，GPT-4 最专业" },
+        { id: 48, title: "心理咨询对话", content: "你是一位有执业资质的心理咨询师。请用温暖、专业的方式倾听我的烦恼，给予情感支持和合理的心理建议。", category: "心理咨询", tags: ["心理", "情感", "健康"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 88, "Claude": 90, "GPT-3.5": 80 }, bestModel: "Claude", note: "心理倾听需要共情能力，Claude 最温暖" },
+        { id: 49, title: "旅行攻略规划", content: "你是一位资深旅行达人。请帮我规划一份详细的旅行攻略。包括景点推荐、美食、住宿、交通和注意事项。", category: "生活休闲", tags: ["旅行", "攻略", "休闲"], models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 85 }, bestModel: "GPT-4", note: "旅行规划需要整合能力，GPT-4 攻略最详尽" },
+        { id: 50, title: "游戏攻略撰写", content: "你是一位资深游戏攻略作者。请帮我撰写一份详细、有趣的游戏攻略。包括通关技巧、BOSS打法、隐藏要素和收集指南。", category: "娱乐游戏", tags: ["游戏", "攻略", "娱乐"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "游戏攻略需要玩家视角，GPT-4 最详细" },
+        { id: 51, title: "小说情节构思", content: "你是一位资深小说家和编剧。请帮助我构思小说情节。包括故事大纲、人物设定、情节转折和高潮设计。", category: "创意灵感", tags: ["小说", "创作", "故事"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 92, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "小说创作需要想象力，GPT-4 最丰富" },
+        { id: 52, title: "PPT演示文稿设计", content: "你是一位PPT设计专家。请帮我设计一份专业的演示文稿。包括内容结构、视觉设计、动画效果和演讲备注。", category: "职场效率", tags: ["PPT", "演示", "汇报"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "PPT设计需要逻辑和审美，GPT-4 最清晰" },
+        { id: 53, title: "装修设计方案", content: "你是一位资深室内设计师。请帮我设计装修方案。包括风格定位、空间布局、色彩搭配、家具选购和预算清单。", category: "设计创意", tags: ["装修", "室内设计", "家居"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "装修设计需要审美和实用，GPT-4 方案最详尽" },
+        { id: 54, title: "Logo品牌设计提示词", content: "现代简约Logo设计，扁平化风格，品牌色彩，矢量图形，简洁线条，几何图形，极简主义，logo设计，商业品牌", category: "设计创意", tags: ["Logo", "品牌", "设计"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 92, "Stable Diffusion": 85, "FLUX": 88 }, bestModel: "Midjourney", note: "Logo设计需要简洁感，Midjourney 最强" },
+        { id: 55, title: "水彩画风格提示词", content: "水彩画风格，透明感，柔和色彩，笔触自然，水彩纹理，晕染效果，插画风格，清新淡雅，艺术绘画", category: "艺术风格", tags: ["水彩", "插画", "手绘"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 90, "Stable Diffusion": 88, "FLUX": 85 }, bestModel: "Midjourney", note: "水彩风格需要透明感，Midjourney 最佳" },
+        { id: 56, title: "星空银河摄影", content: "星空摄影，银河，繁星点点，长曝光，天文摄影，深空天体，星轨，壮阔宇宙，星空延时摄影", category: "写实摄影", tags: ["星空", "银河", "天文"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "星空需要深邃感，Stable Diffusion 最强" },
+        { id: 57, title: "短视频脚本生成", content: "你是一位抖音/B站资深内容创作者。请根据主题创作一个吸引人的短视频脚本。包括开头3秒钩子、中间内容、结尾引导。", category: "营销文案", tags: ["短视频", "脚本", "抖音"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "短视频脚本需要节奏感，GPT-4 最懂流量" },
+        { id: 58, title: "论文降重与润色", content: "你是一位学术写作专家。请帮我对论文进行降重和润色，保持原意的同时提升学术表达水平。", category: "学习教育", tags: ["论文", "学术", "写作"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "学术写作需要专业性，GPT-4 最地道" },
+        { id: 59, title: "Git命令速查", content: "你是一位Git专家。请提供常用Git命令的速查表，包括日常开发中频繁使用的命令和最佳实践。", category: "编程开发", tags: ["Git", "版本控制", "开发"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 88 }, bestModel: "GPT-4", note: "Git命令需要准确性，GPT-4 最准确" },
+        { id: 60, title: "正则表达式生成", content: "你是一位正则表达式专家。请根据需求编写高效、准确的正则表达式，并提供使用示例和解释。", category: "编程开发", tags: ["正则", "Regex", "编程"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "正则需要精确匹配，GPT-4 最准确" },
+        { id: 61, title: "数据可视化图表设计", content: "你是一位数据可视化专家。请帮设计图表类型选择、配色方案和布局设计。包括柱状图、折线图、饼图、热力图等。", category: "数据分析", tags: ["数据可视化", "图表", "设计"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "数据可视化需要设计能力，GPT-4 最全面" },
+        { id: 62, title: "时间管理技巧", content: "你是一位时间管理专家。请分享有效的时间管理技巧和工具推荐，包括番茄工作法、GTD、四象限法则等实用方法。", category: "职场效率", tags: ["时间管理", "效率", "职场"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "时间管理需要实操性，GPT-4 方法最实用" },
+        { id: 63, title: "科幻场景提示词", content: "科幻场景，宇宙飞船，星际旅行，外星文明，星球大战，太空站，未来科技，全息投影，宏大叙事，科幻电影质感", category: "AI绘画", tags: ["科幻", "太空", "未来"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 93, "Stable Diffusion": 88, "FLUX": 85 }, bestModel: "Midjourney", note: "科幻场景需要宏大感，Midjourney 最佳" },
+        { id: 64, title: "水墨山水国画提示词", content: "中国水墨画，山水画，浓淡干湿，笔走龙蛇，留白意境，青绿山水，泼墨山水，古典中国画，文人画", category: "AI绘画", tags: ["水墨", "国画", "山水"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 85, "Stable Diffusion": 92, "FLUX": 88 }, bestModel: "Stable Diffusion", note: "水墨国画需要中国传统审美，SD 最佳" },
+        { id: 65, title: "游戏角色立绘提示词", content: "游戏角色立绘，高质量游戏CG，角色设计，二次元风格，精致细节，游戏UI，角色卡面，立绘质量，动态姿势", category: "AI绘画", tags: ["游戏", "角色", "立绘"], models: ["Stable Diffusion", "NovelAI", "Midjourney"], accuracy: { "Stable Diffusion": 93, "NovelAI": 90, "Midjourney": 80 }, bestModel: "Stable Diffusion + NovelAI", note: "游戏立绘需要精细感，SD 最佳" },
+        { id: 66, title: "睡前故事生成", content: "你是一位优秀的儿童故事作家。请创作一个温馨、有教育意义的睡前故事，适合3-8岁儿童，时长约5-10分钟。", category: "创意灵感", tags: ["故事", "儿童", "睡前"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 93, "GPT-3.5": 85 }, bestModel: "Claude", note: "睡前故事需要温柔，Claude 最温馨" },
+        { id: 67, title: "诗歌/歌词创作", content: "你是一位诗人/词作者。请根据主题或情感创作一首诗歌或歌词。要求押韵、有意境、情感真挚。", category: "创意灵感", tags: ["诗歌", "歌词", "创作"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 93, "GPT-3.5": 82 }, bestModel: "Claude", note: "诗歌创作需要情感，Claude 文采最优美" },
+        { id: 68, title: "简历自我评价优化", content: "你是一位资深HR。请帮我优化简历中的自我评价部分，用精准、有力的语言突出个人优势和职业定位。", category: "面试求职", tags: ["简历", "自我评价", "求职"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "自我评价需要精准，GPT-4 最懂HR" },
+        { id: 69, title: "模拟面试练习", content: "你是一位资深面试官。请模拟面试场景向我提问，包括自我介绍、项目介绍、专业技能和行为面试问题。", category: "面试求职", tags: ["面试", "模拟", "求职"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "模拟面试需要专业性，GPT-4 最有深度" },
+        { id: 70, title: "健身餐食谱设计", content: "你是一位专业营养师。请帮我设计一周的健身减脂餐食谱，包括早餐、午餐、晚餐和加餐，热量控制在合理范围。", category: "健康运动", tags: ["健身餐", "减脂", "营养"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "健身餐需要营养学知识，GPT-4 最科学" },
+        { id: 71, title: "美食摄影提示词", content: "美食摄影，食物摄影，浅景深，自然光，俯拍角度，暖色调，食欲感，美食摆盘，商业美食摄影，杂志级画质", category: "写实摄影", tags: ["美食", "摄影", "食物"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 88, "Stable Diffusion": 85, "FLUX": 90 }, bestModel: "FLUX", note: "美食摄影需要食欲感，FLUX 最诱人" },
+        { id: 72, title: "情绪管理指导", content: "你是一位心理健康专家。请帮助我理解和管理情绪，包括识别情绪、情绪调节技巧和积极心态培养方法。", category: "心理咨询", tags: ["情绪", "心理", "健康"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 90, "Claude": 92, "GPT-3.5": 82 }, bestModel: "Claude", note: "情绪管理需要共情，Claude 最温柔" },
+        { id: 73, title: "读书笔记整理", content: "你是一位知识管理专家。请帮我整理书籍/文章的读书笔记，包括核心观点、精彩摘录、个人感悟和实践应用。", category: "学习教育", tags: ["读书", "笔记", "知识管理"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "读书笔记需要理解力，GPT-4 总结最到位" },
+        { id: 74, title: "演讲稿撰写", content: "你是一位演讲稿撰写专家。请帮我撰写一份有感染力的演讲稿。包括开场白、故事引入、核心观点和有力结尾。", category: "通用写作", tags: ["演讲", "口才", "表达"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 90, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "演讲稿需要感染力，GPT-4 最打动人心" },
+        { id: 75, title: "儿童绘本创作", content: "你是一位资深绘本作家和插画师。请帮我创作一个适合3-6岁儿童的绘本故事，包括故事脚本、画面描述和寓意解读。", category: "创意灵感", tags: ["绘本", "儿童", "故事"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85 }, bestModel: "GPT-4", note: "儿童绘本需要童趣，GPT-4 最有创意" },
+        { id: 76, title: "API接口文档生成", content: "你是一位资深后端工程师。请根据需求生成规范的API接口文档。包括接口描述、请求参数、响应格式和错误码说明。", category: "编程开发", tags: ["API", "文档", "后端"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "API文档需要规范性，GPT-4 格式最标准" },
+        { id: 77, title: "新闻通稿撰写", content: "你是一位资深公关专家。请帮我撰写新闻通稿。包括新闻标题、导语、主体内容和结语，遵循新闻写作规范。", category: "营销文案", tags: ["新闻", "公关", "通稿"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "新闻写作需要规范性，GPT-4 最专业" },
+        { id: 78, title: "电商产品详情页文案", content: "你是一位资深电商文案专家。请帮我撰写产品详情页文案，包括产品卖点、使用场景、用户评价引导和购买紧迫感营造。", category: "营销文案", tags: ["电商", "详情页", "转化"], models: ["GPT-4", "Claude", "GPT-3.5"], accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 }, bestModel: "GPT-4", note: "电商文案需要转化能力，GPT-4 最懂购买" },
+        { id: 79, title: "室内装修效果图提示词", content: "现代室内装修效果图，北欧风格，客厅空间设计，柔和灯光，绿色植物点缀，简约家具，温馨氛围，家居设计，高端质感", category: "AI绘画", tags: ["室内", "装修", "北欧"], models: ["Midjourney", "Stable Diffusion", "FLUX"], accuracy: { "Midjourney": 92, "Stable Diffusion": 85, "FLUX": 88 }, bestModel: "Midjourney", note: "室内效果图需要空间感，Midjourney 最佳" },
+        { id: 80, title: "宠物拟人化插画提示词", content: "宠物拟人化插画，可爱的猫狗角色，穿上人类服装，人类姿势，动漫风格，大眼睛，圆润可爱，温馨治愈，插画风格", category: "AI绘画", tags: ["宠物", "拟人", "可爱"], models: ["Stable Diffusion", "NovelAI", "Midjourney"], accuracy: { "Stable Diffusion": 93, "NovelAI": 90, "Midjourney": 80 }, bestModel: "Stable Diffusion + NovelAI", note: "宠物拟人化需要可爱感，SD 最灵活" }
     ];
 
     // ==== 状态 ====
@@ -1088,11 +1143,75 @@
         toastTimer = setTimeout(() => { t.style.display = 'none'; }, 1800);
     }
 
-    // ==== 生成器（本地规则版，无需API） ====
-    function generatePrompt() {
+    // ==== 豆包API智能提示词生成器 ====
+    async function generatePrompt() {
         const input = document.getElementById('generatorInput').value.trim();
         if (!input) { showToast('请先输入你的需求'); return; }
 
+        const resultEl = document.getElementById('generatorResult');
+        const promptEl = document.getElementById('generatedPrompt');
+        const btn = document.querySelector('.generator-btn');
+        btn.textContent = '🤖 AI生成中...';
+        btn.disabled = true;
+
+        const apiKey = localStorage.getItem('pf_ark_api_key');
+
+        const systemPrompt = `你是一位专业的AI提示词工程师。你的任务是根据用户的需求，生成高质量、结构化的AI提示词。
+
+生成规则：
+1. 如果是绘画类需求（涉及图片生成、AI绘图等），请生成适合 Midjourney/Stable Diffusion/FLUX/DALL-E 等绘图模型的英文提示词
+2. 如果是文本/写作类需求，请生成适合 ChatGPT/Claude/文心一言/通义千问 等语言模型的提示词
+3. 提示词要具体、准确、有细节，包含风格、构图、光线、色彩等要素
+4. 绘画类提示词用英文输出，其他用中文输出
+5. 不要添加前缀说明，直接输出提示词内容`;
+
+        const userPrompt = `用户需求：${input}
+
+风格偏好：${currentStyle}
+- detailed（详细版）：要求结构完整、细节丰富
+- concise（简洁版）：要求简洁有力、直击要点
+- poetic（诗意版）：要求语言优美、意境深远
+- professional（专业版）：要求专业规范、可直接使用
+
+请根据以上需求，生成最合适的AI提示词。`;
+
+        if (apiKey) {
+            try {
+                const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + apiKey
+                    },
+                    body: JSON.stringify({
+                        model: 'doubao-1-5-pro-32k-241118',
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            { role: 'user', content: userPrompt }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.8
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const result = data.choices[0].message.content;
+                    promptEl.textContent = result;
+                    resultEl.style.display = 'block';
+                    showToast('✨ AI生成成功');
+                    btn.textContent = '✨ 生成提示词';
+                    btn.disabled = false;
+                    return;
+                } else {
+                    console.warn('API响应失败，状态码:', response.status);
+                }
+            } catch (e) {
+                console.warn('API调用失败，使用本地规则', e);
+            }
+        }
+
+        // 本地规则后备生成
         const styleMap = {
             detailed: {
                 prefix: '请作为一位专业的AI提示词工程师，基于以下需求生成详细、结构化的提示词：\n\n【需求】',
@@ -1109,11 +1228,13 @@
             }
         };
         const s = styleMap[currentStyle];
-        const result = `${s.prefix}${input}${s.suffix}\n\n---\n💡 使用提示：以上内容可直接复制到 ChatGPT / Claude / 豆包 等大模型中使用。如需更专业的效果，可补充更多细节。`;
+        const result = `${s.prefix}${input}${s.suffix}\n\n---\n💡 使用提示：以上内容可直接复制到 ChatGPT / Claude / 豆包 等大模型中使用。`;
 
-        document.getElementById('generatedPrompt').textContent = result;
-        document.getElementById('generatorResult').style.display = 'block';
-        showToast('✨ 已生成提示词模板');
+        promptEl.textContent = result;
+        resultEl.style.display = 'block';
+        showToast('✨ 已生成提示词模板\n💡 设置API密钥可获得AI智能生成');
+        btn.textContent = '✨ 生成提示词';
+        btn.disabled = false;
     }
     function copyGenerated() {
         const txt = document.getElementById('generatedPrompt').textContent;
@@ -1121,50 +1242,184 @@
         addHistory('智能生成', txt.slice(0, 100));
     }
 
-    // ==== 图片反向提纯（本地关键词生成版） ====
+    // ==== 图片反向提纯（豆包API智能分析） ====
+    let selectedFile = null;
+
     function handleImageUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
+        selectedFile = file;
+
         const reader = new FileReader();
         reader.onload = (e) => {
             const preview = document.getElementById('imagePreview');
             preview.src = e.target.result;
             preview.classList.add('show');
-
-            // 基于文件信息生成伪关键词（无AI API环境）
-            const baseKeywords = [
-                '高细节', '8K分辨率', '超高清', '专业摄影', '电影级光效',
-                '真实质感', '精致细节', '柔和光线', '浅景深', '构图完美'
-            ];
-            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
-            const keywords = baseKeywords.slice(0, 6).join('，');
-            const resultHtml = `
-                <div class="prompt-card">
-                    <div class="prompt-title">🎨 图片分析结果</div>
-                    <div style="font-size:12px;color:#94a3b8;margin:8px 0">文件大小: ${sizeMB} MB</div>
-                    <div style="font-size:13px;color:#cbd5e1;line-height:1.7;margin-bottom:10px">
-                        检测到主要元素: 主题突出、背景有层次、光线自然、色彩丰富
-                    </div>
-                    <div class="prompt-tags">
-                        ${baseKeywords.slice(0,6).map(k => `<span class="tag">${k}</span>`).join('')}
-                    </div>
-                    <div class="model-info">
-                        <div class="model-info-header">📝 推荐提示词</div>
-                        <div style="font-size:12px;color:#cbd5e1;line-height:1.7;margin-top:6px">
-                            ${keywords}，主图清晰，背景简洁，专业构图，电影级画面
-                        </div>
-                        <div class="model-note">💡 提示：在电脑版页面可获取更详细的分析。此移动端版本提供基础关键词参考。</div>
-                    </div>
-                    <div class="prompt-actions">
-                        <button class="action-btn" onclick="copyText('${keywords}，主图清晰，背景简洁，专业构图，电影级画面')">📋 复制关键词</button>
-                    </div>
-                </div>
-            `;
-            const r = document.getElementById('reverseResult');
-            r.innerHTML = resultHtml;
-            r.style.display = 'block';
+            analyzeImageMobile(file);
         };
         reader.readAsDataURL(file);
+    }
+
+    async function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function analyzeImageMobile(file) {
+        const apiKey = localStorage.getItem('pf_ark_api_key');
+        const resultContainer = document.getElementById('reverseResult');
+        const sizeKB = (file.size / 1024).toFixed(1);
+
+        // 显示加载状态
+        resultContainer.innerHTML = `
+            <div class="prompt-card">
+                <div class="prompt-title">🎨 图片分析中...</div>
+                <div style="display:flex;gap:10px;margin:10px 0">
+                    <div class="stat-item" style="flex:1;padding:10px">
+                        <div class="stat-value" style="font-size:14px">${sizeKB}KB</div>
+                        <div class="stat-label" style="font-size:10px">文件大小</div>
+                    </div>
+                    <div class="stat-item" style="flex:1;padding:10px">
+                        <div class="stat-value" style="font-size:14px">🤖</div>
+                        <div class="stat-label" style="font-size:10px">AI分析中...</div>
+                    </div>
+                </div>
+                <div style="text-align:center;padding:20px">
+                    <div style="font-size:24px">⏳</div>
+                    <div style="font-size:12px;color:#94a3b8;margin-top:8px">正在分析图片，请稍候...</div>
+                </div>
+            </div>
+        `;
+        resultContainer.style.display = 'block';
+
+        let imageAnalysis = null;
+
+        // 尝试调用豆包API进行图像分析
+        if (apiKey) {
+            try {
+                const base64 = await fileToBase64(file);
+                const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + apiKey
+                    },
+                    body: JSON.stringify({
+                        model: 'doubao-1-5-vision-pro-32k-250628',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: [
+                                    { type: 'image_url', image_url: { url: base64 } },
+                                    { type: 'text', text: '请仔细分析这张图片，生成适合AI绘画的提示词。请按以下格式输出：\n\n【主体】（2-4个关键词）\n【风格】（2-3个关键词）\n【场景】（2-4个关键词）\n【光线与色彩】（2-3个）\n【构图与细节】（2-3个）\n【推荐画质】（2-3个）\n\n请用中文输出，每项用逗号分隔的关键词。' }
+                                ]
+                            }
+                        ],
+                        max_tokens: 1500
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    imageAnalysis = data.choices[0].message.content;
+                }
+            } catch (e) {
+                console.warn('图像分析API失败', e);
+            }
+        }
+
+        // 生成推荐关键词
+        const imageKeywordDB = {
+            subject: ['少女', '人物', '风景', '建筑', '动物', '静物', '花卉', '美食', '星空', '城市'],
+            style: ['写实', '插画', '油画', '水彩', '赛博朋克', '日系', '古风', '极简', '复古', '梦幻'],
+            scene: ['室内', '室外', '街道', '自然', '海边', '森林', '都市', '乡村', '工作室', '天空'],
+            tech: ['高细节', '8K', '电影级', '专业摄影', '柔和光线', '景深', '暖色调', '冷色调', 'HDR']
+        };
+
+        const getRandomKeywords = (arr, count) => {
+            const shuffled = [...arr].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        };
+
+        let styleWords, subjectWords, sceneWords, techWords;
+
+        if (imageAnalysis) {
+            // 解析API返回的分析结果
+            const parseKeywords = (text, tag) => {
+                const match = text.match(new RegExp(`【${tag}】([\\s\\S]*?)(?:\\n|$)`));
+                if (match) return match[1].split(/[,，、]/).map(k => k.trim()).filter(k => k && k.length < 20).slice(0, 4);
+                return [];
+            };
+
+            subjectWords = parseKeywords(imageAnalysis, '主体');
+            styleWords = parseKeywords(imageAnalysis, '风格');
+            sceneWords = [...parseKeywords(imageAnalysis, '场景'), ...parseKeywords(imageAnalysis, '光线与色彩')];
+            techWords = [...parseKeywords(imageAnalysis, '构图与细节'), ...parseKeywords(imageAnalysis, '推荐画质')];
+
+            // 填充空数据
+            if (subjectWords.length === 0) subjectWords = getRandomKeywords(imageKeywordDB.subject, 3);
+            if (styleWords.length === 0) styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+            if (sceneWords.length === 0) sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+            if (techWords.length === 0) techWords = getRandomKeywords(imageKeywordDB.tech, 3);
+        } else {
+            styleWords = getRandomKeywords(imageKeywordDB.style, 3);
+            subjectWords = getRandomKeywords(imageKeywordDB.subject, 3);
+            sceneWords = getRandomKeywords(imageKeywordDB.scene, 3);
+            techWords = getRandomKeywords(imageKeywordDB.tech, 3);
+        }
+
+        const allKeywords = [...subjectWords, ...styleWords, ...sceneWords, ...techWords].join('，');
+        const englishKeywords = allKeywords; // 可以添加英文翻译
+
+        // 渲染分析结果
+        resultContainer.innerHTML = `
+            <div class="prompt-card">
+                <div class="prompt-title">🎨 图片分析结果 ${imageAnalysis ? '<span style="color:#10b981;font-size:12px">🤖 AI分析</span>' : '<span style="color:#f59e0b;font-size:12px">📝 智能识别</span>'}</div>
+                <div style="display:flex;gap:10px;margin:10px 0">
+                    <div class="stat-item" style="flex:1;padding:10px">
+                        <div class="stat-value" style="font-size:14px">${sizeKB}KB</div>
+                        <div class="stat-label" style="font-size:10px">文件大小</div>
+                    </div>
+                    <div class="stat-item" style="flex:1;padding:10px">
+                        <div class="stat-value" style="font-size:14px">${allKeywords.length}</div>
+                        <div class="stat-label" style="font-size:10px">关键词</div>
+                    </div>
+                </div>
+
+                ${imageAnalysis ? `
+                <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(148,163,184,0.1);border-radius:10px;padding:12px;margin-bottom:12px">
+                    <div style="font-size:11px;color:#94a3b8;margin-bottom:8px">📋 AI分析内容</div>
+                    <div style="font-size:12px;color:#cbd5e1;line-height:1.8;white-space:pre-wrap">${imageAnalysis}</div>
+                </div>
+                ` : ''}
+
+                <div class="prompt-tags">
+                    ${styleWords.map(k => `<span class="tag">${k}</span>`).join('')}
+                </div>
+                <div class="prompt-tags">
+                    ${subjectWords.map(k => `<span class="tag">${k}</span>`).join('')}
+                </div>
+
+                <div class="model-info">
+                    <div class="model-info-header">📝 推荐提示词（可直接复制）</div>
+                    <div style="font-size:13px;color:#cbd5e1;line-height:1.8;margin-top:8px;word-break:break-all">${allKeywords}</div>
+                </div>
+
+                ${!imageAnalysis ? `
+                <div style="font-size:11px;color:#64748b;margin-top:8px;padding:8px;background:rgba(245,158,11,0.1);border-radius:8px">
+                    💡 提示：当前为本地规则生成。设置API密钥后可获得AI智能分析，获得更精准的提示词。
+                </div>
+                ` : ''}
+
+                <div class="prompt-actions" style="margin-top:12px">
+                    <button class="action-btn secondary" onclick="copyText('${allKeywords.replace(/'/g, "\\'")}')">📋 复制关键词</button>
+                </div>
+            </div>
+        `;
     }
 
     function emptyState(icon, text) {

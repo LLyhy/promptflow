@@ -1494,6 +1494,11 @@
             <button class="category-btn" data-category="数据分析">数据分析</button>
             <button class="category-btn" data-category="创意灵感">创意灵感</button>
             <button class="category-btn" data-category="面试求职">面试求职</button>
+            <button class="category-btn" data-category="健康运动">健康运动</button>
+            <button class="category-btn" data-category="美食烹饪">美食烹饪</button>
+            <button class="category-btn" data-category="心理咨询">心理咨询</button>
+            <button class="category-btn" data-category="生活休闲">生活休闲</button>
+            <button class="category-btn" data-category="娱乐游戏">娱乐游戏</button>
         </div>
 
         <div id="prompts" class="tab-content active">
@@ -1547,6 +1552,18 @@
                         <option value="AI绘画">AI绘画</option>
                         <option value="学习教育">学习教育</option>
                         <option value="职场效率">职场效率</option>
+                        <option value="营销文案">营销文案</option>
+                        <option value="写实摄影">写实摄影</option>
+                        <option value="艺术风格">艺术风格</option>
+                        <option value="设计创意">设计创意</option>
+                        <option value="数据分析">数据分析</option>
+                        <option value="创意灵感">创意灵感</option>
+                        <option value="面试求职">面试求职</option>
+                        <option value="健康运动">健康运动</option>
+                        <option value="美食烹饪">美食烹饪</option>
+                        <option value="心理咨询">心理咨询</option>
+                        <option value="生活休闲">生活休闲</option>
+                        <option value="娱乐游戏">娱乐游戏</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -2361,6 +2378,523 @@
                 accuracy: { "GPT-4": 93, "Claude": 85, "GPT-3.5": 85 },
                 bestModel: "GPT-4",
                 note: "组件库需要系统性和一致性设计，GPT-4 最佳"
+            },
+            {
+                id: 64,
+                title: "健身计划定制",
+                content: "你是一位专业健身教练。请根据我的身体状况、健身目标和可用时间，制定一份详细的健身计划。包括热身、力量训练、有氧和拉伸。",
+                category: "健康运动",
+                tags: ["健身", "运动", "健康"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "健身计划需要专业知识和生活实际结合，GPT-4 最全面"
+            },
+            {
+                id: 65,
+                title: "美食菜谱生成",
+                content: "你是一位米其林大厨。请根据食材和口味偏好，生成一道美味的菜谱。包括所需材料、步骤、烹饪技巧和摆盘建议。",
+                category: "美食烹饪",
+                tags: ["美食", "菜谱", "烹饪"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 85, "文心一言": 82, "通义千问": 80 },
+                bestModel: "GPT-4",
+                note: "中文美食内容，文心一言有优势，整体 GPT-4 最专业"
+            },
+            {
+                id: 66,
+                title: "心理咨询对话",
+                content: "你是一位有执业资质的心理咨询师。请用温暖、专业的方式倾听我的烦恼，给予情感支持和合理的心理建议。注意区分心理咨询与医疗诊断。",
+                category: "心理咨询",
+                tags: ["心理", "情感", "健康"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 88, "Claude": 90, "GPT-3.5": 80 },
+                bestModel: "Claude",
+                note: "心理倾听需要共情能力，Claude 在情感理解方面表现突出"
+            },
+            {
+                id: 67,
+                title: "法律问题咨询",
+                content: "你是一位资深律师。请帮我分析法律问题，提供法律建议。注意区分法律咨询与律师意见，非紧急情况建议咨询专业律师。",
+                category: "法律咨询",
+                tags: ["法律", "咨询", "权益"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 85, "Claude": 83, "GPT-3.5": 78 },
+                bestModel: "GPT-4",
+                note: "法律问题复杂，GPT-4 法律知识库最全面，但仅供参考"
+            },
+            {
+                id: 68,
+                title: "理财规划建议",
+                content: "你是一位专业的理财规划师。请根据我的收入、支出、风险偏好和财务目标，提供个人理财建议。包括储蓄、投资和保险规划。",
+                category: "财务理财",
+                tags: ["理财", "投资", "财务"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 88, "Claude": 85, "GPT-3.5": 80 },
+                bestModel: "GPT-4",
+                note: "理财规划需要综合分析，GPT-4 金融知识最丰富"
+            },
+            {
+                id: 69,
+                title: "旅行攻略规划",
+                content: "你是一位资深旅行达人。请帮我规划一份详细的旅行攻略。包括景点推荐、美食、住宿、交通和注意事项。",
+                category: "生活休闲",
+                tags: ["旅行", "攻略", "休闲"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 85, "通义千问": 82 },
+                bestModel: "GPT-4",
+                note: "旅行规划需要实时信息整合，GPT-4 攻略最详尽"
+            },
+            {
+                id: 70,
+                title: "宠物养护指南",
+                content: "你是一位专业宠物医生/驯导师。请提供宠物（猫/狗）的养护知识。包括饮食、健康、行为训练和日常护理。",
+                category: "生活休闲",
+                tags: ["宠物", "养宠", "健康"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "宠物养护需要专业知识，GPT-4 最全面准确"
+            },
+            {
+                id: 71,
+                title: "游戏攻略撰写",
+                content: "你是一位资深游戏攻略作者。请帮我撰写一份详细、有趣的游戏攻略。包括通关技巧、BOSS打法、隐藏要素和收集指南。",
+                category: "娱乐游戏",
+                tags: ["游戏", "攻略", "娱乐"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 85, "文心一言": 82 },
+                bestModel: "GPT-4",
+                note: "游戏攻略需要玩家视角和实用性，GPT-4 最详细"
+            },
+            {
+                id: 72,
+                title: "小说情节构思",
+                content: "你是一位资深小说家和编剧。请帮助我构思小说情节。包括故事大纲、人物设定、情节转折和高潮设计。",
+                category: "创意灵感",
+                tags: ["小说", "创作", "故事"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 93, "Claude": 92, "GPT-3.5": 85, "文心一言": 80, "通义千问": 78 },
+                bestModel: "GPT-4",
+                note: "小说创作需要想象力和叙事能力，GPT-4 和 Claude 都非常出色"
+            },
+            {
+                id: 73,
+                title: "情感关系咨询",
+                content: "你是一位经验丰富的情感咨询师。请用温暖、理解的方式帮助我分析情感问题，提供沟通建议和关系经营技巧。",
+                category: "心理咨询",
+                tags: ["情感", "恋爱", "关系"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 88, "Claude": 92, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "Claude",
+                note: "情感咨询需要共情和理解，Claude 表现最温暖"
+            },
+            {
+                id: 74,
+                title: "商业计划书撰写",
+                content: "你是一位资深商业顾问。请帮我撰写一份专业的商业计划书。包括市场分析、商业模式、盈利预测和融资计划。",
+                category: "职场效率",
+                tags: ["商业", "创业", "计划"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 80 },
+                bestModel: "GPT-4",
+                note: "商业计划需要专业知识和商业思维，GPT-4 最全面"
+            },
+            {
+                id: 75,
+                title: "论文降重与润色",
+                content: "你是一位学术写作专家。请帮我对论文进行降重和润色，保持原意的同时提升学术表达水平，优化逻辑和用词。",
+                category: "学习教育",
+                tags: ["论文", "学术", "写作"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85 },
+                bestModel: "GPT-4",
+                note: "学术写作需要专业性和准确性，GPT-4 学术表达最地道"
+            },
+            {
+                id: 76,
+                title: "装修设计方案",
+                content: "你是一位资深室内设计师。请帮我设计装修方案。包括风格定位、空间布局、色彩搭配、家具选购和预算清单。",
+                category: "设计创意",
+                tags: ["装修", "室内设计", "家居"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "装修设计需要审美和实用性，GPT-4 方案最详尽"
+            },
+            {
+                id: 77,
+                title: "Logo品牌设计提示词",
+                content: "现代简约Logo设计，扁平化风格，品牌色彩，矢量图形，简洁线条，几何图形，极简主义，SVG格式，logo设计，商业品牌，高端质感",
+                category: "设计创意",
+                tags: ["Logo", "品牌", "设计"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 92, "Stable Diffusion": 85, "FLUX": 88 },
+                bestModel: "Midjourney",
+                note: "Logo设计需要简洁和识别度，Midjourney 构图感最强"
+            },
+            {
+                id: 78,
+                title: "水彩画风格提示词",
+                content: "水彩画风格，透明感，柔和色彩，笔触自然，水彩纹理，晕染效果，插画风格，清新淡雅，艺术绘画，手绘质感",
+                category: "艺术风格",
+                tags: ["水彩", "插画", "手绘"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 90, "Stable Diffusion": 88, "FLUX": 85 },
+                bestModel: "Midjourney",
+                note: "水彩风格需要透明感和笔触感，Midjourney 表现最佳"
+            },
+            {
+                id: 79,
+                title: "星空银河摄影",
+                content: "星空摄影，银河，繁星点点，长曝光，努比亚Z60ultra，天文摄影，深空天体，星轨，暗夜公园，壮阔宇宙，星空延时摄影",
+                category: "写实摄影",
+                tags: ["星空", "银河", "天文"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 85, "Stable Diffusion": 90, "FLUX": 88 },
+                bestModel: "Stable Diffusion",
+                note: "星空银河需要深邃感和真实感，Stable Diffusion 氛围最强"
+            },
+            {
+                id: 80,
+                title: "短视频脚本生成",
+                content: "你是一位抖音/B站资深内容创作者。请根据主题创作一个吸引人的短视频脚本。包括开头3秒钩子、中间内容、结尾引导和配乐建议。",
+                category: "营销文案",
+                tags: ["短视频", "脚本", "抖音"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82, "文心一言": 82, "通义千问": 80 },
+                bestModel: "GPT-4",
+                note: "短视频脚本需要节奏感和平台调性，GPT-4 最懂流量密码"
+            },
+            {
+                id: 81,
+                title: "产品卖点提炼",
+                content: "你是一位资深品牌策划。请帮提炼产品的核心卖点，用有说服力的语言描述产品优势。包括用户痛点、解决方案和产品亮点。",
+                category: "营销文案",
+                tags: ["产品", "卖点", "策划"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "卖点提炼需要洞察用户心理，GPT-4 文案最有说服力"
+            },
+            {
+                id: 82,
+                title: "Git命令速查",
+                content: "你是一位Git专家。请提供常用Git命令的速查表，包括日常开发中频繁使用的命令和最佳实践。",
+                category: "编程开发",
+                tags: ["Git", "版本控制", "开发"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"],
+                accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 88, "CodeLlama": 85 },
+                bestModel: "GPT-4",
+                note: "Git命令记忆，推荐使用 GPT-4，准确无误"
+            },
+            {
+                id: 83,
+                title: "正则表达式生成",
+                content: "你是一位正则表达式专家。请根据需求编写高效、准确的正则表达式，并提供使用示例和解释。",
+                category: "编程开发",
+                tags: ["正则", "Regex", "编程"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "CodeLlama"],
+                accuracy: { "GPT-4": 95, "Claude": 90, "GPT-3.5": 85, "CodeLlama": 80 },
+                bestModel: "GPT-4",
+                note: "正则表达式需要精确匹配，GPT-4 准确性最高"
+            },
+            {
+                id: 84,
+                title: "API接口文档生成",
+                content: "你是一位资深后端工程师。请根据需求生成规范的API接口文档。包括接口描述、请求参数、响应格式和错误码说明。",
+                category: "编程开发",
+                tags: ["API", "文档", "后端"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82 },
+                bestModel: "GPT-4",
+                note: "API文档需要规范性和完整性，GPT-4 格式最标准"
+            },
+            {
+                id: 85,
+                title: "数据可视化图表设计",
+                content: "你是一位数据可视化专家。请帮设计图表类型选择、配色方案和布局设计。包括柱状图、折线图、饼图、热力图等。",
+                category: "数据分析",
+                tags: ["数据可视化", "图表", "设计"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 },
+                bestModel: "GPT-4",
+                note: "数据可视化需要设计和数据双重能力，GPT-4 最全面"
+            },
+            {
+                id: 86,
+                title: "A/B测试方案设计",
+                content: "你是一位增长黑客专家。请帮设计A/B测试方案，包括测试假设、变量设计、样本量计算和结果分析方法。",
+                category: "数据分析",
+                tags: ["A/B测试", "增长", "实验"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 80 },
+                bestModel: "GPT-4",
+                note: "A/B测试需要统计学基础，GPT-4 方案最科学"
+            },
+            {
+                id: 87,
+                title: "PPT演示文稿设计",
+                content: "你是一位PPT设计专家。请帮我设计一份专业的演示文稿。包括内容结构、视觉设计、动画效果和演讲备注。",
+                category: "职场效率",
+                tags: ["PPT", "演示", "汇报"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 90, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "PPT设计需要逻辑和审美，GPT-4 内容结构最清晰"
+            },
+            {
+                id: 88,
+                title: "时间管理技巧",
+                content: "你是一位时间管理专家。请分享有效的时间管理技巧和工具推荐，包括番茄工作法、GTD、四象限法则等实用方法。",
+                category: "职场效率",
+                tags: ["时间管理", "效率", "职场"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 82, "通义千问": 80 },
+                bestModel: "GPT-4",
+                note: "时间管理需要实操性，GPT-4 方法最实用"
+            },
+            {
+                id: 89,
+                title: "跨文化沟通指南",
+                content: "你是一位跨文化沟通专家。请提供与不同文化背景的人沟通的注意事项和技巧，包括商务和日常生活场景。",
+                category: "职场效率",
+                tags: ["沟通", "跨文化", "商务"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82 },
+                bestModel: "GPT-4",
+                note: "跨文化沟通需要广博知识，GPT-4 文化理解最深入"
+            },
+            {
+                id: 90,
+                title: "新闻通稿撰写",
+                content: "你是一位资深公关专家。请帮我撰写新闻通稿。包括新闻标题、导语、主体内容和结语，遵循新闻写作规范。",
+                category: "营销文案",
+                tags: ["新闻", "公关", "通稿"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82 },
+                bestModel: "GPT-4",
+                note: "新闻写作需要规范和专业性，GPT-4 最符合媒体要求"
+            },
+            {
+                id: 91,
+                title: "科幻场景提示词",
+                content: "科幻场景，宇宙飞船，星际旅行，外星文明，星球大战，太空站，氢聚变引擎，未来科技，全息投影，宏大叙事，科幻电影质感",
+                category: "AI绘画",
+                tags: ["科幻", "太空", "未来"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 93, "Stable Diffusion": 88, "FLUX": 85 },
+                bestModel: "Midjourney",
+                note: "科幻场景需要宏大叙事感，Midjourney 最佳"
+            },
+            {
+                id: 92,
+                title: "水墨山水国画提示词",
+                content: "中国水墨画，山水画，浓淡干湿，笔走龙蛇，留白意境，青绿山水，泼墨山水，古典中国画，元四家风格，诗书画印，文人画",
+                category: "AI绘画",
+                tags: ["水墨", "国画", "山水"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 85, "Stable Diffusion": 92, "FLUX": 88 },
+                bestModel: "Stable Diffusion",
+                note: "水墨国画需要中国传统审美，Stable Diffusion 配合中国风模型最佳"
+            },
+            {
+                id: 93,
+                title: "游戏角色立绘提示词",
+                content: "游戏角色立绘，高质量游戏CG，角色设计，二次元风格，精致细节，游戏UI，角色卡面，立绘质量，动态姿势，发光特效，游戏美术",
+                category: "AI绘画",
+                tags: ["游戏", "角色", "立绘"],
+                models: ["Midjourney", "Stable Diffusion", "NovelAI", "FLUX"],
+                accuracy: { "Stable Diffusion": 93, "NovelAI": 90, "Midjourney": 80, "FLUX": 85 },
+                bestModel: "Stable Diffusion + NovelAI",
+                note: "游戏立绘需要精细和风格化，Stable Diffusion 配合专门模型最佳"
+            },
+            {
+                id: 94,
+                title: "美食摄影提示词",
+                content: "美食摄影，食物摄影，浅景深，自然光，俯拍角度，暖色调，食欲感，美食摆盘，商业美食摄影，杂志级画质，精致料理",
+                category: "写实摄影",
+                tags: ["美食", "摄影", "食物"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 88, "Stable Diffusion": 85, "FLUX": 90 },
+                bestModel: "FLUX",
+                note: "美食摄影需要食欲感，FLUX 质感和色彩最诱人"
+            },
+            {
+                id: 95,
+                title: "情绪管理指导",
+                content: "你是一位心理健康专家。请帮助我理解和管理情绪，包括识别情绪、情绪调节技巧和积极心态培养方法。",
+                category: "心理咨询",
+                tags: ["情绪", "心理", "健康"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 90, "Claude": 92, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "Claude",
+                note: "情绪管理需要共情和温柔，Claude 最能理解你的感受"
+            },
+            {
+                id: 96,
+                title: "读书笔记整理",
+                content: "你是一位知识管理专家。请帮我整理书籍/文章的读书笔记，包括核心观点、精彩摘录、个人感悟和实践应用。",
+                category: "学习教育",
+                tags: ["读书", "笔记", "知识管理"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 80, "通义千问": 78 },
+                bestModel: "GPT-4",
+                note: "读书笔记需要理解和提炼，GPT-4 总结最到位"
+            },
+            {
+                id: 97,
+                title: "演讲稿撰写",
+                content: "你是一位演讲稿撰写专家。请帮我撰写一份有感染力的演讲稿。包括开场白、故事引入、核心观点和有力结尾。",
+                category: "通用写作",
+                tags: ["演讲", "口才", "表达"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 93, "Claude": 90, "GPT-3.5": 85, "文心一言": 82 },
+                bestModel: "GPT-4",
+                note: "演讲稿需要感染力和节奏感，GPT-4 最懂如何打动人心"
+            },
+            {
+                id: 98,
+                title: "儿童绘本创作",
+                content: "你是一位资深绘本作家和插画师。请帮我创作一个适合3-6岁儿童的绘本故事，包括故事脚本、画面描述和寓意解读。",
+                category: "创意灵感",
+                tags: ["绘本", "儿童", "故事"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 85, "文心一言": 82 },
+                bestModel: "GPT-4",
+                note: "儿童绘本需要童趣和想象力，GPT-4 故事最有创意"
+            },
+            {
+                id: 99,
+                title: "Logo创意头脑风暴",
+                content: "你是一位品牌策略专家。请围绕品牌名称和定位，进行Logo创意头脑风暴，提供10个创意方向和设计建议。",
+                category: "设计创意",
+                tags: ["Logo", "品牌", "头脑风暴"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 92, "Claude": 90, "GPT-3.5": 82 },
+                bestModel: "GPT-4",
+                note: "Logo创意需要洞察力和审美，GPT-4 创意最丰富"
+            },
+            {
+                id: 100,
+                title: "iOS/Android应用创意",
+                content: "你是一位资深产品经理。请根据用户需求和市场趋势，提供App创意方案。包括核心功能、用户画像、商业模式和竞争优势。",
+                category: "创意灵感",
+                tags: ["App", "产品", "创新"],
+                models: ["GPT-4", "Claude", "GPT-3.5"],
+                accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 80 },
+                bestModel: "GPT-4",
+                note: "App创意需要市场洞察和产品思维，GPT-4 最专业"
+            },
+            {
+                id: 101,
+                title: "简历自我评价优化",
+                content: "你是一位资深HR。请帮我优化简历中的自我评价部分，用精准、有力的语言突出个人优势和职业定位。",
+                category: "面试求职",
+                tags: ["简历", "自我评价", "求职"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "自我评价需要精准和有力，GPT-4 最懂HR心思"
+            },
+            {
+                id: 102,
+                title: "模拟面试练习",
+                content: "你是一位资深面试官。请模拟面试场景向我提问，包括自我介绍、项目介绍、专业技能和行为面试问题，并给出反馈建议。",
+                category: "面试求职",
+                tags: ["面试", "模拟", "求职"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 93, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "模拟面试需要专业性和针对性，GPT-4 提问最有深度"
+            },
+            {
+                id: 103,
+                title: "春节/节日海报提示词",
+                content: "中国传统节日海报设计，节日氛围，红色金色主调，祥云图案，中国结，灯笼，烟花，团圆喜庆，节日文案融合，高端大气",
+                category: "设计创意",
+                tags: ["节日", "海报", "中国风"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 90, "Stable Diffusion": 88, "FLUX": 85 },
+                bestModel: "Midjourney",
+                note: "节日海报需要喜庆和氛围感，Midjourney 中国风最佳"
+            },
+            {
+                id: 104,
+                title: "电商产品详情页文案",
+                content: "你是一位资深电商文案专家。请帮我撰写产品详情页文案，包括产品卖点、使用场景、用户评价引导和购买紧迫感营造。",
+                category: "营销文案",
+                tags: ["电商", "详情页", "转化"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 82 },
+                bestModel: "GPT-4",
+                note: "电商文案需要转化能力，GPT-4 最懂如何说服购买"
+            },
+            {
+                id: 105,
+                title: "睡前故事生成",
+                content: "你是一位优秀的儿童故事作家。请创作一个温馨、有教育意义的睡前故事，适合3-8岁儿童，时长约5-10分钟。",
+                category: "创意灵感",
+                tags: ["故事", "儿童", "睡前"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 93, "GPT-3.5": 85, "文心一言": 82, "通义千问": 80 },
+                bestModel: "Claude",
+                note: "睡前故事需要温柔和想象力，Claude 讲述最温馨"
+            },
+            {
+                id: 106,
+                title: "多邻国风格插画提示词",
+                content: "多邻国Duolingo风格插画，卡通角色，明亮色彩，扁平化设计，游戏化元素，活泼可爱，教育应用风格，矢量插画风格",
+                category: "AI绘画",
+                tags: ["卡通", "插画", "教育"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 88, "Stable Diffusion": 90, "FLUX": 85 },
+                bestModel: "Stable Diffusion",
+                note: "多邻国风格需要活泼和游戏感，Stable Diffusion 最灵活"
+            },
+            {
+                id: 107,
+                title: "健身餐食谱设计",
+                content: "你是一位专业营养师。请帮我设计一周的健身减脂餐食谱，包括早餐、午餐、晚餐和加餐，热量控制在合理范围。",
+                category: "健康运动",
+                tags: ["健身餐", "减脂", "营养"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言"],
+                accuracy: { "GPT-4": 92, "Claude": 88, "GPT-3.5": 82, "文心一言": 80 },
+                bestModel: "GPT-4",
+                note: "健身餐需要营养学知识，GPT-4 搭配最科学"
+            },
+            {
+                id: 108,
+                title: "室内装修效果图提示词",
+                content: "现代室内装修效果图，北欧风格，客厅空间设计，柔和灯光，绿色植物点缀，简约家具，温馨氛围，家居设计，高端质感，室内设计杂志",
+                category: "AI绘画",
+                tags: ["室内", "装修", "北欧"],
+                models: ["Midjourney", "Stable Diffusion", "FLUX"],
+                accuracy: { "Midjourney": 92, "Stable Diffusion": 85, "FLUX": 88 },
+                bestModel: "Midjourney",
+                note: "室内效果图需要空间感和真实感，Midjourney 最佳"
+            },
+            {
+                id: 109,
+                title: "宠物拟人化插画提示词",
+                content: "宠物拟人化插画，可爱的猫狗角色，穿上人类服装，人类姿势，动漫风格，大眼睛，圆润可爱，温馨治愈，插画风格，角色设计",
+                category: "AI绘画",
+                tags: ["宠物", "拟人", "可爱"],
+                models: ["Stable Diffusion", "NovelAI", "Midjourney", "FLUX"],
+                accuracy: { "Stable Diffusion": 93, "NovelAI": 90, "Midjourney": 80, "FLUX": 85 },
+                bestModel: "Stable Diffusion + NovelAI",
+                note: "宠物拟人化需要可爱和情感，Stable Diffusion 最灵活"
+            },
+            {
+                id: 110,
+                title: "诗歌/歌词创作",
+                content: "你是一位诗人/词作者。请根据主题或情感创作一首诗歌或歌词。要求押韵、有意境、情感真挚、富有画面感。",
+                category: "创意灵感",
+                tags: ["诗歌", "歌词", "创作"],
+                models: ["GPT-4", "Claude", "GPT-3.5", "文心一言", "通义千问"],
+                accuracy: { "GPT-4": 92, "Claude": 93, "GPT-3.5": 82, "文心一言": 80, "通义千问": 78 },
+                bestModel: "Claude",
+                note: "诗歌创作需要情感和韵律，Claude 文采最优美"
             }
         ];
 
