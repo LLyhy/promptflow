@@ -30,9 +30,6 @@
       "author": { "@type": "Person", "name": "LLyhy" }
     }
     </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
     :root {
         --bg: #0a0e1a;
@@ -49,7 +46,7 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-        font-family: 'DM Sans', 'Noto Sans SC', system-ui, sans-serif;
+        font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
         background: var(--bg);
         color: var(--text);
         min-height: 100vh;
@@ -128,14 +125,14 @@
     }
     .hero-badge span { color: var(--accent); }
     .hero h1 {
-        font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        font-family: Georgia, 'Noto Serif SC', 'Songti SC', serif;
         font-size: clamp(48px, 7vw, 92px);
         font-weight: 800;
         letter-spacing: -0.035em;
         line-height: 1.02;
         margin-bottom: 28px;
     }
-    .hero h1 .italic { font-style: italic; font-family: 'Playfair Display', serif; color: var(--accent); }
+    .hero h1 .italic { font-style: italic; font-family: Georgia, serif; color: var(--accent); }
     .hero h1 .grad {
         background: linear-gradient(135deg, var(--indigo), var(--violet) 50%, var(--accent));
         -webkit-background-clip: text;
@@ -151,7 +148,86 @@
     }
     .hero-cta {
         display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-        margin-bottom: 70px;
+        margin-bottom: 40px;
+    }
+
+    /* 信任条 */
+    .trust-strip {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 22px;
+        font-size: 13px;
+        color: var(--text-dim);
+        font-weight: 500;
+    }
+    .trust-dot { color: var(--text-soft); }
+
+    /* 即时体验输入框 */
+    .hero-demo {
+        max-width: 600px;
+        margin: 0 auto 12px;
+        background: rgba(17, 24, 39, 0.6);
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        border-radius: 14px;
+        padding: 20px 24px;
+        backdrop-filter: blur(8px);
+    }
+    .hero-demo-label {
+        font-size: 13px;
+        color: #a78bfa;
+        font-weight: 600;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+    .hero-demo-row {
+        display: flex;
+        gap: 10px;
+    }
+    .hero-demo-input {
+        flex: 1;
+        padding: 14px 18px;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(10, 14, 26, 0.8);
+        color: var(--text);
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .hero-demo-input:focus {
+        border-color: var(--indigo);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .hero-demo-input::placeholder { color: var(--text-soft); }
+    .hero-demo-btn {
+        padding: 14px 24px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, var(--indigo), var(--violet));
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: transform 0.2s, box-shadow 0.2s;
+        font-family: inherit;
+    }
+    .hero-demo-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+    .hero-demo-hint {
+        text-align: center;
+        font-size: 11px;
+        color: var(--text-soft);
+        margin-top: 10px;
+    }
+    @media (max-width: 500px) {
+        .hero-demo-row { flex-direction: column; }
+        .hero-demo-btn { width: 100%; }
     }
     .btn-primary {
         background: linear-gradient(135deg, var(--accent), #ea580c);
@@ -239,7 +315,7 @@
         margin-bottom: 12px;
     }
     .preview-prompt-title {
-        font-family: 'Playfair Display', serif;
+        font-family: Georgia, serif;
         font-size: 22px;
         font-weight: 800;
         margin-bottom: 10px;
@@ -292,14 +368,14 @@
     }
     .preview-cover-top {
         color: white;
-        font-family: 'DM Sans', sans-serif;
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
         font-size: 13px;
         font-weight: 600;
         letter-spacing: 0.15em;
         position: relative;
     }
     .preview-cover-main {
-        font-family: 'Playfair Display', serif;
+        font-family: Georgia, serif;
         color: white;
         font-size: 42px;
         font-weight: 800;
@@ -333,7 +409,7 @@
         padding: 10px;
     }
     .stat-num {
-        font-family: 'Playfair Display', serif;
+        font-family: Georgia, serif;
         font-size: 48px;
         font-weight: 800;
         letter-spacing: -0.03em;
@@ -364,7 +440,7 @@
         margin-bottom: 16px;
     }
     .section-title {
-        font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        font-family: Georgia, 'Noto Serif SC', 'Songti SC', serif;
         font-size: clamp(36px, 5vw, 56px);
         font-weight: 800;
         letter-spacing: -0.03em;
@@ -419,7 +495,7 @@
         border: 1px solid rgba(99,102,241,0.3);
     }
     .feature-title {
-        font-family: 'Playfair Display', serif;
+        font-family: Georgia, serif;
         font-size: 22px;
         font-weight: 800;
         letter-spacing: -0.02em;
@@ -479,7 +555,7 @@
         position: absolute;
         left: -8px;
         top: 38px;
-        font-family: 'Playfair Display', serif;
+        font-family: Georgia, serif;
         font-size: 96px;
         font-weight: 800;
         color: transparent;
@@ -488,7 +564,7 @@
         line-height: 1;
     }
     .step-title {
-        font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        font-family: Georgia, 'Noto Serif SC', 'Songti SC', serif;
         font-size: 24px;
         font-weight: 800;
         margin-bottom: 12px;
@@ -517,7 +593,7 @@
     .case:hover { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(249,115,22,0.1)); transform: translateY(-2px); }
     .case-emoji { font-size: 32px; margin-bottom: 16px; }
     .case-title {
-        font-family: 'Playfair Display', serif;
+        font-family: Georgia, serif;
         font-size: 26px;
         font-weight: 800;
         margin-bottom: 10px;
@@ -559,7 +635,7 @@
         background: radial-gradient(circle, rgba(249,115,22,0.2), transparent 70%);
     }
     .cta h2 {
-        font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        font-family: Georgia, 'Noto Serif SC', 'Songti SC', serif;
         font-size: clamp(32px, 4.5vw, 48px);
         font-weight: 800;
         letter-spacing: -0.03em;
@@ -624,6 +700,13 @@
 <!-- HERO -->
 <section class="hero container">
     <div class="hero-badge">✨ <span>完全免费</span> · 无需登录 · 可离线使用</div>
+    <div class="trust-strip">
+        <span>🖼 63 个精选模板</span>
+        <span class="trust-dot">·</span>
+        <span>🎯 5 种创作场景</span>
+        <span class="trust-dot">·</span>
+        <span>💯 完全免费</span>
+    </div>
     <h1>
         让 <span class="italic">灵感</span> 流动起来，<br>
         <span class="grad">一句描述 → 成品级作品</span>
@@ -632,6 +715,18 @@
         PromptFlow 是一套面向创作者的 AI 工具集：从提示词生成、图片反向提纯，到一键封面设计。
         零门槛上手，零成本使用。
     </p>
+
+    <!-- 即时体验输入框 -->
+    <div class="hero-demo" id="heroDemo">
+        <div class="hero-demo-label">👇 直接试试 — 用中文描述你想要的画面</div>
+        <div class="hero-demo-row">
+            <input type="text" class="hero-demo-input" id="heroDemoInput" placeholder="例如：一只白色小猫坐在窗边，黄昏的柔光洒进来..."
+                onkeydown="if(event.key==='Enter') launchDemo();">
+            <button class="hero-demo-btn" onclick="launchDemo()">✨ 生成提示词</button>
+        </div>
+        <div class="hero-demo-hint">不用注册 · 不用下载 · 1 秒出结果</div>
+    </div>
+
     <div class="hero-cta">
         <a href="index.html" class="btn-primary">立即开始创作 →</a>
         <a href="cover.html" class="btn-secondary">🎨 体验封面工坊</a>
@@ -826,6 +921,19 @@
     </div>
     © 2024 PromptFlow · 面向创作者的 AI 工具集
 </footer>
+
+<script>
+function launchDemo() {
+    const input = document.getElementById('heroDemoInput');
+    const val = (input && input.value.trim()) || '';
+    if (!val) {
+        input && input.focus();
+        return;
+    }
+    const url = 'index.html?q=' + encodeURIComponent(val.substring(0, 120));
+    location.href = url;
+}
+</script>
 
 </body>
 </html>
