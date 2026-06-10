@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#08080c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="description" content="PromptFlow — 面向创作者的 AI 工具集。智能提示词生成 · 图片反向提纯 · 一键封面设计。免费，即开即用。">
+<meta name="keywords" content="AI提示词,Prompt,AI绘画,Midjourney,封面生成,反向提纯,免费AI工具">
+<meta property="og:title" content="PromptFlow — AI 工具集">
+<meta property="og:description" content="智能提示词生成 · 图片反向提纯 · 一键封面设计。免费。">
+<meta property="og:image" content="https://llyhy.github.io/promptflow/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<title>PromptFlow — 让灵感流动</title>
+<style>
+:root {
+    --ink: #08080c;
+    --ink-2: #111116;
+    --border: rgba(200,164,90,0.12);
+    --text: #e8e4dd;
+    --text-dim: #908c84;
+    --text-soft: #5c5852;
+    --gold: #c8a45a;
+    --gold-dim: #8b7340;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: var(--ink);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+}
+body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(ellipse 90% 50% at 50% 0%, rgba(200,164,90,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 20% 60%, rgba(200,164,90,0.03) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 30% at 80% 40%, rgba(180,140,80,0.02) 0%, transparent 60%);
+}
+
+/* ---- HERO ---- */
+.hero {
+    position: relative; z-index: 1;
+    padding: 60px 24px 48px;
+    text-align: center;
+    min-height: 100dvh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.hero-line {
+    width: 32px; height: 1px; background: var(--gold); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.6s 0.1s ease-out forwards;
+}
+.hero-brand {
+    font-family: Georgia, 'Songti SC', serif;
+    font-size: clamp(44px, 12vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin-bottom: 14px;
+    opacity: 0; animation: fadeUp 0.6s 0.15s ease-out forwards;
+}
+.hero-brand em { font-style: italic; color: var(--gold); }
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hero-tagline {
+    font-size: 15px; color: var(--text-dim); max-width: 288px;
+    line-height: 1.7; margin-bottom: 36px;
+    opacity: 0; animation: fadeUp 0.6s 0.25s ease-out forwards;
+}
+.hero-tagline strong { color: var(--text); font-weight: 600; }
+
+/* ---- DEMO INPUT ---- */
+.hero-demo {
+    width: 100%; max-width: 360px;
+    opacity: 0; animation: fadeUp 0.6s 0.35s ease-out forwards;
+}
+.hero-demo-inner {
+    display: flex; flex-direction: column; gap: 10px;
+    background: rgba(17,17,22,0.8); border-radius: 14px; padding: 12px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+}
+.hero-demo-input {
+    padding: 14px 16px; border: none; border-radius: 10px;
+    background: rgba(8,8,12,0.8); color: var(--text); font-size: 15px;
+    font-family: inherit; outline: none;
+    border: 1px solid rgba(200,164,90,0.1);
+    transition: border-color 0.3s;
+}
+.hero-demo-input:focus { border-color: var(--gold); }
+.hero-demo-input::placeholder { color: var(--text-soft); font-size: 14px; }
+.hero-demo-btn {
+    padding: 16px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: var(--ink); font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer;
+    transition: opacity 0.2s;
+    -webkit-appearance: none;
+}
+.hero-demo-btn:active { opacity: 0.85; }
+.hero-demo-hint {
+    font-size: 11px; color: var(--text-soft); text-align: center;
+    margin-top: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ---- HOW ---- */
+.how { position: relative; z-index: 1; padding: 64px 24px; }
+.how-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--gold); font-weight: 700; margin-bottom: 12px;
+    opacity: 0; transform: translateY(20px); transition: 0.6s ease-out;
+}
+.how-label.in { opacity: 1; transform: translateY(0); }
+.how-title {
+    font-family: Georgia, 'Songti SC', serif;
+    font-size: 32px; font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.1; margin-bottom: 40px;
+    opacity: 0; transform: translateY(20px); transition: 0.6s ease-out;
+}
+.how-title.in { opacity: 1; transform: translateY(0); }
+.how-title em { font-style: italic; color: var(--gold); }
+.how-steps { display: flex; flex-direction: column; gap: 2px; border-radius: 14px; overflow: hidden; }
+.how-step {
+    background: var(--ink-2); padding: 28px 24px; position: relative;
+    opacity: 0; transform: translateY(24px); transition: 0.6s ease-out;
+}
+.how-step.in { opacity: 1; transform: translateY(0); }
+.how-step:first-child { transition-delay: 0s; }
+.how-step:nth-child(2) { transition-delay: 0.1s; }
+.how-step:nth-child(3) { transition-delay: 0.2s; }
+.how-step-num {
+    font-family: Georgia, serif; font-size: 40px; font-weight: 800;
+    color: rgba(200,164,90,0.08); position: absolute; top: 16px; right: 20px; line-height: 1;
+}
+.how-step h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.how-step p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* ---- CAPS ---- */
+.caps { position: relative; z-index: 1; padding: 0 24px 64px; }
+.cap { padding: 28px 0; border-bottom: 1px solid var(--border); }
+.cap:first-of-type { border-top: 1px solid var(--border); }
+.cap-emoji { font-size: 28px; margin-bottom: 10px; }
+.cap-title {
+    font-family: Georgia, serif; font-size: 22px; font-weight: 800;
+    letter-spacing: -0.02em; margin-bottom: 6px;
+}
+.cap-desc { font-size: 13px; color: var(--text-dim); line-height: 1.8; }
+.cap-link {
+    display: inline-flex; align-items: center; gap: 6px; color: var(--gold);
+    text-decoration: none; font-size: 13px; font-weight: 700; margin-top: 12px;
+    padding: 10px 0;
+}
+.cap-link::after { content: '→'; font-size: 14px; }
+
+/* ---- CTA ---- */
+.cta {
+    position: relative; z-index: 1; padding: 80px 24px 64px; text-align: center;
+}
+.cta-title {
+    font-family: Georgia, 'Songti SC', serif;
+    font-size: 30px; font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.1; margin-bottom: 12px;
+}
+.cta-title em { font-style: italic; color: var(--gold); }
+.cta-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 32px; }
+.cta-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: var(--ink); padding: 18px 36px; border-radius: 12px;
+    font-size: 15px; font-weight: 700; text-decoration: none;
+    transition: opacity 0.2s;
+    min-width: 200px;
+}
+.cta-btn:active { opacity: 0.85; }
+.cta-free { font-size: 12px; color: var(--text-soft); margin-top: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ---- FOOTER ---- */
+.footer {
+    position: relative; z-index: 1; padding: 32px 24px; text-align: center;
+    border-top: 1px solid var(--border); font-size: 12px; color: var(--text-soft);
+}
+.footer a { color: var(--text-dim); text-decoration: none; margin: 0 6px; }
+.footer a:active { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-line"></div>
+    <h1 class="hero-brand">Prompt<em>Flow</em></h1>
+    <p class="hero-tagline">
+        面向创作者的 <strong>AI 工具集</strong><br>智能提示词 · 反向提纯 · 封面设计
+    </p>
+
+    <div class="hero-demo">
+        <div class="hero-demo-inner">
+            <input type="text" class="hero-demo-input" id="heroInput"
+                placeholder="描述你想要的画面，用中文即可…"
+                enterkeyhint="go">
+            <button class="hero-demo-btn" id="heroBtn">✦ 生成提示词</button>
+        </div>
+        <div class="hero-demo-hint">完全免费 · 无需登录 · 即开即用</div>
+    </div>
+</section>
+
+<section class="how">
+    <div class="how-label">Workflow</div>
+    <h2 class="how-title">三个动作<br><em>灵感</em> → <em>成品</em></h2>
+
+    <div class="how-steps">
+        <div class="how-step">
+            <div class="how-step-num">01</div>
+            <h4>💭 描述你的想法</h4>
+            <p>用中文写下脑海中的画面。不需要专业术语，口语就行。系统自动识别场景并引导补全。</p>
+        </div>
+        <div class="how-step">
+            <div class="how-step-num">02</div>
+            <h4>✨ AI 自动补全维度</h4>
+            <p>风格、光线、构图、质量——缺失的维度自动识别推荐。像有位专业 prompt 工程师在帮你。</p>
+        </div>
+        <div class="how-step">
+            <div class="how-step-num">03</div>
+            <h4>🚀 一键出图出文</h4>
+            <p>复制提示词丢进 Midjourney / SD / GPT 直接出结果。支持绘画、文案、脚本多场景。</p>
+        </div>
+    </div>
+</section>
+
+<section class="caps">
+    <div class="cap">
+        <div class="cap-emoji">🎨</div>
+        <h3 class="cap-title">智能提示词生成</h3>
+        <p class="cap-desc">输入中文描述，自动匹配场景并补全缺失维度。AI 绘画 / 小红书 / 短视频 / 编程多模式。</p>
+        <a href="../index.html" class="cap-link">进入生成器</a>
+    </div>
+    <div class="cap">
+        <div class="cap-emoji">🔍</div>
+        <h3 class="cap-title">图片反向提纯</h3>
+        <p class="cap-desc">上传图片，AI 自动反推提示词。学优秀作品的 prompt 结构，快速建立关键词库。</p>
+        <a href="../reverse.html" class="cap-link">开始提纯</a>
+    </div>
+    <div class="cap">
+        <div class="cap-emoji">📐</div>
+        <h3 class="cap-title">一键封面设计</h3>
+        <p class="cap-desc">无需设计技能。输入标题，选尺寸和风格，自动生成适配小红书/公众号/B 站的专业封面。</p>
+        <a href="../cover.html" class="cap-link">打开封面工坊</a>
+    </div>
+</section>
+
+<section class="cta">
+    <h2 class="cta-title">让 <em>灵感</em><br>从现在开始流动</h2>
+    <p class="cta-sub">不需要注册，不需要付费<br>打开就开始创作</p>
+    <a href="../index.html" class="cta-btn">✦ 开始创作</a>
+    <div class="cta-free">免费 · 无需登录 · 纯网页</div>
+</section>
+
+<footer class="footer">
+    <div style="margin-bottom:6px;"><strong style="color:var(--text-dim)">PromptFlow</strong></div>
+    <a href="../index.html">生成器</a> · <a href="../reverse.html">提纯</a> · <a href="../cover.html">封面</a>
+    <div style="margin-top:8px">© 2024 PromptFlow</div>
+</footer>
+
+<script>
+(function(){
+    const input = document.getElementById('heroInput');
+    const btn = document.getElementById('heroBtn');
+    function go() {
+        const val = (input && input.value.trim()) || '';
+        location.href = '../index.html' + (val ? '?q=' + encodeURIComponent(val.substring(0, 120)) : '');
+    }
+    btn.addEventListener('click', go);
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === 'Go') { e.preventDefault(); go(); }
+    });
+
+    // scroll reveal
+    function reveal() {
+        document.querySelectorAll('.how-label, .how-title, .how-step, .cap').forEach(function(el) {
+            var rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 60) { el.classList.add('in'); }
+        });
+    }
+    window.addEventListener('scroll', reveal, { passive: true });
+    reveal();
+
+    // focus input on load for instant engagement
+    setTimeout(function() {
+        if (document.activeElement === document.body) { input.focus(); }
+    }, 600);
+})();
+</script>
+
+</body>
+</html>
