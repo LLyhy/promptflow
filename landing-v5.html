@@ -42,16 +42,108 @@ body {
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    cursor: none;
 }
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,164,90,0.04) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 40% at 85% 80%, rgba(200,164,90,0.03) 0%, transparent 60%);
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,164,90,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 80%, rgba(200,164,90,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 20% 50%, rgba(180,140,80,0.03) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
 }
+/* dot grid overlay */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(200,164,90,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    z-index: 0;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, black 10%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, black 10%, transparent 70%);
+}
+
+/* mouse spotlight — follows cursor globally */
+#mouseLight {
+    position: fixed;
+    top: 0; left: 0;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(200,164,90,0.08) 0%, rgba(200,164,90,0.03) 30%, transparent 60%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.6s;
+    will-change: left, top;
+}
+#mouseLight.hidden { opacity: 0; }
+
+/* custom cursor dot */
+#cursorDot {
+    position: fixed;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: width 0.15s, height 0.15s, background 0.15s;
+    will-change: left, top;
+}
+#cursorDot.hover { width: 32px; height: 32px; background: transparent; border: 2px solid var(--gold); }
+
+/* grain texture layer */
+#grainLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+}
+#grainLayer canvas { width: 100%; height: 100%; display: block; }
+
+/* decorative floating orbs */
+.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+.orb-1 { width: 300px; height: 300px; top: 15%; left: -5%;
+    background: radial-gradient(circle, rgba(200,164,90,0.06) 0%, transparent 70%);
+    animation: orbFloat 18s ease-in-out infinite; }
+.orb-2 { width: 200px; height: 200px; top: 60%; right: -3%;
+    background: radial-gradient(circle, rgba(200,164,90,0.05) 0%, transparent 70%);
+    animation: orbFloat 22s ease-in-out 5s infinite; }
+.orb-3 { width: 180px; height: 180px; top: 40%; left: 50%;
+    background: radial-gradient(circle, rgba(180,140,80,0.04) 0%, transparent 70%);
+    animation: orbFloat 20s ease-in-out 10s infinite; }
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(30px, -20px); }
+    50% { transform: translate(-15px, 25px); }
+    75% { transform: translate(20px, 10px); }
+}
+
+/* subtle scan line at bottom */
+.scanline {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,164,90,0.15), transparent);
+    z-index: 0; pointer-events: none;
+    animation: scanPulse 4s ease-in-out infinite;
+}
+@keyframes scanPulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.6; }
+}
+
+/* nav and interactive elements should get default cursor back */
+.nav, .nav *, .hero-demo, .hero-demo *, .cap-link, .cta-btn,
+button, a, input, .how-step, .cap-row { cursor: auto; }
+.nav a, .nav button, .cap-link, .cta-btn, button, a { cursor: pointer; }
+input[type="text"] { cursor: text; }
 
 /* ---- NAV ---- */
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 999;
@@ -339,36 +431,115 @@ body::before {
     <div style="margin-top: 8px;">© 2024 PromptFlow</div>
 </footer>
 
+<!-- background fx elements -->
+<div id="mouseLight" class="hidden"></div>
+<div id="cursorDot"></div>
+<div id="grainLayer"><canvas id="grainCanvas"></canvas></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="scanline"></div>
+
 <script>
-function goGenerate() {
-    const input = document.getElementById('heroInput');
-    const val = (input && input.value.trim()) || '';
-    const url = val ? 'index.html?q=' + encodeURIComponent(val.substring(0, 120)) : 'index.html';
-    location.href = url;
-}
-
-// Scroll reveal
-const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+(function(){
+    /* ---- grain texture ---- */
+    const grainCanvas = document.getElementById('grainCanvas');
+    const ctx = grainCanvas.getContext('2d');
+    function resizeGrain() {
+        grainCanvas.width = window.innerWidth;
+        grainCanvas.height = window.innerHeight;
+    }
+    function drawGrain() {
+        const w = grainCanvas.width, h = grainCanvas.height;
+        const imageData = ctx.createImageData(w, h);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+            const v = Math.random() * 40;
+            data[i] = v; data[i+1] = v; data[i+2] = v; data[i+3] = 255;
         }
+        ctx.putImageData(imageData, 0, 0);
+    }
+    resizeGrain(); drawGrain();
+    window.addEventListener('resize', () => { resizeGrain(); drawGrain(); });
+
+    /* ---- mouse spotlight + custom cursor ---- */
+    const mouseLight = document.getElementById('mouseLight');
+    const cursorDot = document.getElementById('cursorDot');
+    let mouseX = -200, mouseY = -200;
+    let targetX = -200, targetY = -200;
+    let isTouch = false;
+
+    function onMove(e) {
+        isTouch = false;
+        targetX = e.clientX;
+        targetY = e.clientY;
+        mouseLight.classList.remove('hidden');
+        cursorDot.style.opacity = '1';
+    }
+    function onTouch() {
+        isTouch = true;
+        mouseLight.classList.add('hidden');
+        cursorDot.style.opacity = '0';
+    }
+    function onLeave() {
+        mouseLight.classList.add('hidden');
+        cursorDot.style.opacity = '0';
+    }
+
+    window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('touchstart', onTouch, { passive: true });
+    window.addEventListener('mouseleave', onLeave);
+
+    /* hover detection for cursor dot */
+    document.querySelectorAll('a, button, input, .cap-link, .cta-btn, .hero-demo-btn').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorDot.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover'));
     });
-}, observerOptions);
 
-document.querySelectorAll('.how-step, .cap-row, .cta-title, .cta-sub, .cta-btn').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
-    observer.observe(el);
-});
+    function animate() {
+        if (!isTouch) {
+            const speed = 0.12;
+            mouseX += (targetX - mouseX) * speed;
+            mouseY += (targetY - mouseY) * speed;
+            mouseLight.style.left = mouseX + 'px';
+            mouseLight.style.top = mouseY + 'px';
+            cursorDot.style.left = targetX + 'px';
+            cursorDot.style.top = targetY + 'px';
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
 
-// Stagger how-step reveals
-document.querySelectorAll('.how-step').forEach((el, i) => {
-    el.style.transitionDelay = (i * 0.12) + 's';
-});
+    /* ---- hero demo ---- */
+    function goGenerate() {
+        const input = document.getElementById('heroInput');
+        const val = (input && input.value.trim()) || '';
+        const url = val ? 'index.html?q=' + encodeURIComponent(val.substring(0, 120)) : 'index.html';
+        location.href = url;
+    }
+    window.goGenerate = goGenerate;
+
+    /* ---- scroll reveal ---- */
+    const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.how-step, .cap-row, .cta-title, .cta-sub, .cta-btn').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
+        observer.observe(el);
+    });
+    document.querySelectorAll('.how-step').forEach((el, i) => {
+        el.style.transitionDelay = (i * 0.12) + 's';
+    });
+})();
 </script>
 
 </body>
