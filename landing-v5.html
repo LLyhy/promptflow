@@ -83,6 +83,76 @@ body::after {
 }
 #mouseLight.hidden { opacity: 0; }
 
+/* ---- flashlight reveal layer: hidden content, visible only under cursor ---- */
+#revealLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    -webkit-mask-image: radial-gradient(circle 280px at 50% 50%, black 20%, transparent 70%);
+    mask-image: radial-gradient(circle 280px at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    will-change: mask-position, -webkit-mask-position;
+    transition: opacity 0.6s;
+}
+#revealLayer.hidden { opacity: 0; }
+
+.reveal-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap: 8px 14px;
+    padding: 10% 8%;
+    font-family: 'Playfair Display', Georgia, serif;
+}
+.reveal-word {
+    font-size: clamp(14px, 1.8vw, 22px);
+    font-weight: 600;
+    color: var(--gold);
+    opacity: 0.5;
+    letter-spacing: 0.04em;
+    transition: opacity 0.4s;
+}
+.reveal-word.large { font-size: clamp(24px, 3.5vw, 48px); font-weight: 800; opacity: 0.3; font-style: italic; }
+.reveal-word.mid { font-size: clamp(18px, 2.5vw, 32px); opacity: 0.4; }
+.reveal-word.dim { opacity: 0.25; font-size: clamp(12px, 1.4vw, 16px); }
+
+/* decorative lines in the reveal layer */
+.reveal-geo {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+}
+.reveal-geo .line {
+    position: absolute;
+    height: 1px;
+    background: var(--gold);
+}
+.reveal-geo .line.l1 { top: 18%; left: 5%; width: 30%; }
+.reveal-geo .line.l2 { top: 35%; right: 8%; width: 25%; }
+.reveal-geo .line.l3 { top: 55%; left: 10%; width: 20%; }
+.reveal-geo .line.l4 { top: 72%; right: 12%; width: 35%; }
+.reveal-geo .line.l5 { top: 85%; left: 20%; width: 15%; }
+
+.reveal-geo .circle {
+    position: absolute;
+    border: 1px solid rgba(200,164,90,0.4);
+    border-radius: 50%;
+}
+.reveal-geo .circle.c1 { width: 80px; height: 80px; top: 14%; left: 22%; }
+.reveal-geo .circle.c2 { width: 120px; height: 120px; top: 50%; right: 15%; }
+.reveal-geo .circle.c3 { width: 60px; height: 60px; top: 70%; left: 60%; }
+
+
 /* custom cursor dot */
 #cursorDot {
     position: fixed;
@@ -433,6 +503,40 @@ input[type="text"] { cursor: text; }
 
 <!-- background fx elements -->
 <div id="mouseLight" class="hidden"></div>
+<div id="revealLayer" class="hidden">
+    <div class="reveal-content">
+        <span class="reveal-word large">PromptFlow</span>
+        <span class="reveal-word mid">让灵感流动</span>
+        <span class="reveal-word">cinematic</span>
+        <span class="reveal-word">cyberpunk</span>
+        <span class="reveal-word dim">neon lights</span>
+        <span class="reveal-word">golden hour</span>
+        <span class="reveal-word dim">volumetric</span>
+        <span class="reveal-word">8K quality</span>
+        <span class="reveal-word">anime style</span>
+        <span class="reveal-word dim">portrait</span>
+        <span class="reveal-word">masterpiece</span>
+        <span class="reveal-word dim">landscape</span>
+        <span class="reveal-word">symmetry</span>
+        <span class="reveal-word dim">close-up</span>
+        <span class="reveal-word mid">✦</span>
+        <span class="reveal-word">watercolor</span>
+        <span class="reveal-word dim">minimalist</span>
+        <span class="reveal-word">oil painting</span>
+        <span class="reveal-word dim">backlight</span>
+        <span class="reveal-word mid">创造 ✦ 提纯 ✦ 设计</span>
+    </div>
+    <div class="reveal-geo">
+        <div class="line l1"></div>
+        <div class="line l2"></div>
+        <div class="line l3"></div>
+        <div class="line l4"></div>
+        <div class="line l5"></div>
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+        <div class="circle c3"></div>
+    </div>
+</div>
 <div id="cursorDot"></div>
 <div id="grainLayer"><canvas id="grainCanvas"></canvas></div>
 <div class="orb orb-1"></div>
@@ -462,8 +566,9 @@ input[type="text"] { cursor: text; }
     resizeGrain(); drawGrain();
     window.addEventListener('resize', () => { resizeGrain(); drawGrain(); });
 
-    /* ---- mouse spotlight + custom cursor ---- */
+    /* ---- mouse spotlight + custom cursor + reveal layer ---- */
     const mouseLight = document.getElementById('mouseLight');
+    const revealLayer = document.getElementById('revealLayer');
     const cursorDot = document.getElementById('cursorDot');
     let mouseX = -200, mouseY = -200;
     let targetX = -200, targetY = -200;
@@ -474,15 +579,23 @@ input[type="text"] { cursor: text; }
         targetX = e.clientX;
         targetY = e.clientY;
         mouseLight.classList.remove('hidden');
+        revealLayer.classList.remove('hidden');
         cursorDot.style.opacity = '1';
+        // update mask position directly for instant reveal
+        const mx = (e.clientX / window.innerWidth * 100).toFixed(1);
+        const my = (e.clientY / window.innerHeight * 100).toFixed(1);
+        revealLayer.style.webkitMaskPosition = mx + '% ' + my + '%';
+        revealLayer.style.maskPosition = mx + '% ' + my + '%';
     }
     function onTouch() {
         isTouch = true;
         mouseLight.classList.add('hidden');
+        revealLayer.classList.add('hidden');
         cursorDot.style.opacity = '0';
     }
     function onLeave() {
         mouseLight.classList.add('hidden');
+        revealLayer.classList.add('hidden');
         cursorDot.style.opacity = '0';
     }
 
