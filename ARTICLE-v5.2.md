@@ -4,6 +4,12 @@
 
 ---
 
+## 摘要
+
+PromptFlow 是一个免费开源的 AI 提示词工具集，纯前端，GitHub Pages 托管。v4 时它已经功能完备——63 个模板、引导式构建器、反向提纯——但跳出率高达 60%。v5.0 大版本围绕"让产品主动理解用户"这个目标，做了三件事：① 多场景智能识别引擎，输入中文自动判断要画画还是写文案，动态切换引导流程；② 宣传矩阵优化，OG 社交预览标签 + 微信/微博/QQ 一键分享 + JSON-LD 结构化数据；③ 落地页全面重设计，暗金配色系统 + 六层背景（点阵网格、胶片颗粒、浮动光球、鼠标光源、扫描线、手电筒揭秘交互）+ Hero 即时输入框。全站纯 HTML/CSS/JS，零运行时依赖，首屏加载从 3-8s 降到 < 1s，跳出率从 60% 降到预估 35%。
+
+---
+
 先放地址：**[PromptFlow 主站](https://llyhy.github.io/promptflow/)** ｜ **[v5.2 新落地页](https://llyhy.github.io/promptflow/landing-v5.html)** ｜ **[GitHub 仓库](https://github.com/LLyhy/promptflow)**
 
 ---
