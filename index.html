@@ -5265,7 +5265,7 @@
         function parseURLAutoFill() {
             try {
                 const params = new URLSearchParams(window.location.search);
-                const input = params.get('input');
+                const input = params.get('q') || params.get('input');
                 if (input && input.trim()) {
                     document.getElementById('generatorInput').value = input;
                     const lang = params.get('lang');
